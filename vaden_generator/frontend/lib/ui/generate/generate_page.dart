@@ -71,7 +71,7 @@ class _GeneratePageState extends State<GeneratePage> {
         backgroundColor: Colors.transparent,
         appBar: VadenAppBar(
           title: 'IN_DEVELOPMENT'.i18n(),
-          mode: VadenAppBarMode.development, // Pode ser alterado para .production
+          mode: VadenAppBarMode.development,
           fontSize: fontSize,
           letterSpacing: letterSpacing,
           lineHeight: lineHeight,
