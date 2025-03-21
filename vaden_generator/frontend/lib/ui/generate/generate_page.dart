@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:localization/localization.dart';
 
@@ -306,17 +307,22 @@ class _GeneratePageState extends State<GeneratePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  '${'Community_made'.i18n()} ',
+                                  '${'Community_made'.i18n()}  ',
                                   style: GoogleFonts.anekBangla(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w300,
                                     color: VadenColors.secondaryColor,
                                   ),
                                 ),
-                                SvgPicture.asset(
-                                  VadenImage.flutterandoLogo,
-                                  width: 120,
-                                  height: 24,
+                                InkWell(
+                                  child: SvgPicture.asset(
+                                    VadenImage.flutterandoLogo,
+                                    width: 120,
+                                    height: 24,
+                                  ),
+                                  onTap: () {
+                                    context.go('/linktree');
+                                  },
                                 ),
                               ],
                             ),
@@ -326,7 +332,7 @@ class _GeneratePageState extends State<GeneratePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  '${'Copyright'.i18n()} ',
+                                  '${'Copyright'.i18n()}  ',
                                   style: GoogleFonts.anekBangla(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -339,7 +345,7 @@ class _GeneratePageState extends State<GeneratePage> {
                                   height: 24,
                                 ),
                                 Text(
-                                  '2025',
+                                  ' 2025',
                                   style: GoogleFonts.anekBangla(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
