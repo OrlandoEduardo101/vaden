@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:localization/localization.dart';
 
 import 'config/dependencies.dart';
@@ -9,6 +10,7 @@ import 'ui/core/themes/theme.dart';
 import 'ui/widgets/internation/internation_widget.dart';
 
 void main() {
+  usePathUrlStrategy();
   setupInjection();
   runApp(const MainApp());
 }
