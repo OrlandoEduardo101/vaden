@@ -58,7 +58,7 @@ class _VadenLinkTreeState extends State<VadenLinkTree> {
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            'VADEN Generator',
+                            'VADEN',
                             style: GoogleFonts.anekBangla(
                               color: VadenColors.txtSecondary,
                               fontSize: 32,
@@ -133,7 +133,7 @@ class _VadenLinkTreeState extends State<VadenLinkTree> {
                                 title: 'Generator',
                                 onPressed: () {
                                   urlLauncherService.launch(
-                                    'https://t.me/flutterando',
+                                    'https://start.vaden.dev/',
                                   );
                                 },
                                 icon: null,
@@ -150,7 +150,7 @@ class _VadenLinkTreeState extends State<VadenLinkTree> {
                                 title: 'Discord',
                                 onPressed: () {
                                   urlLauncherService.launch(
-                                    'https://discord.flutterando.com.br',
+                                    'https://discord.vaden.dev',
                                   );
                                 },
                                 icon: null,
@@ -162,7 +162,7 @@ class _VadenLinkTreeState extends State<VadenLinkTree> {
                                 title: 'Linkedin',
                                 onPressed: () {
                                   urlLauncherService.launch(
-                                    'https://www.linkedin.com/company/theflutterando/',
+                                    'https://www.linkedin.com/company/vaden1/',
                                   );
                                 },
                                 icon: null,
@@ -176,10 +176,10 @@ class _VadenLinkTreeState extends State<VadenLinkTree> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               VadenButtonExtension.outlined(
-                                title: 'Flutterando',
+                                title: 'GitHub',
                                 onPressed: () {
                                   urlLauncherService.launch(
-                                    'https://www.youtube.com/@FlutterandoTV',
+                                    'https://github.com/Flutterando/vaden',
                                   );
                                 },
                                 icon: null,
@@ -188,10 +188,10 @@ class _VadenLinkTreeState extends State<VadenLinkTree> {
                                 borderColor: VadenColors.stkWhite,
                               ),
                               VadenButtonExtension.outlined(
-                                title: 'Telegram',
+                                title: 'Documentation',
                                 onPressed: () {
                                   urlLauncherService.launch(
-                                    'https://t.me/flutterando',
+                                    'https://doc.vaden.dev',
                                   );
                                 },
                                 icon: null,
