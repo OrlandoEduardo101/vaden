@@ -136,19 +136,35 @@ class _GeneratePageState extends State<GeneratePage> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Container(
-                        height: 1,
-                        width: 156,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [
-                              VadenColors.gradientStart,
-                              VadenColors.gradientEnd,
-                            ],
-                          ),
-                        ),
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final textSpan = TextSpan(
+                            text: 'Create_new_project'.i18n(),
+                            style: GoogleFonts.anekBangla(
+                              color: VadenColors.txtSecondary,
+                              fontSize: 20,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          );
+                          final textPainter = TextPainter(
+                            text: textSpan,
+                            textDirection: TextDirection.ltr,
+                          )..layout();
+                          return Container(
+                            height: 1,
+                            width: textPainter.width,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [
+                                  VadenColors.gradientStart,
+                                  VadenColors.gradientEnd,
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 32),
                       Column(
@@ -205,19 +221,35 @@ class _GeneratePageState extends State<GeneratePage> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Container(
-                        height: 1,
-                        width: 130,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [
-                              VadenColors.gradientStart,
-                              VadenColors.gradientEnd,
-                            ],
-                          ),
-                        ),
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final textSpan = TextSpan(
+                            text: 'Dependencies'.i18n(),
+                            style: GoogleFonts.anekBangla(
+                              color: VadenColors.txtSecondary,
+                              fontSize: 20,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          );
+                          final textPainter = TextPainter(
+                            text: textSpan,
+                            textDirection: TextDirection.ltr,
+                          )..layout();
+                          return Container(
+                            height: 1,
+                            width: textPainter.width,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [
+                                  VadenColors.gradientStart,
+                                  VadenColors.gradientEnd,
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 32),
                       Column(

@@ -107,19 +107,35 @@ class _VadenLinkTreeState extends State<VadenLinkTree> {
                                 ),
                               ),
                               const SizedBox(height: 4),
-                              Container(
-                                height: 1,
-                                width: 156,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                    colors: [
-                                      VadenColors.gradientStart,
-                                      VadenColors.gradientEnd,
-                                    ],
-                                  ),
-                                ),
+                              LayoutBuilder(
+                                builder: (context, constraints) {
+                                  final textSpan = TextSpan(
+                                    text: 'Our_channels'.i18n(),
+                                    style: GoogleFonts.anekBangla(
+                                      color: VadenColors.txtSecondary,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  );
+                                  final textPainter = TextPainter(
+                                    text: textSpan,
+                                    textDirection: TextDirection.ltr,
+                                  )..layout();
+                                  return Container(
+                                    height: 1,
+                                    width: textPainter.width,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        colors: [
+                                          VadenColors.gradientStart,
+                                          VadenColors.gradientEnd,
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
                             ],
                           ),
