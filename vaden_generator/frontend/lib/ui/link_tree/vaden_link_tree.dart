@@ -20,6 +20,7 @@ class _VadenLinkTreeState extends State<VadenLinkTree> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     Localizations.localeOf(context);
 
     return Container(
@@ -36,86 +37,95 @@ class _VadenLinkTreeState extends State<VadenLinkTree> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const SizedBox(height: 80),
-              SizedBox(
-                width: double.infinity,
-                height: 60,
-                child: Stack(
-                  children: [
-                    Center(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            VadenImage.vadenLogo,
-                            width: 48,
-                            height: 48,
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            'VADEN',
-                            style: GoogleFonts.anekBangla(
-                              color: VadenColors.txtSecondary,
-                              fontSize: 32,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      right: 48,
-                      top: 0,
-                      bottom: 0,
-                      child: Center(
-                        child: InternationWidget(),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 250),
-              Center(
-                child: SizedBox(
-                  width: 760,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: size.height),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              spacing: 48,
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 100,
+                  alignment: Alignment.bottomCenter,
+                  child: Stack(
                     children: [
-                      Text(
-                        'Our_channels'.i18n(),
-                        style: GoogleFonts.anekBangla(
-                          color: VadenColors.txtSecondary,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w300,
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              VadenImage.vadenLogo,
+                              width: 48,
+                              height: 48,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              'VADEN',
+                              style: GoogleFonts.anekBangla(
+                                color: VadenColors.txtSecondary,
+                                fontSize: 32,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      Container(
-                        height: 1,
-                        width: 156,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [
-                              VadenColors.gradientStart,
-                              VadenColors.gradientEnd,
-                            ],
+                      if (size.width > 760) ...[
+                        Positioned(
+                          right: 48,
+                          top: 0,
+                          bottom: 0,
+                          child: Center(
+                            child: InternationWidget(),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 32),
-                      Column(
+                      ]
+                    ],
+                  ),
+                ),
+                Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 760),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         spacing: 32,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Our_channels'.i18n(),
+                                style: GoogleFonts.anekBangla(
+                                  color: VadenColors.txtSecondary,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Container(
+                                height: 1,
+                                width: 156,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [
+                                      VadenColors.gradientStart,
+                                      VadenColors.gradientEnd,
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Wrap(
+                            spacing: 32,
+                            runSpacing: 32,
                             children: [
                               VadenButtonExtension.outlined(
                                 title: 'Apoia-se',
@@ -141,11 +151,6 @@ class _VadenLinkTreeState extends State<VadenLinkTree> {
                                 height: 80,
                                 borderColor: VadenColors.stkWhite,
                               ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
                               VadenButtonExtension.outlined(
                                 title: 'Discord',
                                 onPressed: () {
@@ -170,11 +175,6 @@ class _VadenLinkTreeState extends State<VadenLinkTree> {
                                 height: 80,
                                 borderColor: VadenColors.stkWhite,
                               ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
                               VadenButtonExtension.outlined(
                                 title: 'GitHub',
                                 onPressed: () {
@@ -200,75 +200,74 @@ class _VadenLinkTreeState extends State<VadenLinkTree> {
                                 borderColor: VadenColors.stkWhite,
                               ),
                             ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Column(
+                    spacing: 16,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${'Community_made'.i18n()}  ',
+                            style: GoogleFonts.anekBangla(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
+                              color: VadenColors.secondaryColor,
+                            ),
+                          ),
+                          InkWell(
+                            child: SvgPicture.asset(
+                              VadenImage.flutterandoLogo,
+                              width: 120,
+                              height: 24,
+                            ),
+                            onTap: () {
+                              context.go('/linktree');
+                            },
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${'Copyright'.i18n()} ',
+                            style: GoogleFonts.anekBangla(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: VadenColors.txtSupport2,
+                            ),
+                          ),
+                          SvgPicture.asset(
+                            VadenImage.copyrightIcon,
+                            width: 120,
+                            height: 24,
+                          ),
+                          Text(
+                            ' 2025',
+                            style: GoogleFonts.anekBangla(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: VadenColors.txtSupport2,
+                            ),
                           ),
                         ],
                       ),
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 250),
-              Center(
-                child: Column(
-                  spacing: 16,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '${'Community_made'.i18n()}  ',
-                          style: GoogleFonts.anekBangla(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w300,
-                            color: VadenColors.secondaryColor,
-                          ),
-                        ),
-                        InkWell(
-                          child: SvgPicture.asset(
-                            VadenImage.flutterandoLogo,
-                            width: 120,
-                            height: 24,
-                          ),
-                          onTap: () {
-                            context.go('/linktree');
-                          },
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '${'Copyright'.i18n()} ',
-                          style: GoogleFonts.anekBangla(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: VadenColors.txtSupport2,
-                          ),
-                        ),
-                        SvgPicture.asset(
-                          VadenImage.copyrightIcon,
-                          width: 120,
-                          height: 24,
-                        ),
-                        Text(
-                          ' 2025',
-                          style: GoogleFonts.anekBangla(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: VadenColors.txtSupport2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
