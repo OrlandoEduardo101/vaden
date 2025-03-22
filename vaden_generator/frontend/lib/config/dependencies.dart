@@ -12,6 +12,7 @@ final injector = AutoInjector();
 
 void setupInjection() {
   injector.add(dioFactory);
+  injector.add(Constants.new);
   injector.addSingleton(ClientHttp.new);
   injector.addSingleton(UrlLauncherService.new);
   injector.addSingleton<GenerateRepository>(RemoteGenerateRepository.new);
