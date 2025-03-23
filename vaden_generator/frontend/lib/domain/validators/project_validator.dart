@@ -5,10 +5,10 @@ import '../entities/project.dart';
 class ProjectValidator extends LucidValidator<Project> {
   ProjectValidator() {
     ruleFor((p) => p.name, key: 'name') //
-        .notEmpty()
+        .notEmpty(message: 'notEmpty')
         .minLength(3)
         .maxLength(50)
-        .matchesPattern(r'^[a-z][a-z0-9_]*$', code: 'invalid_name');
+        .matchesPattern(r'^[a-z][a-z0-9_]*$', code: 'invalidName');
 
     ruleFor((p) => p.description, key: 'description') //
         .notEmpty()
@@ -17,6 +17,6 @@ class ProjectValidator extends LucidValidator<Project> {
 
     ruleFor((p) => p.dartVersion, key: 'dartVersion') //
         .notEmpty()
-        .matchesPattern(r'^\d+\.\d+\.\d+$', code: 'invalid_version');
+        .matchesPattern(r'^\d+\.\d+\.\d+$', code: 'invalidVersion');
   }
 }

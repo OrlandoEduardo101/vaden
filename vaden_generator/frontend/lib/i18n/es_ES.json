@@ -17,5 +17,10 @@
   "Project_name": "Nombre del proyecto",
   "Try_again": "Intentar de nuevo",
   "Vaden_Backend": "Vaden Backend",
-  "Vaden_Project": "Proyecto Vaden"
+  "Vaden_Project": "Proyecto Vaden",
+  "invalidName":"Formato de nombre no permitido",
+  "invalidVersion":"Formato de versión no permitido Ej: 1.2.3",
+  "maxLength":"Número excesivo de caracteres",
+  "minLength": "Número insuficiente de caracteres",
+  "notEmpty":"No puede estar vacío"
 }

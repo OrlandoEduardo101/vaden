@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:localization/localization.dart';
 
 import '../../config/dependencies.dart';
+import '../../config/extension.dart';
 import '../../domain/entities/project.dart';
 import '../../domain/validators/project_validator.dart';
 import '../core/ui/ui.dart';
@@ -158,7 +159,7 @@ class _GeneratePageState extends State<GeneratePage> {
                             label: 'Project_name'.i18n(),
                             hint: 'Vaden_Backend'.i18n(),
                             onChanged: project.setName,
-                            validator: projectValidator.byField(project, 'name'),
+                            validator: projectValidator.byField(project, 'name').i18n(),
                             verticalPadding: 20,
                           ),
                           const SizedBox(height: 32),
@@ -167,7 +168,7 @@ class _GeneratePageState extends State<GeneratePage> {
                             label: 'Description'.i18n(),
                             hint: 'Vaden_Project'.i18n(),
                             onChanged: project.setDescription,
-                            validator: projectValidator.byField(project, 'description'),
+                            validator: projectValidator.byField(project, 'description').i18n(),
                             verticalPadding: 20,
                           ),
                           const SizedBox(height: 32),
