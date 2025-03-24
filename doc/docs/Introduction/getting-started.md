@@ -2,7 +2,7 @@
 sidebar_position: 10
 ---
 
-# Getting Started with Vaden
+# Getting Started
 
 Vaden is designed to be "flight-ready" from the very start. Launch a new project in just three simple steps:
 
@@ -19,7 +19,7 @@ As with any Dart project, you need to download the required dependencies. Run th
 dart pub get
 ```
 
-## Run the Class Scanner with build_runner
+## 3. Run the Class Scanner with build_runner
 
 The **Class Scanner** iintroduces Java-inspired metaprogramming to Dart. Since this feature is integrated with build_runner, simply run the build or watch command during development:
 
@@ -27,7 +27,7 @@ The **Class Scanner** iintroduces Java-inspired metaprogramming to Dart. Since t
 dart run build_runner watch
 ```
 
-## Running the Project
+## 4. Running the Project
 
 The generated project is ready to run using the Dart SDK or via IDEs like VSCode. To run the project:
 - In your IDE, press F5, or run the command:
@@ -36,13 +36,13 @@ The generated project is ready to run using the Dart SDK or via IDEs like VSCode
 dart run
 ```
 
-## Testing Your Application
+## 5. Testing Your Application
 
 When you run the project, the console will display a message indicating that the server is listening on port **8080**. You can then test your application using a web browser or tools like **Postman** or **Insomnia**.
 
 If your project includes **OpenAPI** as a dependency, navigate to [http://localhost:8080/docs/](http://localhost:8080/docs/) to access the **Swagger UI** and test the **API** endpoints.
 
-## Contribute and Evolve
+## 6. Contribute and Evolve
 
 Vaden is an open-source project, and we welcome your contributions—big or small. If you encounter any bugs or have suggestions for improvement, please reach out via our social media channels or open an issue on GitHub.
 

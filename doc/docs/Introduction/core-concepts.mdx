@@ -1,0 +1,106 @@
+---
+sidebar_position: 2
+---
+
+# Core Concepts
+
+Vaden runs on top of the shelf server core. This architectural decision allows full compatibility with existing Dart packages that already work with shelf, while giving Vaden the flexibility to build its own high-level abstractions for routing, middleware, dependency injection, and more.
+
+## Class Scanner
+
+Unlike traditional code generation in Dart that relies on .g.dart files, Vaden uses a separate dev tool called **Class Scanner**. This tool scans annotated classes in your codebase, similar to how **Spring Boot** operates in Java. It provides a more natural metaprogramming experience and avoids polluting your codebase with additional files.
+
+For example, you can define a DTO cleanly:
+
+```dart
+@DTO()
+class Credentials {
+  final String username;
+  final String password;
+
+  Credentials(this.username, this.password);
+}
+```
+
+No .g.dart or boilerplate needed. The vaden_class_scanner generates a single file called vaden_application.dart, which encapsulates the configuration of your entire application and is used in main() to run the server.
+
+## DSON - Dynamic Serialization
+
+Vaden includes a service called DSON, responsible for handling toJson and fromJson operations for DTOs. This enables automatic serialization and deserialization of objects without manually writing converters. It also integrates with the OpenAPI generator to produce accurate schema definitions.
+The DSON service can be injected into any class, such as a controller or service:
+
+```dart
+// decode
+final credentials = dson.fromJson<Credentials>(json);
+// encode
+final backToJson = dson.toJson(credentials);
+```
+
+## Dependency Injection
+
+Vaden supports a robust dependency injection system inspired by Spring Boot.
+
+At its core, the annotation `@Component()` marks a class as injectable and managed by the framework. All other dependency-related annotations like `@Service`, `@Repository`, and `@Bean()` are specializations of `@Component()`. This means any class annotated with these will automatically be registered in the DI container and can be resolved anywhere.
+
+You can use:
+
+- `@Service` for service-layer classes
+
+- `@Repository` for database access layers
+
+- `@Component` for general-purpose dependencies
+
+- `@Bean()` inside `@Configuration()` classes for more advanced or conditional registrations
+
+The `@Configuration()` annotation designates a class that defines application configuration. Similar to Spring Boot, it serves as a centralized place to define and instantiate beans. These beans are declared via `@Bean()` methods and are typically used for third-party services, adapters, or infrastructure components.
+
+```dart
+@Configuration()
+class AppConfiguration {
+  @Bean()
+  Future<Storage> storage(ApplicationSettings settings) {
+    return Storage.createStorageService(settings);
+  }
+
+  @Bean()
+  Pipeline globalMiddleware() {
+    return Pipeline()..addMiddleware(logRequests());
+  }
+}
+```
+
+This lets you inject complex external services like file storage, databases, or third-party APIs.
+
+:::tip
+
+Beans can be either synchronous or asynchronous (i.e., they can return Future), allowing flexible integration with async APIs.
+
+:::
+
+## Controller
+
+In Vaden, the `@Controller()` annotation is the entry point for HTTP routing. Controllers are core to how Vaden maps HTTP requests to executable logic. By annotating a class with `@Controller('/path')`, you define a base route for all methods within the class.
+
+Each method inside a controller can then be annotated with HTTP verbs like `@Get()`, `@Post()`, etc., creating clear, concise, and organized routing.
+The controller receives dependencies through constructor injection, such as services or repositories registered in the DI container:
+
+```dart
+@Controller('/auth')
+class AuthController {
+  final AuthService authService;
+
+  AuthController(this.authService);
+
+  @Get('/ping')
+  Response ping() => Response.ok(authService.ping());
+}
+```
+
+Controllers also support:
+
+- Request parameters using `@Param()`
+- Query parameters using` @Query()`
+- Request body parsing using `@Body()`
+- Middleware and Guards via `@UseMiddleware([])` and `@UseGuards([])`
+
+This design aligns with mature frameworks like Spring Boot and NestJS, making it familiar and productive. Controllers in Vaden are not just convenient — they are foundational to how the application handles web traffic.
