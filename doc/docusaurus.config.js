@@ -78,7 +78,7 @@ const config = {
         disableSwitch: true,
         respectPrefersColorScheme: false,
       },
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/vaden-social-card.jpg',
       navbar: {
         title: 'VADEN',
         logo: {
@@ -147,7 +147,7 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
-        additionalLanguages: ['dart'],
+        additionalLanguages: ['dart', 'yaml'],
       },
     }),
 };

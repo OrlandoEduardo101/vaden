@@ -33,7 +33,7 @@ The generated project is ready to run using the Dart SDK or via IDEs like VSCode
 - In your IDE, press F5, or run the command:
 
 ```sh title="Terminal"
-dart run
+dart run bin/server.dart
 ```
 
 ## 5. Testing Your Application

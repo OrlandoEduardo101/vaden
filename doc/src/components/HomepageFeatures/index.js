@@ -4,32 +4,33 @@ import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    title: 'High efficiency and low cost',
+    Svg: require('@site/static/img/easy-to-use.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Vaden uses an AOT (Ahead-of-Time) compilation model, generating smaller binaries and remove a backend   
+        interpreter necessity to run Dart code. This improves infrastructure, 
+        reducing resources consumption and increasing efficiency.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    title: 'Much easier',
+    Svg: require('@site/static/img/much-easier.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        It's syntax is similar to Java, C# and JavaScript, making the 
+        learning curve smoother for developers who are familiar with these languages.
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: 'Objective and structured',
+    Svg: require('@site/static/img/objetive.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Vaden will be a complete ecosystem, offering security, robust documentation, 
+        an efficient ORM and support for connections to enterprise databases such as SQL Server and Oracle.
       </>
     ),
   },

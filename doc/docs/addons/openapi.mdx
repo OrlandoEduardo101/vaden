@@ -1,0 +1,62 @@
+---
+sidebar_position: 1
+---
+
+# OpenAPI (Swagger)
+
+Vaden supports OpenAPI (Swagger) documentation through a built-in add-on that can be enabled during project creation. This add-on generates automatic API documentation by analyzing annotations on your controllers and DTOs.
+
+## Enabling OpenAPI Support
+
+When generating a new project using the Vaden Generator, make sure to select the OpenAPI add-on. This will create:
+- Default openapi.dart configuration under `lib/config/`.
+- Controller examples using @Api() and `@ApiResponse()`.
+
+:::tip
+
+If you don’t enable the add-on, the documentation system won’t be available by default.
+
+:::
+
+## Annotating Controllers
+
+To include a controller in the documentation, you must annotate it with `@Api()`:
+
+```dart
+@Api(tag: 'auth', description: 'Authentication endpoints')
+@Controller('/auth')
+class AuthController {
+  @Get('/ping')
+  String ping() => 'pong';
+}
+```
+If the controller is not annotated with @Api(), it will be excluded from the generated Swagger documentation.
+
+## Documenting Endpoints
+
+Each route can be further described using `@ApiOperation()` and one or more `@ApiResponse()` annotations:
+
+```dart
+@ApiOperation(summary: 'Ping the server', description: 'Simple health check')
+@ApiResponse(200, description: 'Success')
+@Get('/ping')
+String ping() => 'pong';
+```
+
+You can also specify a return schema using a DTO:
+
+```dart
+@ApiResponse(
+  200,
+  description: 'Successful login',
+  content: ApiContent(type: 'application/json', schema: TokenResponse),
+)
+```
+
+## Serving the Documentation
+
+Once enabled, your project will expose:
+- `/docs/openapi.json` – The raw OpenAPI spec.
+- `/docs/` – Swagger UI rendered via static resources.
+
+You don’t need to configure these manually — they’re included with the add-on and mounted automatically.

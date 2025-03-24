@@ -1,0 +1,91 @@
+---
+sidebar_position: 6
+---
+
+# Data Transfer Object (DTO)
+
+Vaden uses the concept of DTOs (Data Transfer Objects) to safely transport data between client and server. DTOs are tightly integrated with the serialization system known as DSON, which handles converting objects to and from JSON.
+
+## `@DTO()` Annotation
+
+To define a DTO in Vaden, annotate the class with @DTO(). This marks the class for code generation so that Vaden can handle:
+- Automatic fromJson and toJson conversion.
+- Input validation (via Validator mixin).
+- Schema generation for OpenAPI.
+
+```dart
+@DTO()
+class Credentials with Validator<Credentials> {
+  final String username;
+  final String password;
+
+  Credentials(this.username, this.password);
+
+  static Credentials fromJson(Map<String, dynamic> json) {
+    return Credentials(json['username'], json['password']);
+  }
+
+  @override
+  LucidValidator<Credentials> validate(ValidatorBuilder<Credentials> builder) {
+    return builder
+      .ruleFor((c) => c.username, key: 'username').notEmpty()
+      .ruleFor((c) => c.password, key: 'password').minLength(6);
+  }
+}
+```
+
+Additionally, you can return a DTO directly from a controller method instead of a Response. Vaden will automatically serialize it to JSON:
+
+```dart
+@Get('/me')
+UserProfile getProfile() => UserProfile('Alice');
+```
+
+This makes the controller cleaner while still returning a proper application/json response.
+
+## Deserialization with `@Body()`
+
+When a controller method uses `@Body()`, Vaden will:
+
+- Read the request JSON body.
+- Look up the corresponding `@DTO()`.
+- Deserialize the data using DSON.
+- Optionally validate the object before passing it to your method.
+
+```dart
+@Post('/login')
+String login(@Body() Credentials credentials) {
+  return Response.ok(credentials.username);
+}
+```
+Only `@DTO()` classes are allowed in `@Body()` parameters.
+
+## DSON
+
+DSON is Vaden’s automatic serializer. It is responsible for:
+- Converting DTOs from JSON (`fromJson<T>()`).
+- Converting objects to JSON (`toJson<T>()`).
+- Generating OpenAPI schemas.
+
+You can inject it anywhere:
+
+```dart
+@Service()
+class DebugService {
+  final DSON dson;
+  DebugController(this.dson);
+
+  String serializeCredentials( Map<String, dynamic> body) {
+    final dto = dson.fromJson<Credentials>(body);
+    return Response.ok(dson.toJson(dto));
+  }
+}
+```
+
+## Benefits
+
+- No need to write boilerplate serializers.
+- Clean error handling via validation.
+- Fully typed and OpenAPI-ready.
+
+By using `@DTO()` and DSON together, Vaden ensures reliable and clean data exchange between client and server.

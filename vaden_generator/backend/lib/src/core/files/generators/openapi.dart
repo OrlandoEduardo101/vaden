@@ -92,5 +92,12 @@ class OpenAPIController {
 
     return Response.notFound('Not Found');
   }
+
+  @Get('/openapi.json')
+  Response getOpenApiJSON(Request request) {
+    return Response.ok(swaggerUI.schemaText, headers: {
+      'Content-Type': 'application/json',
+    });
+  }
 }
 ''';
