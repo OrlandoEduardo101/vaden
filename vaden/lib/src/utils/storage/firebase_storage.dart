@@ -18,7 +18,7 @@ part of 'storage.dart';
 /// ```dart
 /// final storage = FirebaseStorage(
 ///   projectId: 'my-firebase-project',
-///   apiKey: 'AIzaSyBOti4mM-6x9WDnZIjIeyEU_U9vDCO4Iec',
+///   apiKey: 'api-key',
 /// );
 ///
 /// // Upload a file
@@ -32,7 +32,7 @@ part of 'storage.dart';
 ///   provider:
 ///     firebase:
 ///       projectId: 'my-firebase-project'
-///       apiKey: 'AIzaSyBOti4mM-6x9WDnZIjIeyEU_U9vDCO4Iec'
+///       apiKey: 'api-key'
 /// ```
 ///
 /// Note: This implementation requires the Firebase SDK for Dart to be properly installed
@@ -42,7 +42,7 @@ class FirebaseStorage extends Storage {
   ///
   /// This ID is used to identify the Firebase project and connect to the correct storage bucket.
   final String projectId;
-  
+
   /// The Firebase API key used for authentication.
   ///
   /// This key is used to authenticate requests to the Firebase Storage service.
@@ -126,7 +126,7 @@ class FirebaseStorage extends Storage {
   /// try {
   ///   // Download a file from Firebase Storage
   ///   final imageBytes = await storage.download('user/123/profile.jpg');
-  ///   
+  ///
   ///   // Save the downloaded file locally
   ///   await File('downloaded_profile.jpg').writeAsBytes(imageBytes);
   ///   print('File downloaded successfully');
@@ -171,11 +171,11 @@ class FirebaseStorage extends Storage {
   /// try {
   ///   // List all files in a user's folder
   ///   final userFiles = await storage.listFiles('user/123/');
-  ///   
+  ///
   ///   print('Found ${userFiles.length} files:');
   ///   for (final filePath in userFiles) {
   ///     print(' - $filePath');
-  ///     
+  ///
   ///     // You can download each file if needed
   ///     // final fileContent = await storage.download(filePath);
   ///   }
@@ -219,11 +219,11 @@ class FirebaseStorage extends Storage {
   ///
   /// // Read a local file
   /// final imageBytes = await File('local_image.jpg').readAsBytes();
-  /// 
+  ///
   /// // Upload the file to Firebase Storage
   /// final storagePath = await storage.upload('user/123/profile.jpg', imageBytes);
   /// print('File uploaded to: $storagePath');
-  /// 
+  ///
   /// // The file is now accessible via Firebase Storage
   /// ```
   ///
