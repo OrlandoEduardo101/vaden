@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:localization/localization.dart';
 
@@ -339,15 +338,10 @@ class _GeneratePageState extends State<GeneratePage> {
                                     color: VadenColors.secondaryColor,
                                   ),
                                 ),
-                                InkWell(
-                                  child: SvgPicture.asset(
-                                    VadenImage.flutterandoLogo,
-                                    width: 120,
-                                    height: 24,
-                                  ),
-                                  onTap: () {
-                                    context.go('/linktree');
-                                  },
+                                SvgPicture.asset(
+                                  VadenImage.flutterandoLogo,
+                                  width: 120,
+                                  height: 24,
                                 ),
                               ],
                             ),
