@@ -1,80 +1,35 @@
-<img src="https://i.imgur.com/HvX3wYJ.png"/>
+<img src="https://doc.vaden.dev/img/vaden-social-card.jpg"/>
 
-# VADEN
+# Vaden
 
-VADEN is a modern backend framework for Dart, inspired by Spring Boot, focusing on developer experience and productivity while maintaining robust security features.
+**Vaden** is a backend framework for Dart inspired by Spring Boot, built entirely by the [Flutterando](https://flutterando.com.br) community.
 
-## Features
+It brings modern concepts like annotation-based controllers, dependency injection, middlewares, guards, DTOs, and OpenAPI documentation — all tailored for a fast and expressive Dart server experience.
 
-- 🚀 Spring Boot-inspired backend framework for Dart
-- 🔒 Built-in security features with Vaden Security
-- 📧 Integrated email functionality
-- 🎯 Web-based project initializer
-- 📦 Modular dependency system
+Vaden aims to deliver the same developer joy Dart brought to Flutter, but for the backend.
 
-## Getting Started
+## Documentation
+Full documentation is available at:
+https://doc.vaden.dev
 
-The easiest way to start a new Vaden project is through our web initializer:
+## Get Started
+Create a new project in seconds using:
+https://start.vaden.dev
 
-1. Visit the Vaden Generator website
-2. Configure your project:
-   - Set project name and Dart version
-   - Select required dependencies (Swagger, WebSocket, ORM, etc.)
-3. Download the generated project
-4. Extract and run!
+## Support the Project
+Vaden is open-source and maintained by the community.
+If you'd like to support its development:
+https://apoia.se/vaden
 
-## Key Components
+## Partners
+We are grateful to the individuals and organizations who believe in and support the Vaden project.
 
-### Vaden Security
-
-Comprehensive authentication flows including:
-- PasswordLess authentication
-- OAuth2 integration
-- Keycloak connector
-- Firebase authentication
-- JWT support
-
-### Email Integration
-
-Built-in email functionality leveraging existing Dart packages from pub.dev.
-
-### Vaden Generator
-
-Web-based project initializer offering:
-- Project template generation
-- Dependency management
-- Configuration setup
-- Quick start boilerplate
-
-## Installation
-
-Add VADEN to your `pubspec.yaml`:
-
-```yaml
-dependencies:
-  vaden: ^latest_version
-```
-
-## Community
-
-Join our community for support and updates:
 - [Flutterando Discord](https://discord.gg/flutterando)
 - [Mobile Devs Ceará (WhatsApp)](https://whatsapp.group/mobiledevsceara)
 
-## Contributing
+Want to become a featured partner? Support Vaden and join our mission to build the Dart backend ecosystem.
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+---
 
+Made with care by the [Flutterando community](https://github.com/Flutterando)
 
-### Financial Support
-
-If you find VADEN useful for your projects, consider supporting our development efforts:
-- [Support us on Apoia.se](https://apoia.se/vaden) - Help ensure the continued development and maintenance of this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
-
-## Credits
-
-Developed by [Flutterando](https://github.com/Flutterando)
