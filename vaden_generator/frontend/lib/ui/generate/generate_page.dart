@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:localization/localization.dart';
 
@@ -72,7 +73,7 @@ class _GeneratePageState extends State<GeneratePage> {
         backgroundColor: Colors.transparent,
         appBar: VadenAppBar(
           title: 'IN_DEVELOPMENT'.i18n(),
-          mode: VadenAppBarMode.development, // Pode ser alterado para .production
+          mode: VadenAppBarMode.development,
           fontSize: fontSize,
           letterSpacing: letterSpacing,
           lineHeight: lineHeight,
@@ -136,19 +137,35 @@ class _GeneratePageState extends State<GeneratePage> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Container(
-                        height: 1,
-                        width: 156,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [
-                              VadenColors.gradientStart,
-                              VadenColors.gradientEnd,
-                            ],
-                          ),
-                        ),
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final textSpan = TextSpan(
+                            text: 'Create_new_project'.i18n(),
+                            style: GoogleFonts.anekBangla(
+                              color: VadenColors.txtSecondary,
+                              fontSize: 20,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          );
+                          final textPainter = TextPainter(
+                            text: textSpan,
+                            textDirection: TextDirection.ltr,
+                          )..layout();
+                          return Container(
+                            height: 1,
+                            width: textPainter.width,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [
+                                  VadenColors.gradientStart,
+                                  VadenColors.gradientEnd,
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 32),
                       Column(
@@ -205,19 +222,35 @@ class _GeneratePageState extends State<GeneratePage> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Container(
-                        height: 1,
-                        width: 130,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [
-                              VadenColors.gradientStart,
-                              VadenColors.gradientEnd,
-                            ],
-                          ),
-                        ),
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final textSpan = TextSpan(
+                            text: 'Dependencies'.i18n(),
+                            style: GoogleFonts.anekBangla(
+                              color: VadenColors.txtSecondary,
+                              fontSize: 20,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          );
+                          final textPainter = TextPainter(
+                            text: textSpan,
+                            textDirection: TextDirection.ltr,
+                          )..layout();
+                          return Container(
+                            height: 1,
+                            width: textPainter.width,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [
+                                  VadenColors.gradientStart,
+                                  VadenColors.gradientEnd,
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 32),
                       Column(
@@ -255,10 +288,9 @@ class _GeneratePageState extends State<GeneratePage> {
                               SizedBox(
                                 width: 124,
                                 height: 56,
-                                child: VadenButtonExtension.primary(
-                                  title: 'Add'.i18n(),
+                                child: VadenButton(
+                                  label: 'Add'.i18n(),
                                   onPressed: _openDependenciesDialog,
-                                  icon: null,
                                   width: 120,
                                 ),
                               ),
@@ -273,26 +305,19 @@ class _GeneratePageState extends State<GeneratePage> {
                           project,
                         ]),
                         builder: (context, child) {
-                          final String title = 'Generate_project'.i18n();
-                          final double width = 320;
-
+                          final bool isValid = projectValidator.validate(project).isValid;
                           return Center(
-                            child: projectValidator.validate(project).isValid
-                                ? VadenButtonExtension.primary(
-                                    title: title,
-                                    onPressed: () =>
-                                        viewModel.createProjectCommand.execute(project),
-                                    icon: null,
-                                    width: width,
-                                    isLoading: viewModel.createProjectCommand.isRunning,
-                                  )
-                                : VadenButtonExtension.outlined(
-                                    title: title,
-                                    onPressed: () {},
-                                    icon: null,
-                                    width: width,
-                                    borderColor: VadenColors.stkWhite,
-                                  ),
+                            child: VadenButton(
+                              label: 'Generate_project'.i18n(),
+                              style: isValid
+                                  ? VadenButtonStyle.filled
+                                  : VadenButtonStyle.outlinedWhite,
+                              onPressed: isValid
+                                  ? () => viewModel.createProjectCommand.execute(project)
+                                  : () {},
+                              width: 320,
+                              isLoading: viewModel.createProjectCommand.isRunning,
+                            ),
                           );
                         },
                       ),
@@ -307,17 +332,22 @@ class _GeneratePageState extends State<GeneratePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  '${'Community_made'.i18n()} ',
+                                  '${'Community_made'.i18n()}  ',
                                   style: GoogleFonts.anekBangla(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w300,
                                     color: VadenColors.secondaryColor,
                                   ),
                                 ),
-                                SvgPicture.asset(
-                                  VadenImage.flutterandoLogo,
-                                  width: 120,
-                                  height: 24,
+                                InkWell(
+                                  child: SvgPicture.asset(
+                                    VadenImage.flutterandoLogo,
+                                    width: 120,
+                                    height: 24,
+                                  ),
+                                  onTap: () {
+                                    context.go('/linktree');
+                                  },
                                 ),
                               ],
                             ),
@@ -327,7 +357,7 @@ class _GeneratePageState extends State<GeneratePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  '${'Copyright'.i18n()} ',
+                                  '${'Copyright'.i18n()}  ',
                                   style: GoogleFonts.anekBangla(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -340,7 +370,7 @@ class _GeneratePageState extends State<GeneratePage> {
                                   height: 24,
                                 ),
                                 Text(
-                                  '2025',
+                                  ' 2025',
                                   style: GoogleFonts.anekBangla(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,

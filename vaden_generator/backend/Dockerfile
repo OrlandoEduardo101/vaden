@@ -7,7 +7,7 @@ RUN dart pub get
 COPY . .
 RUN dart pub get --offline
 RUN dart run build_runner build --delete-conflicting-outputs
-RUN dart compile exe bin/server.dart -o bin/server
+RUN dart compile exe bin/backend.dart -o bin/server
 
 FROM scratch
 WORKDIR /app
