@@ -79,7 +79,7 @@ class FirebaseStorage extends Storage {
   /// ```dart
   /// final storage = FirebaseStorage(
   ///   projectId: 'my-firebase-project',
-  ///   apiKey: 'AIzaSyBOti4mM-6x9WDnZIjIeyEU_U9vDCO4Iec',
+  ///   apiKey: 'api-key',
   /// );
   ///
   /// try {
@@ -120,7 +120,7 @@ class FirebaseStorage extends Storage {
   /// ```dart
   /// final storage = FirebaseStorage(
   ///   projectId: 'my-firebase-project',
-  ///   apiKey: 'AIzaSyBOti4mM-6x9WDnZIjIeyEU_U9vDCO4Iec',
+  ///   apiKey: 'api-key',
   /// );
   ///
   /// try {
@@ -165,7 +165,7 @@ class FirebaseStorage extends Storage {
   /// ```dart
   /// final storage = FirebaseStorage(
   ///   projectId: 'my-firebase-project',
-  ///   apiKey: 'AIzaSyBOti4mM-6x9WDnZIjIeyEU_U9vDCO4Iec',
+  ///   apiKey: 'api-key',
   /// );
   ///
   /// try {
@@ -214,7 +214,7 @@ class FirebaseStorage extends Storage {
   /// ```dart
   /// final storage = FirebaseStorage(
   ///   projectId: 'my-firebase-project',
-  ///   apiKey: 'AIzaSyBOti4mM-6x9WDnZIjIeyEU_U9vDCO4Iec',
+  ///   apiKey: 'api-key',
   /// );
   ///
   /// // Read a local file
