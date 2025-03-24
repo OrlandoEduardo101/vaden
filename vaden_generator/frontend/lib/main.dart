@@ -4,8 +4,8 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:localization/localization.dart';
 
 import 'config/dependencies.dart';
+import 'config/routes.dart';
 import 'main_viewmodels.dart';
-import 'routes.dart';
 import 'ui/core/themes/theme.dart';
 import 'ui/widgets/internation/internation_widget.dart';
 
