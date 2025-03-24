@@ -50,7 +50,7 @@ abstract class Storage {
   /// - A Future that resolves to the path of the uploaded file, which can be used
   ///   to download or reference the file later.
   Future<String> upload(String filePath, List<int> bytes);
-  
+
   /// Downloads a file from the storage provider.
   ///
   /// This method retrieves a file from the storage provider based on its path.
@@ -61,7 +61,7 @@ abstract class Storage {
   /// Returns:
   /// - A Future that resolves to the contents of the file as a byte array.
   Future<List<int>> download(String filePath);
-  
+
   /// Deletes a file from the storage provider.
   ///
   /// This method removes a file from the storage provider based on its path.
@@ -72,7 +72,7 @@ abstract class Storage {
   /// Returns:
   /// - A Future that completes when the file has been deleted.
   Future<void> delete(String filePath);
-  
+
   /// Lists all files in a folder in the storage provider.
   ///
   /// This method retrieves a list of file paths for all files in the specified folder.
@@ -106,7 +106,7 @@ abstract class Storage {
   ///       secretKey: 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
   ///     firebase:  # Only needed if provider is 'firebase'
   ///       projectId: 'my-project-id'
-  ///       apiKey: 'AIzaSyBOti4mM-6x9WDnZIjIeyEU_U9vDCO4Iec'
+  ///       apiKey: 'api-key'
   ///   local:  # Only needed if provider is 'local' or not specified
   ///     folder: 'uploads'
   /// ```
