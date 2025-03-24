@@ -4,10 +4,13 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:localization/localization.dart';
 
 import 'config/dependencies.dart';
-import 'config/routes.dart';
 import 'main_viewmodels.dart';
 import 'ui/core/themes/theme.dart';
+import 'ui/generate/generate_page.dart';
+import 'ui/link_tree/vaden_link_tree.dart';
 import 'ui/widgets/internation/internation_widget.dart';
+
+const isStartPage = bool.fromEnvironment('IS_START_PAGE', defaultValue: true);
 
 void main() {
   usePathUrlStrategy();
@@ -36,13 +39,12 @@ class _MainAppState extends State<MainApp> {
     return ListenableBuilder(
       listenable: viewmodel,
       builder: (context, child) {
-        return MaterialApp.router(
-          title: 'Vaden generator',
+        return MaterialApp(
+          title: isStartPage ? 'Vaden generator' : 'Vaden Backend',
           themeMode: ThemeMode.system,
           theme: lightTheme,
           darkTheme: dartTheme,
           locale: viewmodel.locale,
-          routerConfig: router,
           localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
@@ -68,6 +70,7 @@ class _MainAppState extends State<MainApp> {
 
             return defaultLocale;
           },
+          home: isStartPage ? const GeneratePage() : const VadenLinkTree(),
         );
       },
     );
