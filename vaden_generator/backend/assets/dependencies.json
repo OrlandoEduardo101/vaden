@@ -16,5 +16,11 @@
         "description": "A powerful Http client for Dart, which supports Interceptors, Global configuration, FormData, Request Cancellation, File downloading, Timeout etc.",
         "key": "dio",
         "tag": "HTTP"
+    },
+    {
+        "name": "Redis",
+        "description": "Redis protocol for client-server communication and data exchange.",
+        "key": "redis",
+        "tag": "DATABASE"
     }
 ]

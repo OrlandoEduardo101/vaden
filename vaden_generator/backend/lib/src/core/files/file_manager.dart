@@ -5,6 +5,7 @@ import 'package:backend/src/core/files/file_generate.dart';
 import 'package:backend/src/core/files/generators/dio.dart';
 import 'package:backend/src/core/files/generators/initial_project.dart';
 import 'package:backend/src/core/files/generators/openapi.dart';
+import 'package:backend/src/core/files/generators/redis.dart';
 import 'package:backend/src/core/files/generators/websocket.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vaden/vaden.dart';
@@ -18,6 +19,7 @@ class FileManager {
     'openapi': OpenAPIGenerator(),
     'websocket': WebsocketGenerator(),
     'dio': DioGenerator(),
+    'redis': RedisGenerator(),
   };
 
   Future<Directory> createTempDir(Directory dir, String name) {
