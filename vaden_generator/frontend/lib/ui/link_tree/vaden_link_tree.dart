@@ -143,77 +143,71 @@ class _VadenLinkTreeState extends State<VadenLinkTree> {
                             spacing: 32,
                             runSpacing: 32,
                             children: [
-                              VadenButtonExtension.outlined(
-                                title: 'Apoia-se',
+                              VadenButton(
+                                style: VadenButtonStyle.outlinedWhite,
+                                label: 'Apoia-se',
                                 onPressed: () {
                                   urlLauncherService.launch(
                                     'https://apoia.se/vaden',
                                   );
                                 },
-                                icon: null,
                                 width: 360,
                                 height: 80,
-                                borderColor: VadenColors.stkWhite,
                               ),
-                              VadenButtonExtension.outlined(
-                                title: 'Generator',
+                              VadenButton(
+                                style: VadenButtonStyle.outlinedWhite,
+                                label: 'Generator',
                                 onPressed: () {
                                   urlLauncherService.launch(
                                     'https://start.vaden.dev/',
                                   );
                                 },
-                                icon: null,
                                 width: 360,
                                 height: 80,
-                                borderColor: VadenColors.stkWhite,
                               ),
-                              VadenButtonExtension.outlined(
-                                title: 'Discord',
+                              VadenButton(
+                                style: VadenButtonStyle.outlinedWhite,
+                                label: 'Discord',
                                 onPressed: () {
                                   urlLauncherService.launch(
                                     'https://discord.vaden.dev',
                                   );
                                 },
-                                icon: null,
                                 width: 360,
                                 height: 80,
-                                borderColor: VadenColors.stkWhite,
                               ),
-                              VadenButtonExtension.outlined(
-                                title: 'Linkedin',
+                              VadenButton(
+                                style: VadenButtonStyle.outlinedWhite,
+                                label: 'Linkedin',
                                 onPressed: () {
                                   urlLauncherService.launch(
                                     'https://www.linkedin.com/company/vaden1/',
                                   );
                                 },
-                                icon: null,
                                 width: 360,
                                 height: 80,
-                                borderColor: VadenColors.stkWhite,
                               ),
-                              VadenButtonExtension.outlined(
-                                title: 'GitHub',
+                              VadenButton(
+                                style: VadenButtonStyle.outlinedWhite,
+                                label: 'GitHub',
                                 onPressed: () {
                                   urlLauncherService.launch(
                                     'https://github.com/Flutterando/vaden',
                                   );
                                 },
-                                icon: null,
                                 width: 360,
                                 height: 80,
-                                borderColor: VadenColors.stkWhite,
                               ),
-                              VadenButtonExtension.outlined(
-                                title: 'Documentation',
+                              VadenButton(
+                                style: VadenButtonStyle.outlinedWhite,
+                                label: 'Documentation',
                                 onPressed: () {
                                   urlLauncherService.launch(
                                     'https://doc.vaden.dev',
                                   );
                                 },
-                                icon: null,
                                 width: 360,
                                 height: 80,
-                                borderColor: VadenColors.stkWhite,
                               ),
                             ],
                           )
