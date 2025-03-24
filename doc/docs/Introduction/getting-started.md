@@ -21,7 +21,7 @@ dart pub get
 
 ## 3. Run the Class Scanner with build_runner
 
-The **Class Scanner** iintroduces Java-inspired metaprogramming to Dart. Since this feature is integrated with build_runner, simply run the build or watch command during development:
+The **Class Scanner** introduces Java-inspired metaprogramming to Dart. Since this feature is integrated with build_runner, simply run the build or watch command during development:
 
 ```sh title="Terminal"
 dart run build_runner watch
