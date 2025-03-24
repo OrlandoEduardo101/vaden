@@ -3,13 +3,88 @@ import 'dart:convert';
 import 'package:shelf/shelf.dart';
 import 'package:vaden/src/types/dson.dart';
 
+/// Exception class for handling HTTP responses with error states.
+///
+/// The ResponseException class is used to throw exceptions that can be automatically
+/// converted into HTTP responses with appropriate status codes, body content, and headers.
+/// This allows for a consistent approach to error handling across the application.
+///
+/// ResponseException is typically used in service or repository layers to signal
+/// error conditions that should be propagated to the client as HTTP responses.
+/// The exception is caught by the framework's exception handling middleware and
+/// converted into an appropriate HTTP response.
+///
+/// Example:
+/// ```dart
+/// @Service()
+/// class UserService {
+///   Future<UserDTO> getUserById(String id) async {
+///     final user = await userRepository.findById(id);
+///     if (user == null) {
+///       throw ResponseException(404, {'error': 'User not found'});
+///     }
+///     return user;
+///   }
+/// }
+/// ```
+///
+/// In the example above, if a user is not found, a ResponseException is thrown
+/// with a 404 status code and a JSON body containing an error message. This will
+/// be automatically converted into an HTTP response with the same status code and body.
 class ResponseException<W> implements Exception {
+  /// The body content of the response.
+  ///
+  /// This can be of various types, including:
+  /// - String: For plain text responses
+  /// - List<int>: For binary data
+  /// - Map<String, dynamic>: For JSON objects
+  /// - Custom DTO classes: Will be serialized to JSON using the DSON system
+  /// - Lists of the above types
   final W body;
+  
+  /// The HTTP status code for the response.
+  ///
+  /// Common status codes include:
+  /// - 400: Bad Request
+  /// - 401: Unauthorized
+  /// - 403: Forbidden
+  /// - 404: Not Found
+  /// - 409: Conflict
+  /// - 422: Unprocessable Entity
+  /// - 500: Internal Server Error
   final int code;
+  
+  /// Additional HTTP headers to include in the response.
+  ///
+  /// These headers will be merged with the default headers set by the framework.
+  /// If a Content-Type header is not provided, it will be automatically set based
+  /// on the type of the body content.
   final Map<String, String> headers;
 
+  /// Creates a new ResponseException with the specified status code, body, and headers.
+  ///
+  /// Parameters:
+  /// - [code]: The HTTP status code for the response.
+  /// - [body]: The body content of the response.
+  /// - [headers]: Additional HTTP headers to include in the response (optional).
   const ResponseException(this.code, this.body, {this.headers = const {}});
 
+  /// Generates a shelf Response object from this exception.
+  ///
+  /// This method converts the exception into a shelf Response object that can be
+  /// returned from a controller method or middleware. The conversion process depends
+  /// on the type of the body content:
+  /// - String: Returned as plain text
+  /// - List<int>: Returned as binary data
+  /// - Map<String, dynamic> and similar map types: Encoded as JSON
+  /// - Custom DTO classes: Serialized to JSON using the provided DSON instance
+  /// - Lists of the above types: Processed accordingly
+  ///
+  /// Parameters:
+  /// - [dson]: The DSON instance to use for serializing custom DTO classes.
+  ///
+  /// Returns:
+  /// - A shelf Response object with the appropriate status code, body, and headers.
   Response generateResponse(DSON dson) {
     if (body is String) {
       return Response(code, body: body, headers: _enforceContentType(headers, 'text/plain'));
@@ -36,6 +111,18 @@ class ResponseException<W> implements Exception {
     }
   }
 
+  /// Ensures that the response headers include a Content-Type header.
+  ///
+  /// This private method adds a Content-Type header to the response headers if one
+  /// is not already present. This ensures that the client knows how to interpret
+  /// the response body.
+  ///
+  /// Parameters:
+  /// - [headers]: The original headers map.
+  /// - [contentType]: The content type to set if none is present.
+  ///
+  /// Returns:
+  /// - A new headers map with the Content-Type header added if necessary.
   Map<String, String> _enforceContentType(Map<String, String> headers, String contentType) {
     final Map<String, String> enforcedHeaders = Map<String, String>.from(headers);
 
@@ -46,6 +133,13 @@ class ResponseException<W> implements Exception {
     return enforcedHeaders;
   }
 
+  /// Returns a string representation of this exception.
+  ///
+  /// This method is useful for debugging and logging purposes. It includes the
+  /// exception's body content and status code.
+  ///
+  /// Returns:
+  /// - A string representation of this exception.
   @override
   String toString() {
     return 'ResponseException{message: $body, code: $code}';
