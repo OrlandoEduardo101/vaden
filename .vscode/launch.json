@@ -16,7 +16,7 @@
       "cwd": "vaden_generator/backend",
       "request": "launch",
       "type": "dart",
-      "program": "bin/server.dart"
+      "program": "bin/backend.dart"
     },
     {
       "name": "frontend",

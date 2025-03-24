@@ -11,6 +11,7 @@ import 'constants.dart';
 final injector = AutoInjector();
 
 void setupInjection() {
+  injector.add(Constants.new);
   injector.add(dioFactory);
   injector.add(Constants.new);
   injector.addSingleton(ClientHttp.new);
