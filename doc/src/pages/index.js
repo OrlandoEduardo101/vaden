@@ -1,9 +1,9 @@
-import clsx from 'clsx';
 import Link from '@docusaurus/Link';
+import Translate, { translate } from '@docusaurus/Translate';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
-
+import Layout from '@theme/Layout';
+import clsx from 'clsx';
 import styles from './index.module.css';
 
 function HomepageHeader() {
@@ -11,17 +11,33 @@ function HomepageHeader() {
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
-      <img
+        <img
           src="/img/vaden_logo_text.svg"
-          alt="Logo with text"
+          alt={translate({
+            message: "Logo with text",
+            description: "Alt text for Vaden logo"
+          })}
           style={{ width: '300px', height: 'auto' }}
         />
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
+        <p className="hero__subtitle">
+          <Translate 
+            id="homepage.tagline"
+            description="Main tagline on the homepage"
+          >
+            {siteConfig.tagline}
+          </Translate>
+        </p>
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/Introduction/getting-started">
-            Getting Started - 5min ⏱️
+            to="/docs/Introduction/getting-started"
+          >
+            <Translate
+              id="homepage.getStarted"
+              description="Getting started button text"
+            >
+              Getting Started - 5min ⏱️
+            </Translate>
           </Link>
         </div>
       </div>
@@ -30,11 +46,17 @@ function HomepageHeader() {
 }
 
 export default function Home() {
-  // const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title="Home"
-      description="Like Spring Boot, but for Dart.">
+      title={translate({
+        message: "Home",
+        description: "Page title"
+      })}
+      description={translate({
+        message: "Like Spring Boot, but for Dart.",
+        description: "Page description"
+      })}
+    >
       <HomepageHeader />
       <main>
         <HomepageFeatures />
