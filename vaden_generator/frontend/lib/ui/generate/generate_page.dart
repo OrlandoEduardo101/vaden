@@ -266,7 +266,7 @@ class _GeneratePageState extends State<GeneratePage> {
                                   height: project.dependencies.isEmpty ? 56 : null,
                                   child: project.dependencies.isEmpty
                                       ? VadenTextInput(
-                                          label: 'Add_dependencies'.i18n(),
+                                          label: 'addDependencies'.i18n(),
                                           hint: '',
                                           verticalPadding: project.dependencies.isEmpty //
                                               ? 20
