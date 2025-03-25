@@ -1,0 +1,26 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.Introduction": {
+    "message": "Introdução",
+    "description": "The label for category Introduction in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Introduction.link.generated-index.description": {
+    "message": "Saiba como começar com o Vaden",
+    "description": "The generated-index page description for category Introduction in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Basic Usage": {
+    "message": "Uso Básico",
+    "description": "The label for category Basic Usage in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Add-ons": {
+    "message": "Complementos",
+    "description": "The label for category Add-ons in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Examples": {
+    "message": "Exemplos",
+    "description": "The label for category Examples in sidebar tutorialSidebar"
+  }
+}

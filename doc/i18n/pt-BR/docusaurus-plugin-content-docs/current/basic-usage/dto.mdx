@@ -1,0 +1,93 @@
+---
+sidebar_position: 6
+---
+
+# Objeto de Transferência de Dados (DTO)
+
+Vaden utiliza o conceito de DTOs (Objetos de Transferência de Dados) para transportar dados com segurança entre cliente e servidor. Os DTOs são integrados ao sistema de serialização chamado DSON, que lida com a conversão de objetos para e de JSON.
+
+## Anotação `@DTO()`
+
+Para definir um DTO no Vaden, anote a classe com `@DTO()`. Isso marca a classe para geração de código para que o Vaden possa lidar com:
+
+- Conversão automática de fromJson e toJson.
+- Validação de entrada (via mixin Validator).
+- Geração de esquema para OpenAPI.
+
+```dart
+@DTO()
+class Credentials with Validator<Credentials> {
+  final String username;
+  final String password;
+
+  Credentials(this.username, this.password);
+
+  static Credentials fromJson(Map<String, dynamic> json) {
+    return Credentials(json['username'], json['password']);
+  }
+
+  @override
+  LucidValidator<Credentials> validate(ValidatorBuilder<Credentials> builder) {
+    return builder
+      .ruleFor((c) => c.username, key: 'username').notEmpty()
+      .ruleFor((c) => c.password, key: 'password').minLength(6);
+  }
+}
+```
+
+Além disso, você pode retornar um DTO diretamente de um método do controlador em vez de um Response. O Vaden irá serializá-lo automaticamente para JSON:
+
+```dart
+@Get('/me')
+UserProfile getProfile() => UserProfile('Alice');
+```
+
+Isso torna o controlador mais limpo, mantendo ainda um response adequado do tipo application/json.
+
+## Desserialização com `@Body()`
+
+Quando um método do controlador usa `@Body()`, o Vaden irá:
+
+- Ler o corpo JSON da requisição.
+- Procurar o `@DTO()` correspondente.
+- Desserializar os dados usando DSON.
+- Opcionalmente validar o objeto antes de passá-lo para o seu método.
+
+```dart
+@Post('/login')
+String login(@Body() Credentials credentials) {
+  return Response.ok(credentials.username);
+}
+```
+Apenas classes com `@DTO()` são permitidas em parâmetros `@Body()`.
+
+## DSON
+
+DSON é o serializador automático do Vaden. É responsável por:
+
+- Converter DTOs de JSON (`fromJson<T>()`).
+- Converter objetos para JSON (`toJson<T>()`).
+- Gerar esquemas OpenAPI.
+
+Você pode injetá-lo em qualquer lugar:
+
+```dart
+@Service()
+class DebugService {
+  final DSON dson;
+  DebugController(this.dson);
+
+  String serializeCredentials( Map<String, dynamic> body) {
+    final dto = dson.fromJson<Credentials>(body);
+    return Response.ok(dson.toJson(dto));
+  }
+}
+```
+
+## Benefícios
+
+- Não é necessário escrever serializadores boilerplate.
+- Tratamento de erros limpo via validação.
+- Totalmente tipado e preparado para OpenAPI.
+
+Ao usar `@DTO()` e `DSON` juntos, o Vaden garante uma troca de dados confiável e limpa entre cliente e servidor.

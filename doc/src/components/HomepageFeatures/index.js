@@ -1,39 +1,58 @@
-import clsx from 'clsx';
+import Translate, { translate } from '@docusaurus/Translate';
 import Heading from '@theme/Heading';
+import clsx from 'clsx';
 import styles from './styles.module.css';
 
 const FeatureList = [
-  {
-    title: 'High efficiency and low cost',
-    Svg: require('@site/static/img/easy-to-use.svg').default,
-    description: (
-      <>
-        Vaden uses an AOT (Ahead-of-Time) compilation model, generating smaller binaries and remove a backend   
-        interpreter necessity to run Dart code. This improves infrastructure, 
-        reducing resources consumption and increasing efficiency.
-      </>
-    ),
-  },
-  {
-    title: 'Much easier',
-    Svg: require('@site/static/img/much-easier.svg').default,
-    description: (
-      <>
-        It's syntax is similar to Java, C# and JavaScript, making the 
-        learning curve smoother for developers who are familiar with these languages.
-      </>
-    ),
-  },
-  {
-    title: 'Objective and structured',
-    Svg: require('@site/static/img/objetive.svg').default,
-    description: (
-      <>
-        Vaden will be a complete ecosystem, offering security, robust documentation, 
-        an efficient ORM and support for connections to enterprise databases such as SQL Server and Oracle.
-      </>
-    ),
-  },
+ {
+   title: translate({
+     message: 'High efficiency and low cost',
+     description: 'First feature title'
+   }),
+   Svg: require('@site/static/img/easy-to-use.svg').default,
+   description: (
+     <Translate 
+       id="homepage.features.efficiency.description"
+       description="Description of efficiency feature"
+     >
+       Vaden uses an AOT (Ahead-of-Time) compilation model, generating smaller binaries and remove a backend
+       interpreter necessity to run Dart code. This improves infrastructure,
+       reducing resources consumption and increasing efficiency.
+     </Translate>
+   ),
+ },
+ {
+   title: translate({
+     message: 'Much easier',
+     description: 'Second feature title'
+   }),
+   Svg: require('@site/static/img/much-easier.svg').default,
+   description: (
+     <Translate
+       id="homepage.features.learning.description"
+       description="Description of learning curve feature"
+     >
+       It's syntax is similar to Java, C# and JavaScript, making the
+       learning curve smoother for developers who are familiar with these languages.
+     </Translate>
+   ),
+ },
+ {
+   title: translate({
+     message: 'Objective and structured',
+     description: 'Third feature title'
+   }),
+   Svg: require('@site/static/img/objetive.svg').default,
+   description: (
+     <Translate
+       id="homepage.features.ecosystem.description"
+       description="Description of ecosystem feature"
+     >
+       Vaden will be a complete ecosystem, offering security, robust documentation,
+       an efficient ORM and support for connections to enterprise databases such as SQL Server and Oracle.
+     </Translate>
+   ),
+ },
 ];
 
 function Feature({Svg, title, description}) {
