@@ -5,6 +5,7 @@ import 'package:backend/src/core/files/file_generate.dart';
 import 'package:backend/src/core/files/generators/dio.dart';
 import 'package:backend/src/core/files/generators/initial_project.dart';
 import 'package:backend/src/core/files/generators/openapi.dart';
+import 'package:backend/src/core/files/generators/postgres.dart';
 import 'package:backend/src/core/files/generators/redis.dart';
 import 'package:backend/src/core/files/generators/websocket.dart';
 import 'package:uuid/uuid.dart';
@@ -20,12 +21,14 @@ class FileManager {
     'websocket': WebsocketGenerator(),
     'dio': DioGenerator(),
     'redis': RedisGenerator(),
+    'postgres': PostgresGenerator(),
   };
 
   Future<Directory> createTempDir(Directory dir, String name) {
     final tempDirName = Uuid().v4();
 
-    return Directory('${dir.path}${Platform.pathSeparator}$tempDirName${Platform.pathSeparator}$name') //
+    return Directory(
+            '${dir.path}${Platform.pathSeparator}$tempDirName${Platform.pathSeparator}$name') //
         .create(recursive: true);
   }
 
@@ -66,7 +69,10 @@ class FileManager {
   Future<List<int>> createZip(String folderPath, String projectName) async {
     final archive = Archive();
 
-    final files = Directory(folderPath).listSync(recursive: true).whereType<File>().toList();
+    final files = Directory(folderPath)
+        .listSync(recursive: true)
+        .whereType<File>()
+        .toList();
 
     for (var file in files) {
       final fileBytes = await file.readAsBytes();
