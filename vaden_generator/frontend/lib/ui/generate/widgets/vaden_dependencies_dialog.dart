@@ -160,7 +160,7 @@ class _VadenDependenciesDialogState extends State<VadenDependenciesDialog> {
                     title: dependency.name,
                     subtitle: dependency.description,
                     tag: dependency.tag,
-                    isSelected: true,
+                    isSelected: false,
                     onTap: () => widget.onSave(dependency),
                     maxLines: 3,
                   );
