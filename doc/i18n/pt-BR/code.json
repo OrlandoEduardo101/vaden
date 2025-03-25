@@ -1,0 +1,46 @@
+{
+    "Logo with text": {
+        "message": "Logo com texto",
+        "description": "Texto alternativo para o logo do Vaden"
+    },
+    "homepage.tagline": {
+        "message": "Como Spring Boot, mas para Dart",
+        "description": "Slogan principal da página inicial"
+    },
+    "homepage.getStarted": {
+        "message": "Começar - 5min ⏱️",
+        "description": "Texto do botão de início rápido"
+    },
+    "homepage.pageTitle": {
+        "message": "Início",
+        "description": "Título da página inicial"
+    },
+    "homepage.pageDescription": {
+        "message": "Como Spring Boot, mas para Dart",
+        "description": "Descrição da página para meta tags"
+    },
+    "High efficiency and low cost": {
+        "message": "Alta eficiência e baixo custo",
+        "description": "First feature title"
+    },
+    "homepage.features.efficiency.description": {
+        "message": "Vaden usa um modelo de compilação AOT (Ahead-of-Time), gerando binários menores e removendo a necessidade de um interpretador backend para executar código Dart. Isso melhora a infraestrutura, reduzindo o consumo de recursos e aumentando a eficiência.",
+        "description": "Description of efficiency feature"
+    },
+    "Much easier": {
+        "message": "Muito mais fácil",
+        "description": "Second feature title"
+    },
+    "homepage.features.learning.description": {
+        "message": "Sua sintaxe é similar a Java, C# e JavaScript, tornando a curva de aprendizado mais suave para desenvolvedores familiarizados com essas linguagens.",
+        "description": "Description of learning curve feature"
+    },
+    "Objective and structured": {
+        "message": "Objetivo e estruturado",
+        "description": "Third feature title"
+    },
+    "homepage.features.ecosystem.description": {
+        "message": "Vaden será um ecossistema completo, oferecendo segurança, documentação robusta, um ORM eficiente e suporte para conexões com bancos de dados corporativos como SQL Server e Oracle.",
+        "description": "Description of ecosystem feature"
+    }
+}

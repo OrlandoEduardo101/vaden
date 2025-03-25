@@ -1,0 +1,18 @@
+{
+  "title": {
+    "message": "VADEN",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "Como Spring Boot, mas para Dart.",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Getting Started": {
+    "message": "Iniciar",
+    "description": "Navbar item with label Getting Started"
+  },
+  "item.label.Apoia.se": {
+    "message": "Apoia.se",
+    "description": "Navbar item with label Apoia.se"
+  }
+}

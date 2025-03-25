@@ -1,0 +1,63 @@
+---
+sidebar_position: 1
+---
+
+# OpenAPI (Swagger)
+
+O Vaden oferece suporte à documentação da OpenAPI (Swagger) por meio de um complemento interno que pode ser ativado durante a criação do projeto. Esse complemento gera documentação automática de API analisando anotações em seus controladores e DTOs.
+
+## Ativação do suporte à OpenAPI
+
+Ao gerar um novo projeto usando o Vaden Generator, certifique-se de selecionar o complemento OpenAPI. Isso criará:
+- Configuração padrão openapi.dart em `lib/config/`.
+- Exemplos de controladores usando @Api() e `@ApiResponse()`.
+
+:::tip
+
+Se você não ativar o add-on, o sistema de documentação não estará disponível por padrão.
+
+:::
+
+## Anotação de controles
+
+Para incluir um controlador na documentação, você deve anotá-lo com `@Api()`:
+
+```dart
+@Api(tag: 'auth', description: 'Authentication endpoints')
+@Controller('/auth')
+class AuthController {
+  @Get('/ping')
+  String ping() => 'pong';
+}
+```
+Se o controlador não for anotado com @Api(), ele será excluído da documentação Swagger gerada.
+
+## Documentando Endpoints
+
+Cada rota pode ser descrita com mais detalhes usando anotações `@ApiOperation()` e uma ou mais anotações `@ApiResponse()`:
+
+```dart
+@ApiOperation(summary: 'Ping the server', description: 'Simple health check')
+@ApiResponse(200, description: 'Success')
+@Get('/ping')
+String ping() => 'pong';
+```
+
+Você também pode especificar um esquema de retorno usando um DTO:
+
+```dart
+@ApiResponse(
+  200,
+  description: 'Successful login',
+  content: ApiContent(type: 'application/json', schema: TokenResponse),
+)
+```
+
+## Servidor da documentação
+
+Uma vez ativado, seu projeto exporá:
+- `/docs/openapi.json` - A especificação OpenAPI bruta.
+- `/docs/` - Interface do usuário do Swagger renderizada por meio de recursos estáticos.
+
+Você não precisa configurá-los manualmente - eles estão incluídos no complemento e são montados automaticamente.
+

@@ -1,0 +1,42 @@
+{
+  "link.title.Docs": {
+    "message": "Docs",
+    "description": "The title of the footer links column with title=Docs in the footer"
+  },
+  "link.title.Community": {
+    "message": "Community",
+    "description": "The title of the footer links column with title=Community in the footer"
+  },
+  "link.title.More": {
+    "message": "More",
+    "description": "The title of the footer links column with title=More in the footer"
+  },
+  "link.item.label.Tutorial": {
+    "message": "Tutorial",
+    "description": "The label of footer link with label=Tutorial linking to /docs/Introduction/getting-started"
+  },
+  "link.item.label.Vaden Generator": {
+    "message": "Vaden Generator",
+    "description": "The label of footer link with label=Vaden Generator linking to https://start.vaden.dev"
+  },
+  "link.item.label.Discord": {
+    "message": "Discord",
+    "description": "The label of footer link with label=Discord linking to https://discord.vaden.dev"
+  },
+  "link.item.label.Flutterando": {
+    "message": "Flutterando",
+    "description": "The label of footer link with label=Flutterando linking to https://discord.flutterando.com.br"
+  },
+  "link.item.label.GitHub": {
+    "message": "GitHub",
+    "description": "The label of footer link with label=GitHub linking to https://github.com/Flutterando/vaden"
+  },
+  "link.item.label.Apoia.se": {
+    "message": "Apoia.se",
+    "description": "The label of footer link with label=Apoia.se linking to https://apoia.se/vaden"
+  },
+  "copyright": {
+    "message": "Copyright © 2025 Vaden, Inc. Built with Docusaurus.",
+    "description": "The footer copyright"
+  }
+}
