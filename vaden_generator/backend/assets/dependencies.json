@@ -28,6 +28,12 @@
         "description": "Temporary driver uses to connecting to and querying PostgreSQL databases.",
         "key": "postgres",
         "tag": "DATABASE"
+    },
+    {
+        "name": "SQLite",
+        "description": "A lightweight, file-based, serverless database engine that provides local data storage for applications.",
+        "key": "sqlite",
+        "tag": "DATABASE"
     }
 ]
 
