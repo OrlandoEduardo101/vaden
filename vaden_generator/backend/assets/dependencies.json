@@ -22,5 +22,12 @@
         "description": "Redis protocol for client-server communication and data exchange.",
         "key": "redis",
         "tag": "DATABASE"
+    },
+    {
+        "name": "PostgreSQL",
+        "description": "Temporary driver uses to connecting to and querying PostgreSQL databases.",
+        "key": "postgres",
+        "tag": "DATABASE"
     }
 ]
+
