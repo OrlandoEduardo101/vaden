@@ -24,5 +24,6 @@
   "maxLength": "Quantidade excessiva de caracteres",
   "minLength": "Quantidade de caracteres insuficiente",
   "notEmpty": "Não pode estar vazio",
-  "addDependencies": "Adicionar dependencias"
+  "addDependencies": "Adicionar dependencias",
+  "reservedKeyword": "O nome não pode ser uma palavra reservada do Dart ou o nome do framework (Vaden)"
 }
