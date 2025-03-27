@@ -7,6 +7,7 @@ import 'package:backend/src/core/files/generators/initial_project.dart';
 import 'package:backend/src/core/files/generators/openapi.dart';
 import 'package:backend/src/core/files/generators/postgres.dart';
 import 'package:backend/src/core/files/generators/redis.dart';
+import 'package:backend/src/core/files/generators/sqlite.dart';
 import 'package:backend/src/core/files/generators/websocket.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vaden/vaden.dart';
@@ -22,6 +23,7 @@ class FileManager {
     'dio': DioGenerator(),
     'redis': RedisGenerator(),
     'postgres': PostgresGenerator(),
+    'sqlite': SqliteGenerator(),
   };
 
   Future<Directory> createTempDir(Directory dir, String name) {
