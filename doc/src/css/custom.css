@@ -68,9 +68,10 @@
 .hero .hero__subtitle {
   text-shadow: none !important;
 }
-
+html,
 body {
   background-color: #000000 !important;
+  height: 100vh;
 }
 
 .footer,
