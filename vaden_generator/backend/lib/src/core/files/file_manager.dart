@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:archive/archive_io.dart';
 import 'package:backend/src/core/files/file_generate.dart';
+import 'package:backend/src/core/files/generators/cron.dart';
 import 'package:backend/src/core/files/generators/dio.dart';
 import 'package:backend/src/core/files/generators/initial_project.dart';
 import 'package:backend/src/core/files/generators/openapi.dart';
@@ -24,6 +25,7 @@ class FileManager {
     'redis': RedisGenerator(),
     'postgres': PostgresGenerator(),
     'sqlite': SqliteGenerator(),
+    'cron': CronGenerator(),
   };
 
   Future<Directory> createTempDir(Directory dir, String name) {

@@ -34,6 +34,12 @@
         "description": "A lightweight, file-based, serverless database engine that provides local data storage for applications.",
         "key": "sqlite",
         "tag": "DATABASE"
+    },
+    {
+        "name": "Cron",
+        "description": "Cron Jobs, run tasks periodically at fixed times or intervals..",
+        "key": "cron",
+        "tag": "SYSTEM"
     }
 ]
 
