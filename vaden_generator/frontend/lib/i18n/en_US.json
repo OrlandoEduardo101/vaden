@@ -24,5 +24,6 @@
   "maxLength": "Excessive number of characters",
   "minLength": "Insufficient number of characters",
   "notEmpty": "Cannot be empty",
-  "addDependencies": "Add dependencies"
+  "addDependencies": "Add dependencies",
+  "reservedKeyword": "The name cannot be a Dart reserved keyword or the framework name (Vaden)"
 }
