@@ -155,6 +155,23 @@ class AggregatingVadenBuilder implements Builder {
     return Response.internalServerError(body: jsonEncode({'error': 'Internal server error'}));
   }
 ''');
+
+    aggregatedBuffer.writeln('''PType? _parse<PType>(String? value) {
+    if (value == null) {
+      return null;
+    }
+
+    if(PType == int) {
+      return int.parse(value) as PType;
+    } else if(PType == double) {
+      return double.parse(value) as PType;
+    } else if(PType == bool) {
+      return bool.parse(value) as PType;
+    } else {
+      return value as PType;
+    }
+  }
+    ''');
     aggregatedBuffer.writeln('}');
 
     importsBuffer.writeln(importSet.map((uri) => "import $uri").join('\n'));

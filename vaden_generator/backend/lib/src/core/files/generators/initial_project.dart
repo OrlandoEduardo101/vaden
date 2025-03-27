@@ -93,7 +93,7 @@ const _readmeContent = '''# {{name}}
 const _buildContent = r'''targets:
   $default:
     builders:
-      vaden_gen|aggregating_vaden_builder:
+      vaden_class_scanner|aggregating_vaden_builder:
         enabled: true
 
 ''';

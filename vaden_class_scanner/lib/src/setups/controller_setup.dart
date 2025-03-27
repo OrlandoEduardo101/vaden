@@ -100,7 +100,8 @@ String controllerSetup(ClassElement classElement) {
       final security = convertSecurity != null ? '[$convertSecurity]' : '<Map<String, dynamic>>[]';
 
       bodyBuffer.writeln("""
-paths['$apiPathResolver'] = {
+paths['$apiPathResolver'] = <String, dynamic>{
+  ...paths['$apiPathResolver'] ?? <String, dynamic>{},
   '$routerMethod': {
     'tags': ['${api.tag}'],
     'summary': '',
@@ -281,11 +282,11 @@ paths['$apiPathResolver']['$routerMethod']['parameters']?.add({
   if (request.params['$pname'] == null) {
     return Response(400, body: jsonEncode({'error': 'Path Param is required ($pname)'}));
   }
-  final ${parameter.name} = request.params['$pname']!;
+  final ${parameter.name} =  _parse<${parameter.type.getDisplayString()}>(request.params['$pname'])!;
 
 """);
         } else {
-          paramCodeList.add("final ${parameter.name} = request.params['$pname'];");
+          paramCodeList.add("final ${parameter.name} =  _parse<${parameter.type.getDisplayString()}>(request.params['$pname']);");
         }
       } else if (queryChecker.hasAnnotationOf(parameter)) {
         final qname = queryChecker.firstAnnotationOf(parameter)?.getField('name')?.toStringValue() ?? parameter.name;
@@ -308,14 +309,16 @@ paths['$apiPathResolver']['$routerMethod']['parameters']?.add({
   if (request.url.queryParameters['$qname'] == null) {
     return Response(400, body: jsonEncode({'error': 'Query param is required ($qname)'}));
   }
-  final ${parameter.name} = request.url.queryParameters['$qname']!;
+  final ${parameter.name} = _parse<${parameter.type.getDisplayString()}>(request.url.queryParameters['$qname'])!;
 
 """);
         } else {
-          paramCodeList.add("final ${parameter.name} = request.url.queryParameters['$qname'];");
+          paramCodeList.add("final ${parameter.name} = _parse<${parameter.type.getDisplayString()}>(request.url.queryParameters['$qname']);");
         }
       } else if (headerChecker.hasAnnotationOf(parameter)) {
         final hname = headerChecker.firstAnnotationOf(parameter)?.getField('name')?.toStringValue() ?? parameter.name;
+        final isNotNull = !_isNullable(parameter.type);
+
         if (api != null) {
           bodyBuffer.writeln("""
 paths['$apiPathResolver']['$routerMethod']['parameters']?.add({
@@ -328,11 +331,34 @@ paths['$apiPathResolver']['$routerMethod']['parameters']?.add({
 });
 """);
         }
-        paramCodeList.add("final ${parameter.name} = request.headers['$hname'];");
+
+        if (isNotNull) {
+          paramCodeList.add("""
+  if (request.headers['$hname'] == null) {
+    return Response(400, body: jsonEncode({'error': 'Header is required ($hname)'}));
+  }
+  final ${parameter.name} = _parse<${parameter.type.getDisplayString()}>(request.headers['$hname'])!;
+
+""");
+        } else {
+          paramCodeList.add("final ${parameter.name} = _parse<${parameter.type.getDisplayString()}>(request.headers['$hname']);");
+        }
       } else if (contextChecker.hasAnnotationOf(parameter)) {
         final cname = contextChecker.firstAnnotationOf(parameter)?.getField('name')?.toStringValue() ?? parameter.name;
         final ctype = parameter.type.getDisplayString();
-        paramCodeList.add("final ${parameter.name} = request.context['$cname'] as $ctype;");
+        final isNotNull = !_isNullable(parameter.type);
+
+        if (isNotNull) {
+          paramCodeList.add("""
+  if (request.context['$cname'] == null) {
+    return Response(400, body: jsonEncode({'error': 'Context is required ($cname)'}));
+  }
+  final ${parameter.name} = request.context['$cname'] as $ctype;
+
+""");
+        } else {
+          paramCodeList.add("final ${parameter.name} = request.context['$cname'] as $ctype?;");
+        }
       } else {
         final paramType = parameter.type.getDisplayString();
         if (paramType == 'Request' || paramType == 'Request?') {

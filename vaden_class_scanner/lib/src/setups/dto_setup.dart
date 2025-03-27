@@ -99,7 +99,11 @@ String _fromJson(ClassElement classElement) {
     var paramValue = '';
 
     if (isPrimitiveListOrMap(parameter.type)) {
-      paramValue = "json['$paramName']";
+      if (paramType == 'double') {
+        paramValue = "json['$paramName']?.toDouble()";
+      } else {
+        paramValue = "json['$paramName']";
+      }
     } else {
       if (parameter.type.isDartCoreList) {
         final param = parameter.type as ParameterizedType;
