@@ -11,16 +11,19 @@ String configurationSetup(ClassElement classElement) {
   final instanceName = 'configuration${classElement.name}';
 
   for (final method in classElement.methods) {
-    if (beanChecker.hasAnnotationOf(method)) {
-      if (method.returnType.isDartAsyncFuture) {
-        final parametersCode = method.parameters.map((param) {
-          if (param.isNamed) {
-            return '${param.name}: _injector()';
-          }
-          return '_injector()';
-        }).join(', ');
+    if (!beanChecker.hasAnnotationOf(method)) {
+      continue;
+    }
 
-        bodyBuffer.writeln('''
+    if (method.returnType.isDartAsyncFuture || method.returnType.isDartAsyncFutureOr) {
+      final parametersCode = method.parameters.map((param) {
+        if (param.isNamed) {
+          return '${param.name}: _injector()';
+        }
+        return '_injector()';
+      }).join(', ');
+
+      bodyBuffer.writeln('''
 asyncBeans.add(() async {
 final result = await $instanceName.${method.name}($parametersCode);
  _injector.uncommit();
@@ -29,9 +32,8 @@ _injector.addInstance(result);
 });
 
 ''');
-      } else {
-        bodyBuffer.writeln('    _injector.addLazySingleton($instanceName.${method.name});');
-      }
+    } else {
+      bodyBuffer.writeln('    _injector.addLazySingleton($instanceName.${method.name});');
     }
   }
 
