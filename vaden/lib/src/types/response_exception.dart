@@ -41,7 +41,7 @@ class ResponseException<W> implements Exception {
   /// - Custom DTO classes: Will be serialized to JSON using the DSON system
   /// - Lists of the above types
   final W body;
-  
+
   /// The HTTP status code for the response.
   ///
   /// Common status codes include:
@@ -53,7 +53,7 @@ class ResponseException<W> implements Exception {
   /// - 422: Unprocessable Entity
   /// - 500: Internal Server Error
   final int code;
-  
+
   /// Additional HTTP headers to include in the response.
   ///
   /// These headers will be merged with the default headers set by the framework.
@@ -68,6 +68,57 @@ class ResponseException<W> implements Exception {
   /// - [body]: The body content of the response.
   /// - [headers]: Additional HTTP headers to include in the response (optional).
   const ResponseException(this.code, this.body, {this.headers = const {}});
+
+  factory ResponseException.internalServerError(W message, {Map<String, String> headers = const {}}) {
+    return ResponseException(500, message, headers: headers);
+  }
+
+  factory ResponseException.notFound(W message, {Map<String, String> headers = const {}}) {
+    return ResponseException(404, message, headers: headers);
+  }
+  factory ResponseException.badRequest(W message, {Map<String, String> headers = const {}}) {
+    return ResponseException(400, message, headers: headers);
+  }
+  factory ResponseException.unauthorized(W message, {Map<String, String> headers = const {}}) {
+    return ResponseException(401, message, headers: headers);
+  }
+  factory ResponseException.forbidden(W message, {Map<String, String> headers = const {}}) {
+    return ResponseException(403, message, headers: headers);
+  }
+  factory ResponseException.conflict(W message, {Map<String, String> headers = const {}}) {
+    return ResponseException(409, message, headers: headers);
+  }
+  factory ResponseException.unprocessableEntity(W message, {Map<String, String> headers = const {}}) {
+    return ResponseException(422, message, headers: headers);
+  }
+  factory ResponseException.notAcceptable(W message, {Map<String, String> headers = const {}}) {
+    return ResponseException(406, message, headers: headers);
+  }
+  factory ResponseException.notImplemented(W message, {Map<String, String> headers = const {}}) {
+    return ResponseException(501, message, headers: headers);
+  }
+  factory ResponseException.serviceUnavailable(W message, {Map<String, String> headers = const {}}) {
+    return ResponseException(503, message, headers: headers);
+  }
+  factory ResponseException.gatewayTimeout(W message, {Map<String, String> headers = const {}}) {
+    return ResponseException(504, message, headers: headers);
+  }
+  factory ResponseException.tooManyRequests(W message, {Map<String, String> headers = const {}}) {
+    return ResponseException(429, message, headers: headers);
+  }
+  factory ResponseException.notModified(W message, {Map<String, String> headers = const {}}) {
+    return ResponseException(304, message, headers: headers);
+  }
+  factory ResponseException.methodNotAllowed(W message, {Map<String, String> headers = const {}}) {
+    return ResponseException(405, message, headers: headers);
+  }
+
+  factory ResponseException.requestTimeout(W message, {Map<String, String> headers = const {}}) {
+    return ResponseException(408, message, headers: headers);
+  }
+  factory ResponseException.preconditionFailed(W message, {Map<String, String> headers = const {}}) {
+    return ResponseException(412, message, headers: headers);
+  }
 
   /// Generates a shelf Response object from this exception.
   ///

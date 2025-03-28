@@ -43,6 +43,62 @@ UserProfile getProfile() => UserProfile('Alice');
 
 This makes the controller cleaner while still returning a proper application/json response.
 
+## Json Key 
+
+If you want to use a different key in the JSON than the field name, you can use the `@JsonKey()` annotation:
+
+```dart
+@DTO()
+class Credentials with Validator<Credentials> {
+  @JsonKey('user_name')
+  String username;
+
+  String password;
+
+  Credentials(this.username, this.password);
+
+}
+```
+
+## Complex Objects parse
+
+DTOs can also contain other DTOs. Vaden will automatically handle the serialization and deserialization of nested objects,
+but you can also use `@UseParse()` to specify a custom parser for a field. This is useful for complex 
+types or when you want to control the serialization format:
+
+```dart
+@DTO()
+class BaseDto {
+  final String id;
+
+  @UseParse(DateTimeParse)
+  final DateTime createdAt;
+
+  @UseParse(DateTimeParse)
+  final DateTime? updatedAt;
+
+  BaseDto({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+}
+
+class DateTimeParse extends ParamParse<DateTime?, String> {
+  const DateTimeParse();
+
+  @override
+  String toJson(DateTime? param) {
+    return param?.toIso8601String() ?? '';
+  }
+
+  @override
+  DateTime? fromJson(String? json) {
+    return DateTime.tryParse(json ?? '');
+  }
+}
+```
+
 ## Deserialization with `@Body()`
 
 When a controller method uses `@Body()`, Vaden will:

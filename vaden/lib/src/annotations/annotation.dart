@@ -3,6 +3,7 @@
 /// This file contains annotations for defining controllers, services, repositories,
 /// and other components in a Vaden application, as well as annotations for
 /// defining REST API endpoints and OpenAPI documentation.
+library;
 
 part 'openapi.dart';
 part 'rest.dart';
@@ -37,7 +38,7 @@ abstract interface class BaseComponent {
 final class Component implements BaseComponent {
   @override
   final bool registerWithInterfaceOrSuperType;
-  
+
   /// Creates a Component annotation.
   ///
   /// [registerWithInterfaceOrSuperType] - When true, the component will be registered
@@ -63,9 +64,9 @@ final class Component implements BaseComponent {
 /// @Service()
 /// class UserServiceImpl implements UserService {
 ///   final UserRepository _repository;
-///   
+///
 ///   UserServiceImpl(this._repository);
-///   
+///
 ///   @override
 ///   Future<User> getUserById(String id) => _repository.findById(id);
 /// }
@@ -102,15 +103,15 @@ final class Service implements BaseComponent {
 /// @Repository()
 /// class UserRepositoryImpl implements UserRepository {
 ///   final Database _db;
-///   
+///
 ///   UserRepositoryImpl(this._db);
-///   
+///
 ///   @override
 ///   Future<User?> findById(String id) async {
 ///     final result = await _db.query('users', where: 'id = ?', whereArgs: [id]);
 ///     return result.isEmpty ? null : User.fromMap(result.first);
 ///   }
-///   
+///
 ///   // Other method implementations...
 /// }
 /// ```
@@ -185,15 +186,15 @@ class Bean {
 /// @Controller('/api/users')
 /// class UserController {
 ///   final UserService _service;
-///   
+///
 ///   UserController(this._service);
-///   
+///
 ///   @Get('/')
 ///   Future<Response> getAllUsers(Request request) async {
 ///     final users = await _service.findAll();
 ///     return Response.ok(jsonEncode(users));
 ///   }
-///   
+///
 ///   @Get('/:id')
 ///   Future<Response> getUserById(Request request, String id) async {
 ///     final user = await _service.findById(id);
@@ -234,7 +235,7 @@ final class Controller implements BaseComponent {
 ///   Response handleValidationException(Request request, ValidationException e) {
 ///     return Response(400, body: jsonEncode({'error': e.message}));
 ///   }
-///   
+///
 ///   @ExceptionHandler(NotFoundException)
 ///   Response handleNotFoundException(Request request, NotFoundException e) {
 ///     return Response.notFound(jsonEncode({'error': e.message}));
@@ -293,15 +294,15 @@ final class ExceptionHandler {
 ///   final String id;
 ///   final String name;
 ///   final String email;
-///   
+///
 ///   UserDTO({required this.id, required this.name, required this.email});
-///   
+///
 ///   factory UserDTO.fromJson(Map<String, dynamic> json) => UserDTO(
 ///     id: json['id'],
 ///     name: json['name'],
 ///     email: json['email'],
 ///   );
-///   
+///
 ///   Map<String, dynamic> toJson() => {
 ///     'id': id,
 ///     'name': name,
@@ -328,16 +329,16 @@ final class DTO implements BaseComponent {
 /// class UserDTO {
 ///   @JsonKey('user_id')
 ///   final String id;
-///   
+///
 ///   final String name;
-///   
+///
 ///   UserDTO({required this.id, required this.name});
 /// }
 /// ```
 class JsonKey {
   /// The name to use for this field in JSON serialization/deserialization.
   final String name;
-  
+
   /// Creates a JsonKey annotation with the specified name.
   ///
   /// [name] - The name to use for this field in JSON.
@@ -355,10 +356,10 @@ class JsonKey {
 /// class UserDTO {
 ///   final String id;
 ///   final String name;
-///   
+///
 ///   @JsonIgnore()
 ///   final String password; // Will not be included in JSON
-///   
+///
 ///   UserDTO({required this.id, required this.name, required this.password});
 /// }
 /// ```
@@ -379,10 +380,10 @@ class JsonIgnore {
 /// @UseMiddleware([LoggingMiddleware])
 /// class UserController {
 ///   // All endpoints in this controller will use LoggingMiddleware
-///   
+///
 ///   @Get('/')
 ///   Future<Response> getAllUsers(Request request) { ... }
-///   
+///
 ///   @Post('/')
 ///   @UseMiddleware([ValidationMiddleware])
 ///   // This endpoint will use both LoggingMiddleware and ValidationMiddleware
@@ -392,7 +393,7 @@ class JsonIgnore {
 class UseMiddleware {
   /// The list of middleware types to apply.
   final List<Type> middlewares;
-  
+
   /// Creates a UseMiddleware annotation with the specified middleware types.
   ///
   /// [middlewares] - The list of middleware types to apply.
@@ -411,10 +412,10 @@ class UseMiddleware {
 /// @UseGuards([AuthGuard, AdminGuard])
 /// class AdminController {
 ///   // All endpoints in this controller will be protected by AuthGuard and AdminGuard
-///   
+///
 ///   @Get('/stats')
 ///   Future<Response> getStats(Request request) { ... }
-///   
+///
 ///   @Post('/settings')
 ///   @UseGuards([SuperAdminGuard])
 ///   // This endpoint will use AuthGuard, AdminGuard, and SuperAdminGuard
@@ -424,7 +425,7 @@ class UseMiddleware {
 class UseGuards {
   /// The list of guard types to apply.
   final List<Type> guards;
-  
+
   /// Creates a UseGuards annotation with the specified guard types.
   ///
   /// [guards] - The list of guard types to apply.
@@ -458,7 +459,7 @@ class Query {
   ///
   /// If null, the parameter name in the method will be used.
   final String? name;
-  
+
   /// Creates a Query annotation with the specified name.
   ///
   /// [name] - The name of the query parameter in the URL.
@@ -548,7 +549,7 @@ class Body {
 class Header {
   /// The name of the header in the request.
   final String name;
-  
+
   /// Creates a Header annotation with the specified name.
   ///
   /// [name] - The name of the header in the request.
@@ -579,9 +580,15 @@ class Header {
 class Context {
   /// The name of the context value in the request.
   final String name;
-  
+
   /// Creates a Context annotation with the specified name.
   ///
   /// [name] - The name of the context value in the request.
   const Context(this.name);
+}
+
+class UseParse {
+  final Type parser;
+
+  const UseParse(this.parser);
 }

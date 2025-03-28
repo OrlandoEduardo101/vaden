@@ -79,7 +79,16 @@ String controllerSetup(ClassElement classElement) {
   final routerVar = "router$controllerName";
   bodyBuffer.writeln("final $routerVar = Router();");
 
-  for (final method in classElement.methods) {
+  for (final method in _getAllMethods(classElement)) {
+    if (method.enclosingElement3.name == 'Object') continue;
+    if (method.isStatic) continue;
+    if (method.isPrivate) continue;
+    if (method.name == 'noSuchMethod') continue;
+    if (method.name == 'toString') continue;
+    if (method.name == 'hashCode') continue;
+    if (method.name == '==') continue;
+    if (method.name == 'runtimeType') continue;
+
     String? routerMethod;
     String? routePath;
 
@@ -155,7 +164,7 @@ paths['$apiPathResolver']['$routerMethod']['responses']['$statusCode']['content'
 
           if (schema != null) {
             if (schema.isDartCoreList) {
-              final schemaName = _extractListElementType(schema).getDisplayString();
+              final schemaName = _extractListElementType(schema, classElement).getDisplayString();
               bodyBuffer.writeln("""
 paths['$apiPathResolver']['$routerMethod']['responses']['$statusCode']['content']['$type']['schema'] = {
     'type': 'array',
@@ -223,7 +232,7 @@ paths['$apiPathResolver']['$routerMethod']['responses']['$statusCode']['content'
     final paramCodeList = <String>[];
     for (final parameter in method.parameters) {
       if (bodyChecker.hasAnnotationOf(parameter)) {
-        final typeName = parameter.type.getDisplayString();
+        final typeName = _resolveTypeFromGeneric(parameter.type, classElement).getDisplayString();
 
         if (api != null) {
           bodyBuffer.writeln("""
@@ -376,7 +385,7 @@ paths['$apiPathResolver']['$routerMethod']['parameters']?.add({
     }
     final callParams = method.parameters.map((p) => p.name).join(', ');
     final isFuture = method.returnType.isDartAsyncFuture || method.returnType.isDartAsyncFutureOr;
-    final returnType = _getUnderlyingType(method.returnType);
+    final returnType = _getUnderlyingType(method.returnType, classElement);
 
     bodyBuffer.writeln("final ctrl = _injector.get<$controllerName>();");
 
@@ -409,7 +418,7 @@ paths['$apiPathResolver']['$routerMethod']['parameters']?.add({
           """;
       } else {
         if (returnType.isDartCoreList) {
-          final elementType = _extractListElementType(returnType);
+          final elementType = _extractListElementType(returnType, classElement);
           toJsonResponse = """
           final jsoResponse = _injector.get<DSON>().toJsonList<${elementType.getDisplayString()}>(result);
           return Response.ok(jsonEncode(jsoResponse), headers: {'Content-Type': 'application/json'});
@@ -443,26 +452,66 @@ paths['$apiPathResolver']['$routerMethod']['parameters']?.add({
   return bodyBuffer.toString();
 }
 
-DartType _extractListElementType(DartType type) {
+DartType _extractListElementType(DartType type, ClassElement currentClass) {
   if (type is ParameterizedType && type.isDartCoreList && type.typeArguments.isNotEmpty) {
-    return type.typeArguments.first;
+    return _resolveTypeFromGeneric(type.typeArguments.first, currentClass);
   }
-  throw Exception('O tipo não é um List<T> ou não possui argumentos de tipo.');
+  throw Exception('Expected a list type');
 }
 
 bool _isNullable(DartType type) {
   return type.nullabilitySuffix != NullabilitySuffix.none;
 }
 
-DartType _getUnderlyingType(DartType type) {
+DartType _getUnderlyingType(DartType type, ClassElement currentClass) {
   if (type.isDartAsyncFuture || type.isDartAsyncFutureOr) {
     final futureType = type as ParameterizedType;
     final typeArguments = futureType.typeArguments;
 
     if (typeArguments.isNotEmpty) {
-      return typeArguments.first;
+      return _resolveTypeFromGeneric(typeArguments.first, currentClass);
     }
   }
 
+  return _resolveTypeFromGeneric(type, currentClass);
+}
+
+DartType _resolveTypeFromGeneric(DartType type, ClassElement currentClass) {
+  final thisType = currentClass.thisType;
+
+  final superclass = thisType.element.supertype;
+  if (superclass == null) return type;
+
+  if (superclass.element.typeParameters.isEmpty) return type;
+
+  final typeArguments = superclass.typeArguments;
+  final typeParams = superclass.element.typeParameters;
+
+  final typeMap = <String, DartType>{
+    for (int i = 0; i < typeParams.length; i++) typeParams[i].name: typeArguments[i],
+  };
+
+  if (type is TypeParameterType && typeMap.containsKey(type.element.name)) {
+    return typeMap[type.element.name]!;
+  }
+
   return type;
+}
+
+List<MethodElement> _getAllMethods(ClassElement classElement) {
+  final allMethods = <String, MethodElement>{};
+
+  for (final m in classElement.methods) {
+    allMethods[m.name] = m;
+  }
+
+  for (final supertype in classElement.allSupertypes) {
+    if (supertype.element.name == 'Object') continue;
+
+    for (final method in supertype.element.methods) {
+      allMethods.putIfAbsent(method.name, () => method);
+    }
+  }
+
+  return allMethods.values.toList();
 }

@@ -5,6 +5,8 @@ import 'package:source_gen/source_gen.dart';
 import 'package:vaden/vaden.dart';
 
 final _jsonKeyChecker = TypeChecker.fromRuntime(JsonKey);
+final useParseChecker = TypeChecker.fromRuntime(UseParse);
+
 // final _jsonIgnoreChecker = TypeChecker.fromRuntime(JsonIgnore);
 
 String dtoSetup(ClassElement classElement) {
@@ -41,7 +43,13 @@ String _toOpenApi(ClassElement classElement) {
   bool first = true;
   for (final field in fields) {
     final fieldName = _getFieldName(field);
-    final schema = _fieldToSchema(field.type);
+    var schema = '';
+    if (useParseChecker.hasAnnotationOf(field)) {
+      final parser = _getParseConverteType(field);
+      schema = _fieldToSchema(parser);
+    } else {
+      schema = _fieldToSchema(field.type);
+    }
     if (!first) propertiesBuffer.writeln(',');
     propertiesBuffer.write('    "$fieldName": $schema');
     first = false;
@@ -98,7 +106,12 @@ String _fromJson(ClassElement classElement) {
     final hasDefault = parameter.hasDefaultValue;
     var paramValue = '';
 
-    if (isPrimitiveListOrMap(parameter.type)) {
+    final field = _getFieldByParameter(parameter);
+
+    if (useParseChecker.hasAnnotationOf(field)) {
+      final parser = _getParseFunction(field, isFromJson: true);
+      paramValue = "$parser(json['$paramName'])";
+    } else if (isPrimitiveListOrMap(parameter.type)) {
       if (paramType == 'double') {
         paramValue = "json['$paramName']?.toDouble()";
       } else {
@@ -134,6 +147,54 @@ String _fromJson(ClassElement classElement) {
   buffer.writeln('}');
 
   return buffer.toString();
+}
+
+FieldElement _getFieldByParameter(ParameterElement parameter) {
+  if (parameter.isInitializingFormal) {
+    final ctorParam = parameter as FieldFormalParameterElement;
+    return ctorParam.field!;
+  }
+
+  if (parameter is FieldFormalParameterElement) {
+    return parameter.field!;
+  }
+
+  throw ResponseException.internalServerError({'error': 'Parameter is not a field formal parameter'});
+}
+
+String _getParseFunction(FieldElement field, {required bool isFromJson}) {
+  final annotation = useParseChecker.firstAnnotationOf(field);
+  if (annotation == null) return '';
+
+  final parserType = annotation.getField('parser')?.toTypeValue();
+  if (parserType == null) return '';
+
+  final parserName = parserType.getDisplayString();
+  return isFromJson ? '$parserName().fromJson' : '$parserName().toJson';
+}
+
+DartType _getParseConverteType(FieldElement field) {
+  final annotation = useParseChecker.firstAnnotationOf(field)!;
+
+  final parserType = annotation.getField('parser')!.toTypeValue();
+
+  return getParseReturnType(parserType as InterfaceType)!;
+}
+
+DartType? getParseReturnType(InterfaceType parserType) {
+  final paramParseChecker = TypeChecker.fromRuntime(ParamParse);
+
+  for (var type in parserType.allSupertypes) {
+    if (!paramParseChecker.isExactlyType(type)) {
+      continue;
+    }
+
+    final typeArgs = type.typeArguments;
+    if (typeArgs.length == 2) {
+      return typeArgs[1];
+    }
+  }
+  return null;
 }
 
 String _getParameterName(ParameterElement parameter) {
@@ -173,7 +234,10 @@ String _toJsonField(FieldElement field) {
   final fieldTypeString = field.type.getDisplayString();
   final isNotNull = field.type.nullabilitySuffix == NullabilitySuffix.none;
 
-  if (isPrimitiveListOrMap(field.type)) {
+  if (useParseChecker.hasAnnotationOf(field)) {
+    final parser = _getParseFunction(field, isFromJson: false);
+    return "'$fieldKey': $parser(obj.$fieldName),";
+  } else if (isPrimitiveListOrMap(field.type)) {
     return "'$fieldKey': obj.$fieldName,";
   } else {
     if (field.type.isDartCoreList) {
