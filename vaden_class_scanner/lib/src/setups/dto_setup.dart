@@ -111,7 +111,8 @@ String _fromJson(ClassElement classElement) {
     if (useParseChecker.hasAnnotationOf(field)) {
       final parser = _getParseFunction(field, isFromJson: true);
       paramValue = "$parser(json['$paramName'])";
-    } else if (isPrimitiveListOrMap(parameter.type)) {
+    } else if (isPrimitiveListOrMap(parameter.type) &&
+        !paramType.contains('List')) {
       if (paramType == 'double') {
         paramValue = "json['$paramName']?.toDouble()";
       } else {
