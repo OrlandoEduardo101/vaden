@@ -111,10 +111,13 @@ String _fromJson(ClassElement classElement) {
     if (useParseChecker.hasAnnotationOf(field)) {
       final parser = _getParseFunction(field, isFromJson: true);
       paramValue = "$parser(json['$paramName'])";
-    } else if (isPrimitiveListOrMap(parameter.type) &&
-        !paramType.contains('List')) {
+    } else if (isPrimitiveListOrMap(parameter.type)) {
       if (paramType == 'double') {
         paramValue = "json['$paramName']?.toDouble()";
+      } else if (parameter.type.isDartCoreList) {
+        final param = parameter.type as ParameterizedType;
+        final arg = param.typeArguments.first.getDisplayString();
+        paramValue = "json['$paramName'].cast<$arg>()";
       } else {
         paramValue = "json['$paramName']";
       }
