@@ -60,7 +60,12 @@ void main() {
         .createTempProject(
           Project(
             dependencies: [
-              Dependency(name: 'Open API', description: '3.0.0', tag: 'DOC', key: 'openapi'),
+              Dependency(
+                  name: 'Open API',
+                  description: '3.0.0',
+                  tag: 'DOC',
+                  key: 'openapi',
+                  requirements: []),
             ],
             projectName: 'jacob',
             projectDescription: 'Jacob Moura',
@@ -79,7 +84,12 @@ void main() {
         .createTempProject(
           Project(
             dependencies: [
-              Dependency(name: 'Open API', description: '3.0.0', tag: 'DOC', key: 'openapi'),
+              Dependency(
+                  name: 'Open API',
+                  description: '3.0.0',
+                  tag: 'DOC',
+                  key: 'openapi',
+                  requirements: []),
             ],
             projectName: 'jacob',
             projectDescription: 'Jacob Moura',
