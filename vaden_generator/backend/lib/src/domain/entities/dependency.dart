@@ -6,12 +6,14 @@ class Dependency with Validator<Dependency> {
   final String description;
   final String key;
   final String tag;
+  final List<String> requirements;
 
   Dependency({
     required this.name,
     required this.description,
     required this.key,
     required this.tag,
+    required this.requirements,
   });
 
   @override

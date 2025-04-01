@@ -1,8 +1,10 @@
+import 'package:backend/src/domain/entities/metadata.dart';
 import 'package:backend/src/domain/dtos/project_link_dto.dart';
 import 'package:backend/src/domain/entities/dependency.dart';
 import 'package:backend/src/domain/entities/project.dart';
 import 'package:backend/src/domain/usecases/create_project.dart';
 import 'package:backend/src/domain/usecases/get_dependencies.dart';
+import 'package:backend/src/domain/usecases/get_metadata.dart';
 import 'package:result_dart/result_dart.dart';
 import 'package:vaden/vaden.dart';
 
@@ -11,10 +13,16 @@ import 'package:vaden/vaden.dart';
 class GenerateController {
   final CreateProject _createProject;
   final GetDependencies _getDependencies;
+  final GetMetadata _getMetadata;
 
-  GenerateController(this._createProject, this._getDependencies);
+  GenerateController(
+    this._createProject,
+    this._getDependencies,
+    this._getMetadata,
+  );
 
-  @ApiOperation(summary: 'Get dependencies', description: 'Get all dependencies')
+  @ApiOperation(
+      summary: 'Get dependencies', description: 'Get all dependencies')
   @ApiResponse(
     200,
     description: 'Dependencies returned',
@@ -23,6 +31,17 @@ class GenerateController {
   @Get('/dependencies')
   Future<List<Dependency>> getDependencies() async {
     return await _getDependencies().getOrThrow();
+  }
+
+  @ApiOperation(summary: 'Get metadata', description: 'Get the metadata')
+  @ApiResponse(
+    200,
+    description: 'Metadata returned',
+    content: ApiContent(type: 'application/json', schema: Metadata),
+  )
+  @Get('/metadata')
+  Future<Metadata> getMetadata() async {
+    return await _getMetadata.call().getOrThrow();
   }
 
   @ApiOperation(summary: 'Create project', description: 'Create a new project')

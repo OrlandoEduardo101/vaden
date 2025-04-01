@@ -18,3 +18,6 @@ apoia_se:
   url: 'https://api.apoia.se'
   key: 'iYlydfvdfvsdvmlKRp3WuN'
   secret: '1o4Ce-BFY9s-dsPxxHoOtY4BtuU94-XtGL0B7aymLq8'
+
+generate_default:
+  dartVersion: "3.7.2"
