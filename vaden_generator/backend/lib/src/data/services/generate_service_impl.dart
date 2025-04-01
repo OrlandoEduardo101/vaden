@@ -88,8 +88,8 @@ class GenerateServiceImpl implements GenerateService {
     final packageDependenciesList =
         jsonDecode(packageDependenciesContent) as List;
 
-    return Map.fromEntries(packageDependenciesList.map((d) => MapEntry(d['key'],
-        ((d['requirements'] ?? []) as List).map((r) => r as String).toList())));
+    return Map.fromEntries(packageDependenciesList.map((d) => MapEntry(
+        d['key'], ((d['requirements'] ?? []) as List).cast<String>())));
   }
 
   Map<String, dynamic> getPackageVersions() {
