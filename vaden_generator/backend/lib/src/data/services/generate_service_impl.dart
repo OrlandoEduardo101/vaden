@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:backend/src/core/files/file_manager.dart';
 import 'package:backend/src/domain/dtos/project_link_dto.dart';
-import 'package:backend/src/domain/entities/dependency.dart';
 import 'package:backend/src/domain/entities/project.dart';
 import 'package:backend/src/domain/services/generate_service.dart';
 import 'package:result_dart/result_dart.dart';
@@ -43,7 +42,7 @@ class GenerateServiceImpl implements GenerateService {
 
     final versions = getPackageVersions();
 
-    final allDependencyKey = _getAllDependenciesKeys(project.dependencies);
+    final allDependencyKey = _getAllDependenciesKeys(project.dependenciesKeys);
 
     for (var key in allDependencyKey) {
       await fileManager.getGenerator(key).generate(
@@ -61,11 +60,11 @@ class GenerateServiceImpl implements GenerateService {
     return Success(project);
   }
 
-  List<String> _getAllDependenciesKeys(List<Dependency> dependencies) {
+  List<String> _getAllDependenciesKeys(List<String> dependenciesKyes) {
     final dependenciesRequirements = getDependenciesRequirements();
 
     Set<String> allDependenciesKeys = {};
-    Set<String> requirementsKeys = dependencies.map((d) => d.key).toSet();
+    Set<String> requirementsKeys = dependenciesKyes.toSet();
 
     while (true) {
       if (requirementsKeys.isEmpty) {
@@ -74,8 +73,10 @@ class GenerateServiceImpl implements GenerateService {
 
       Set<String> newRequirementsKeys = {};
       for (var key in requirementsKeys) {
-        allDependenciesKeys.add(key);
-        newRequirementsKeys.addAll(dependenciesRequirements[key]!);
+        if (dependenciesRequirements[key] != null) {
+          allDependenciesKeys.add(key);
+          newRequirementsKeys.addAll(dependenciesRequirements[key]!);
+        }
       }
 
       requirementsKeys = newRequirementsKeys;
@@ -83,13 +84,14 @@ class GenerateServiceImpl implements GenerateService {
   }
 
   Map<String, List<String>> getDependenciesRequirements() {
-    final packageDependencies = File('assets/dependencies.json');
-    final packageDependenciesContent = packageDependencies.readAsStringSync();
-    final packageDependenciesList =
-        jsonDecode(packageDependenciesContent) as List;
+    final packagMetadata = File('assets/metadata.json');
+    final packagMetadataContent = packagMetadata.readAsStringSync();
+    final metadata = jsonDecode(packagMetadataContent) as Map;
 
-    return Map.fromEntries(packageDependenciesList.map((d) => MapEntry(
-        d['key'], ((d['requirements'] ?? []) as List).cast<String>())));
+    return Map.fromEntries(
+      (metadata['dependencies'] as List).map((d) => MapEntry(
+          d['key'], ((d['requirements'] ?? []) as List).cast<String>())),
+    );
   }
 
   Map<String, dynamic> getPackageVersions() {

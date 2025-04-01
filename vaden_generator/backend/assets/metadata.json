@@ -47,7 +47,7 @@
           "description": "Cron Jobs, run tasks periodically at fixed times or intervals..",
           "key": "cron",
           "tag": "SYSTEM",
-          "requirements":["sqlite"]
+          "requirements":[]
         }
       ],
     "defaultDartVersion": {

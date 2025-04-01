@@ -1,14 +1,16 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:backend/src/domain/entities/dependency.dart';
 import 'package:vaden/vaden.dart';
 
 @DTO()
-class Project with Validator<Project> {
-  final List<String> dependenciesKeys;
+class ProjectDepreciated with Validator<ProjectDepreciated> {
+  final List<Dependency> dependencies;
   final String projectName;
   final String projectDescription;
   final String dartVersion;
 
-  Project({
-    required this.dependenciesKeys,
+  ProjectDepreciated({
+    required this.dependencies,
     required this.projectName,
     required this.projectDescription,
     required this.dartVersion,
@@ -17,7 +19,7 @@ class Project with Validator<Project> {
   ProjectWithTempPath addPath(String path) {
     return ProjectWithTempPath(
       path: path,
-      dependenciesKeys: dependenciesKeys,
+      dependencies: dependencies,
       projectName: projectName,
       projectDescription: projectDescription,
       dartVersion: dartVersion,
@@ -25,9 +27,26 @@ class Project with Validator<Project> {
   }
 
   @override
-  LucidValidator<Project> validate(ValidatorBuilder<Project> builder) {
+  LucidValidator<ProjectDepreciated> validate(
+      ValidatorBuilder<ProjectDepreciated> builder) {
     builder //
-        .ruleFor((p) => p.projectName, key: 'dependenciesKeys');
+        .ruleFor((p) => p.dependencies, key: 'dependencies')
+        .use((dependencies, project) {
+      if (dependencies.isEmpty) {
+        return null;
+      }
+      final validate = ValidatorBuilder<Dependency>();
+      dependencies.first.validate(validate);
+
+      for (var dependency in dependencies) {
+        dependency.validate(validate);
+        final result = validate.validate(dependency);
+        if (!result.isValid) {
+          return result.exceptions.first;
+        }
+      }
+      return null;
+    });
 
     builder //
         .ruleFor((p) => p.projectName, key: 'projectName')
@@ -47,12 +66,12 @@ class Project with Validator<Project> {
   }
 }
 
-class ProjectWithTempPath extends Project {
+class ProjectWithTempPath extends ProjectDepreciated {
   final String path;
 
   ProjectWithTempPath({
     required this.path,
-    required super.dependenciesKeys,
+    required super.dependencies,
     required super.projectName,
     required super.projectDescription,
     required super.dartVersion,
