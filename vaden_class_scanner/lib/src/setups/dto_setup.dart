@@ -114,6 +114,10 @@ String _fromJson(ClassElement classElement) {
     } else if (isPrimitiveListOrMap(parameter.type)) {
       if (paramType == 'double') {
         paramValue = "json['$paramName']?.toDouble()";
+      } else if (parameter.type.isDartCoreList) {
+        final param = parameter.type as ParameterizedType;
+        final arg = param.typeArguments.first.getDisplayString();
+        paramValue = "json['$paramName'].cast<$arg>()";
       } else {
         paramValue = "json['$paramName']";
       }
