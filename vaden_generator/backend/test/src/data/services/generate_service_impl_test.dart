@@ -58,6 +58,7 @@ void main() {
     await generate
         .createTempProject(
           Project(
+
             dependenciesKeys: ['openapi'],
             projectName: 'jacob',
             projectDescription: 'Jacob Moura',

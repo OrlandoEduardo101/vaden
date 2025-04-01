@@ -86,7 +86,7 @@ class PostgresConfiguration {
       Endpoint(
         host: settings['postgres']['host'],
         database: settings['postgres']['database'],
-        port: int.parse(settings['postgres']['port']),
+        port: settings['postgres']['port'],
         username: settings['postgres']['username'],
         password: settings['postgres']['password'],
       ),
