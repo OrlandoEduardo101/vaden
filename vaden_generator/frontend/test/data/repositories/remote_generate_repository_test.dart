@@ -5,7 +5,7 @@ import 'package:frontend/data/repositories/generate_repository.dart';
 import 'package:frontend/data/repositories/remote_generate_repository.dart';
 import 'package:frontend/data/services/client_http.dart';
 import 'package:frontend/data/services/url_launcher_service.dart';
-import 'package:frontend/domain/entities/dependency.dart';
+import 'package:frontend/domain/entities/metadata.dart';
 import 'package:frontend/domain/entities/project.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:result_dart/result_dart.dart';
@@ -44,47 +44,40 @@ void main() {
     clientHttp = MockClientHttp();
     constants = MockConstants();
     urlLauncherService = UrlLauncherServiceFake();
-    generateRepository =
-        RemoteGenerateRepository(constants, clientHttp, urlLauncherService);
+    generateRepository = RemoteGenerateRepository(constants, clientHttp, urlLauncherService);
   });
 
   group('Get dependencies', () {
-    test('Should return the dependencies when the response is success',
-        () async {
-      when(() => clientHttp.get(any()))
-          .thenAnswer((_) async => Success(ClientResponse(
-                data: ResponseMock.getDependencies,
-                statusCode: 200,
-                request: ClientRequestFake(),
-              )));
+    test('Should return the dependencies when the response is success', () async {
+      when(() => clientHttp.get(any())).thenAnswer((_) async => Success(ClientResponse(
+            data: ResponseMock.getMetadataa,
+            statusCode: 200,
+            request: ClientRequestFake(),
+          )));
 
-      final dependencies = await generateRepository.getDependencies();
+      final dependencies = await generateRepository.getMetadata();
 
       expect(dependencies.isSuccess(), true);
-      expect(dependencies.getOrNull(), isA<List<Dependency>>());
+      expect(dependencies.getOrNull(), isA<Metadata>());
     });
 
     test('Should returnt dio exception when the response is fail', () async {
-      when(() => clientHttp.get(any()))
-          .thenAnswer((_) async => Failure(MockcDioException()));
+      when(() => clientHttp.get(any())).thenAnswer((_) async => Failure(MockcDioException()));
 
-      final dependencies = await generateRepository.getDependencies();
+      final dependencies = await generateRepository.getMetadata();
 
       expect(dependencies.isSuccess(), false);
       expect(dependencies.exceptionOrNull(), isA<DioException>());
     });
 
-    test(
-        'Should returnt exception when the response is different than expected',
-        () async {
-      when(() => clientHttp.get(any()))
-          .thenAnswer((_) async => Success(ClientResponse(
-                data: [{}],
-                statusCode: 200,
-                request: ClientRequestFake(),
-              )));
+    test('Should returnt exception when the response is different than expected', () async {
+      when(() => clientHttp.get(any())).thenAnswer((_) async => Success(ClientResponse(
+            data: {},
+            statusCode: 200,
+            request: ClientRequestFake(),
+          )));
 
-      final dependencies = await generateRepository.getDependencies();
+      final dependencies = await generateRepository.getMetadata();
 
       expect(dependencies.isSuccess(), false);
       expect(dependencies.exceptionOrNull(), isNotNull);
@@ -92,16 +85,13 @@ void main() {
   });
 
   group('Create project', () {
-    test('Should return the project link when the response is success',
-        () async {
+    test('Should return the project link when the response is success', () async {
       when(() => constants.urlBase).thenAnswer((_) => 'https://api.vaden.dev');
-      when(() => clientHttp.post(any()))
-          .thenAnswer((_) async => Success(ClientResponse(
-                data: ResponseMock.postCreate,
-                statusCode: 200,
-                request:
-                    ClientRequest(path: '', data: {'projectName': 'project'}),
-              )));
+      when(() => clientHttp.post(any())).thenAnswer((_) async => Success(ClientResponse(
+            data: ResponseMock.postCreate,
+            statusCode: 200,
+            request: ClientRequest(path: '', data: {'projectName': 'project'}),
+          )));
 
       final projectUrl = await generateRepository.createZip(Project());
 
@@ -110,12 +100,11 @@ void main() {
       expect(
           (urlLauncherService as UrlLauncherServiceFake).url,
           'https://api.vaden.dev/resource/uploads/'
-          '1a8ccfed-b200-4d57-83a6-99b65abafcf5.zip?name=project');
+          '1a8ccfed-b200-4d57-83a6-99b65abafcf5.zip?name=project.zip');
     });
 
     test('Should returnt dio exception when the response is fail', () async {
-      when(() => clientHttp.post(any()))
-          .thenAnswer((_) async => Failure(MockcDioException()));
+      when(() => clientHttp.post(any())).thenAnswer((_) async => Failure(MockcDioException()));
 
       final projectUrl = await generateRepository.createZip(Project());
 
@@ -123,16 +112,12 @@ void main() {
       expect(projectUrl.exceptionOrNull(), isA<DioException>());
     });
 
-    test(
-        'Should returnt exception when the response is different than expected',
-        () async {
-      when(() => clientHttp.post(any()))
-          .thenAnswer((_) async => Success(ClientResponse(
-                data: {},
-                statusCode: 200,
-                request:
-                    ClientRequest(path: '', data: {'projectName': 'project'}),
-              )));
+    test('Should returnt exception when the response is different than expected', () async {
+      when(() => clientHttp.post(any())).thenAnswer((_) async => Success(ClientResponse(
+            data: {},
+            statusCode: 200,
+            request: ClientRequest(path: '', data: {'projectName': 'project'}),
+          )));
 
       final projectUrl = await generateRepository.createZip(Project());
 
@@ -140,15 +125,12 @@ void main() {
       expect(projectUrl.exceptionOrNull(), isNotNull);
     });
 
-    test(
-        'Should returnt exception when the request does not have a project name',
-        () async {
-      when(() => clientHttp.post(any()))
-          .thenAnswer((_) async => Success(ClientResponse(
-                data: ResponseMock.postCreate,
-                statusCode: 200,
-                request: ClientRequest(path: '', data: {}),
-              )));
+    test('Should returnt exception when the request does not have a project name', () async {
+      when(() => clientHttp.post(any())).thenAnswer((_) async => Success(ClientResponse(
+            data: ResponseMock.postCreate,
+            statusCode: 200,
+            request: ClientRequest(path: '', data: {}),
+          )));
 
       final projectUrl = await generateRepository.createZip(Project());
 
