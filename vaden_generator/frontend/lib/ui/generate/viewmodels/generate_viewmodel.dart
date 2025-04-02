@@ -3,32 +3,38 @@ import 'package:result_command/result_command.dart';
 import 'package:result_dart/result_dart.dart';
 
 import '../../../data/repositories/generate_repository.dart';
+import '../../../domain/entities/dart_versions.dart';
 import '../../../domain/entities/dependency.dart';
+import '../../../domain/entities/metadata.dart';
 import '../../../domain/entities/project.dart';
 
 class GenerateViewmodel extends ChangeNotifier {
   GenerateViewmodel(this._generateRepository);
   final GenerateRepository _generateRepository;
 
-  late final fetchDependenciesCommand = Command0<List<Dependency>>(_fetchDependencies);
+  late final fetchMedatadaCommand = Command0<Metadata>(_fetchMetadata);
   late final createProjectCommand = Command1(_createProject);
 
-  final List<String> dartVersions = ['3.6.0', '3.7.1', '3.7.2'];
-  String get latestDartVersion => dartVersions.isNotEmpty ? dartVersions.first : '';
+  List<DartVersion> _dartVersions = [];
+  List<DartVersion> get dartVersions => _dartVersions;
+  DartVersion _defaultDartVersion = DartVersion(id: '', name: '');
+  DartVersion get defaultDartVersion => _defaultDartVersion;
   List<Dependency> _dependencies = [];
   List<Dependency> get dependencies => _dependencies;
 
-  void _setDependencies(List<Dependency> dependencies) {
-    _dependencies = dependencies;
+  void _setDependencies(Metadata metadata) {
+    _dartVersions = metadata.dartVersions;
+    _defaultDartVersion = metadata.defaultDartVersion;
+    _dependencies = metadata.dependencies;
     notifyListeners();
   }
 
   final List<Dependency> _projectDependencies = [];
   List<Dependency> get projectDependencies => _projectDependencies;
 
-  AsyncResult<List<Dependency>> _fetchDependencies() {
+  AsyncResult<Metadata> _fetchMetadata() {
     return _generateRepository //
-        .getDependencies()
+        .getMetadata()
         .onSuccess(_setDependencies);
   }
 
