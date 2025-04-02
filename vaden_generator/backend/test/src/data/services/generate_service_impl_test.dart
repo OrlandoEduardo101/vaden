@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:backend/src/core/files/file_manager.dart';
 import 'package:backend/src/data/services/generate_service_impl.dart';
-import 'package:backend/src/domain/entities/dependency.dart';
 import 'package:backend/src/domain/entities/project.dart';
 import 'package:result_dart/result_dart.dart';
 import 'package:test/test.dart';
@@ -43,7 +42,7 @@ void main() {
 
     await generate.createTempProject(
       Project(
-        dependencies: [],
+        dependenciesKeys: [],
         projectName: 'jacob',
         projectDescription: 'Jacob Moura',
         dartVersion: '3.0.6',
@@ -59,14 +58,8 @@ void main() {
     await generate
         .createTempProject(
           Project(
-            dependencies: [
-              Dependency(
-                  name: 'Open API',
-                  description: '3.0.0',
-                  tag: 'DOC',
-                  key: 'openapi',
-                  requirements: []),
-            ],
+
+            dependenciesKeys: ['openapi'],
             projectName: 'jacob',
             projectDescription: 'Jacob Moura',
             dartVersion: '3.0.6',
@@ -83,14 +76,7 @@ void main() {
     final link = await generate
         .createTempProject(
           Project(
-            dependencies: [
-              Dependency(
-                  name: 'Open API',
-                  description: '3.0.0',
-                  tag: 'DOC',
-                  key: 'openapi',
-                  requirements: []),
-            ],
+            dependenciesKeys: ['openapi'],
             projectName: 'jacob',
             projectDescription: 'Jacob Moura',
             dartVersion: '3.0.6',
@@ -110,7 +96,8 @@ void main() {
     final line = RegExp(r'line 2');
     final content = 'line 1.5';
 
-    await manager.insertLineInFile(file, line, content, position: InsertLinePosition.before);
+    await manager.insertLineInFile(file, line, content,
+        position: InsertLinePosition.before);
 
     expect(file.text, 'line 1\nline 1.5\nline 2\nline 3');
   });
@@ -120,7 +107,8 @@ void main() {
     final line = RegExp(r'line 2');
     final content = 'line 2.5';
 
-    await manager.insertLineInFile(file, line, content, position: InsertLinePosition.after);
+    await manager.insertLineInFile(file, line, content,
+        position: InsertLinePosition.after);
 
     expect(file.text, 'line 1\nline 2\nline 2.5\nline 3');
   });

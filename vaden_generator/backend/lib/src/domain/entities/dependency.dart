@@ -13,7 +13,7 @@ class Dependency with Validator<Dependency> {
     required this.description,
     required this.key,
     required this.tag,
-    required this.requirements,
+    this.requirements = const [],
   });
 
   @override

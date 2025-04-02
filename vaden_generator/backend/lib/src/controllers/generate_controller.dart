@@ -2,6 +2,7 @@ import 'package:backend/src/domain/entities/metadata.dart';
 import 'package:backend/src/domain/dtos/project_link_dto.dart';
 import 'package:backend/src/domain/entities/dependency.dart';
 import 'package:backend/src/domain/entities/project.dart';
+import 'package:backend/src/domain/entities/project_depreciated.dart';
 import 'package:backend/src/domain/usecases/create_project.dart';
 import 'package:backend/src/domain/usecases/get_dependencies.dart';
 import 'package:backend/src/domain/usecases/get_metadata.dart';
@@ -50,8 +51,27 @@ class GenerateController {
     description: 'Return Link to download zip project',
     content: ApiContent(type: 'application/json', schema: ProjectLinkDTO),
   )
-  @Post('/create')
+  @Post('/start')
   Future<ProjectLinkDTO> create(@Body() Project dto) async {
     return await _createProject.call(dto).getOrThrow();
+  }
+
+  @Deprecated('This root was replace to (/start)')
+  @ApiOperation(summary: 'Create project', description: 'Create a new project')
+  @ApiResponse(
+    200,
+    description: 'Return Link to download zip project',
+    content: ApiContent(type: 'application/json', schema: ProjectLinkDTO),
+  )
+  @Post('/create')
+  Future<ProjectLinkDTO> createDeprecated(
+      @Body() ProjectDepreciated dto) async {
+    final newDto = Project(
+        dependenciesKeys: dto.dependencies.map((d) => d.key).toList(),
+        projectName: dto.projectName,
+        projectDescription: dto.projectDescription,
+        dartVersion: dto.dartVersion);
+
+    return await _createProject.call(newDto).getOrThrow();
   }
 }
