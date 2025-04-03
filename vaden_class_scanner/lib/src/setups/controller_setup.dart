@@ -328,19 +328,6 @@ paths['$apiPathResolver']['$routerMethod']['parameters']?.add({
         final hname = headerChecker.firstAnnotationOf(parameter)?.getField('name')?.toStringValue() ?? parameter.name;
         final isNotNull = !_isNullable(parameter.type);
 
-        if (api != null) {
-          bodyBuffer.writeln("""
-paths['$apiPathResolver']['$routerMethod']['parameters']?.add({
-  'name': '$hname',
-  'in': 'header',
-  'required': ${!_isNullable(parameter.type)},
-  'schema': {
-    'type': 'string',
-  },
-});
-""");
-        }
-
         if (isNotNull) {
           paramCodeList.add("""
   if (request.headers['$hname'] == null) {
