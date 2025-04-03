@@ -2,19 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'dependency.dart';
-
 class Project extends ChangeNotifier {
   String name;
   String description;
   String dartVersion;
-  List<Dependency> dependencies;
+  List<String> dependenciesKeys;
 
   Project._(
     this.name,
     this.description,
     this.dartVersion,
-    this.dependencies,
+    this.dependenciesKeys,
   );
 
   factory Project() {
@@ -36,14 +34,14 @@ class Project extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setDependencies(List<Dependency> value) => dependencies = value;
+  void setDependencies(List<String> value) => dependenciesKeys = value;
 
   Map<String, dynamic> toMap() {
     return {
       'projectName': name,
       'projectDescription': description,
       'dartVersion': dartVersion,
-      'dependencies': dependencies.map((x) => x.toMap()).toList(),
+      'dependenciesKeys': dependenciesKeys,
     };
   }
 
@@ -52,11 +50,7 @@ class Project extends ChangeNotifier {
       map['projectName'] ?? '',
       map['projectDescription'] ?? '',
       map['dartVersion'] ?? '',
-      List<Dependency>.from(
-        map['dependencies']?.map(
-          (x) => Dependency.fromMap(x),
-        ),
-      ),
+      List<String>.from(map['dependenciesKeys']),
     );
   }
 

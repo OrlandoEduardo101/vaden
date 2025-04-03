@@ -1,7 +1,7 @@
 import 'package:result_dart/result_dart.dart';
 
 import '../../config/constants.dart';
-import '../../domain/entities/dependency.dart';
+import '../../domain/entities/metadata.dart';
 import '../../domain/entities/project.dart';
 import '../services/client_http.dart';
 import '../services/url_launcher_service.dart';
@@ -23,7 +23,7 @@ class RemoteGenerateRepository implements GenerateRepository {
     return _clientHttp //
         .post(
           ClientRequest(
-            path: '/v1/generate/create',
+            path: '/v1/generate/start',
             data: project.toMap(),
           ),
         )
@@ -32,10 +32,10 @@ class RemoteGenerateRepository implements GenerateRepository {
   }
 
   @override
-  AsyncResult<List<Dependency>> getDependencies() async {
+  AsyncResult<Metadata> getMetadata() {
     return _clientHttp //
-        .get(ClientRequest(path: '/v1/generate/dependencies'))
-        .flatMap(_dependenciesFromResponse);
+        .get(ClientRequest(path: '/v1/generate/metadata'))
+        .flatMap(_metadataFromResponse);
   }
 
   Result<String> _getProjectLink(ClientResponse onSuccess) {
@@ -53,13 +53,10 @@ class RemoteGenerateRepository implements GenerateRepository {
     }
   }
 
-  AsyncResult<List<Dependency>> _dependenciesFromResponse(ClientResponse response) async {
+  AsyncResult<Metadata> _metadataFromResponse(ClientResponse response) async {
     try {
-      final List<Dependency> dependencies = (response.data as List)
-          .map((dependencyMap) => Dependency.fromMap(dependencyMap))
-          .toList();
-
-      return Success(dependencies);
+      final data = Map<String, dynamic>.from(response.data);
+      return Success(Metadata.fromMap(data));
     } catch (e) {
       return Failure(
         Exception(e.toString()),

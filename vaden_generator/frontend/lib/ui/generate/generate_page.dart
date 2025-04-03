@@ -33,13 +33,13 @@ class _GeneratePageState extends State<GeneratePage> {
   @override
   void initState() {
     super.initState();
-    viewModel.fetchDependenciesCommand.execute();
-    project.setDartVersion(viewModel.latestDartVersion);
+    viewModel.fetchMedatadaCommand.execute();
+    project.setDartVersion(viewModel.defaultDartVersion.id);
   }
 
   Future<void> _openDependenciesDialog() async {
     final notSelectedDependencies = [...viewModel.dependencies].where((e) {
-      return !project.dependencies.contains(e);
+      return !project.dependenciesKeys.contains(e.key);
     }).toList();
 
     final result = await VadenDependenciesDialog.show(
@@ -49,7 +49,7 @@ class _GeneratePageState extends State<GeneratePage> {
 
     if (result != null) {
       setState(() {
-        project.dependencies.add(result);
+        project.dependenciesKeys.add(result.key);
       });
     }
   }
@@ -191,10 +191,11 @@ class _GeneratePageState extends State<GeneratePage> {
                           SizedBox(
                             width: double.infinity,
                             child: VadenDropdown(
-                              options: viewModel.dartVersions,
+                              options: viewModel.dartVersions.map((e) => e.name).toList(),
                               title: 'Dart_version'.i18n(),
-                              selectedOption: viewModel.latestDartVersion,
-                              onOptionSelected: project.setDartVersion,
+                              selectedOption: viewModel.defaultDartVersion.name,
+                              onOptionSelected: (name) => project.setDartVersion(
+                                  viewModel.dartVersions.where((v) => v.name == name).first.id),
                               width: double.infinity,
                               fontSize: 16.0,
                             ),
@@ -263,21 +264,24 @@ class _GeneratePageState extends State<GeneratePage> {
                                 padding: const EdgeInsets.only(top: 0),
                                 child: SizedBox(
                                   width: 440,
-                                  height: project.dependencies.isEmpty ? 56 : null,
-                                  child: project.dependencies.isEmpty
+                                  height: project.dependenciesKeys.isEmpty ? 56 : null,
+                                  child: project.dependenciesKeys.isEmpty
                                       ? VadenTextInput(
                                           label: 'addDependencies'.i18n(),
                                           hint: '',
-                                          verticalPadding: project.dependencies.isEmpty //
+                                          verticalPadding: project.dependenciesKeys.isEmpty //
                                               ? 20
                                               : 12,
                                           isEnabled: false,
                                         )
                                       : VadenDependenciesCard(
-                                          dependencies: project.dependencies,
+                                          dependencies: viewModel.dependencies
+                                              .where(
+                                                  (d) => project.dependenciesKeys.contains(d.key))
+                                              .toList(),
                                           onRemove: (dependency) {
                                             setState(() {
-                                              project.dependencies.remove(dependency);
+                                              project.dependenciesKeys.remove(dependency.key);
                                             });
                                           },
                                         ),
