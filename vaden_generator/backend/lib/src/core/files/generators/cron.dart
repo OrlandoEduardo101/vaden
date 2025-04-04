@@ -35,7 +35,7 @@ class CronGenerator extends FileGenerator {
 }
 
 const _libConfigCronCronConfigurationContent =
-    '''import 'package:teste/config/cron/scheduler.dart';
+    '''import 'scheduler.dart';
 import 'package:vaden/vaden.dart';
 
 @Configuration()
