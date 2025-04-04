@@ -53,6 +53,62 @@ You can also specify a return schema using a DTO:
 )
 ```
 
+## Security
+
+To document security schemes, you can use the `@ApiSecurity()` annotation. This allows you to specify authentication methods for your endpoints.
+
+```dart {1}
+@ApiSecurity(['bearer'])
+@ApiResponse(
+  200,
+  description: 'Successful login',
+  content: ApiContent(type: 'application/json', schema: TokenResponse),
+)
+@Post('/login')
+Future<TokenResponse> login(@Body() LoginRequest request) async {
+  // Your login logic here
+}
+```
+This will add a security requirement to the generated OpenAPI spec, indicating that the endpoint requires a Bearer token for authentication.
+
+## Customizing the OpenAPI Spec
+
+You can customize the `OpenAPI` spec by modifying the `openapi_configuration.dart` file in your `lib/config/` directory. This file contains the configuration for the OpenAPI generator, including the title, version, and other metadata.
+
+You can add a custom Security Scheme for representing JWT tokens in the OpenAPI spec. This is useful for documenting authentication methods used in your API:
+
+```dart {19-25}
+@Configuration()
+class OpenApiConfiguration {
+  @Bean()
+  OpenApi openApi(OpenApiConfig config) {
+    return OpenApi(
+      version: '3.0.0',
+      info: Info(
+        title: 'Vaden API',
+        version: '1.0.0',
+        description: 'Vaden Backend example',
+      ),
+      servers: [
+        config.localServer,
+      ],
+      tags: config.tags,
+      paths: config.paths,
+      components: Components(
+        schemas: config.schemas,
+        securitySchemes: {
+          'bearer': SecurityScheme.http(
+            scheme: HttpSecurityScheme.bearer,
+            bearerFormat: 'JWT',
+            description: 'Bearer token for authentication',
+          ),
+        },
+      ),
+    );
+  }
+```
+
+
 ## Serving the Documentation
 
 Once enabled, your project will expose:
