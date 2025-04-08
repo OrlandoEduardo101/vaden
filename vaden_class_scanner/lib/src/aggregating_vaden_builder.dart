@@ -147,6 +147,11 @@ class AggregatingVadenBuilder implements Builder {
     }
 
 ''');
+
+    aggregatedBuffer.writeln('''
+    final moduleRegister = _injector.get<ModuleRegister>();
+    await moduleRegister.registerAll(_router, _injector);
+''');
     aggregatedBuffer.writeln('  }');
     aggregatedBuffer.writeln('''Future<Response> _handleException(dynamic e) async {
 

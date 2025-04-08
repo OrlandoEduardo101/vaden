@@ -33,7 +33,11 @@ class _GeneratePageState extends State<GeneratePage> {
   @override
   void initState() {
     super.initState();
-    viewModel.fetchMedatadaCommand.execute();
+    _init();
+  }
+
+  Future<void> _init() async {
+    await viewModel.fetchMedatadaCommand.execute();
     project.setDartVersion(viewModel.defaultDartVersion.id);
   }
 
@@ -188,18 +192,29 @@ class _GeneratePageState extends State<GeneratePage> {
                             verticalPadding: 20,
                           ),
                           const SizedBox(height: 32),
-                          SizedBox(
-                            width: double.infinity,
-                            child: VadenDropdown(
-                              options: viewModel.dartVersions.map((e) => e.name).toList(),
-                              title: 'Dart_version'.i18n(),
-                              selectedOption: viewModel.defaultDartVersion.name,
-                              onOptionSelected: (name) => project.setDartVersion(
-                                  viewModel.dartVersions.where((v) => v.name == name).first.id),
-                              width: double.infinity,
-                              fontSize: 16.0,
-                            ),
-                          )
+                          ListenableBuilder(
+                              listenable: viewModel.fetchMedatadaCommand,
+                              builder: (context, _) {
+                                if (!viewModel.fetchMedatadaCommand.isSuccess) {
+                                  return SizedBox.shrink();
+                                }
+
+                                return SizedBox(
+                                  width: double.infinity,
+                                  child: VadenDropdown(
+                                    options: viewModel.dartVersions.map((e) => e.name).toList(),
+                                    title: 'Dart_version'.i18n(),
+                                    selectedOption: viewModel.defaultDartVersion.name,
+                                    onOptionSelected: (name) => project.setDartVersion(viewModel
+                                        .dartVersions
+                                        .where((v) => v.name == name)
+                                        .first
+                                        .id),
+                                    width: double.infinity,
+                                    fontSize: 16.0,
+                                  ),
+                                );
+                              })
                         ],
                       ),
                     ],

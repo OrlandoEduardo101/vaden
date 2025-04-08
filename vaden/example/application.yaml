@@ -8,23 +8,31 @@ server:
   host: localhost
 
 storage:
-  provider: local  # opções: local, s3, firebase
+  provider: local # opções: local, s3, firebase
   local:
-    folder: './uploads'
+    folder: "./uploads"
   s3:
-    bucket: 'meu-bucket'
-    region: 'us-east-1'
-    accessKey: 'sua_access_key'
-    secretKey: 'seu_secret_key'
+    bucket: "meu-bucket"
+    region: "us-east-1"
+    accessKey: "sua_access_key"
+    secretKey: "seu_secret_key"
   firebase:
-    projectId: 'my-project'
-    apiKey: 'my_api'
+    projectId: "my-project"
+    apiKey: "my_api"
 
 database:
   provider: postgres
   mysql:
-    host: 'localhost'
+    host: "localhost"
     port: 5432
-    database: 'vaden_db'
-    username: 'vaden_user'
-    password: 'vaden_pass'
+    database: "vaden_db"
+    username: "vaden_user"
+    password: "vaden_pass"
+
+security:
+  secret: AisuSijfdiflkDkldkeokdokDKodk
+  tokenValidity: 3600
+  refreshTokenValidity: 604800
+  issuer: "vaden"
+  audiences:
+    - "vaden"

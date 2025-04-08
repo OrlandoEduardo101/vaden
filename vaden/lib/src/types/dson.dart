@@ -63,10 +63,10 @@ typedef ToOpenApiNormalMap = Map<String, dynamic>;
 abstract class DSON {
   /// Map of types to their deserialization functions.
   late final Map<Type, FromJsonFunction> _mapFromJson;
-  
+
   /// Map of types to their serialization functions.
   late final Map<Type, ToJsonFunction> _mapToJson;
-  
+
   /// Map of types to their OpenAPI schema definitions.
   late final Map<Type, ToOpenApiNormalMap> _mapToOpenApi;
 
@@ -225,4 +225,16 @@ abstract class DSON {
   /// Returns:
   /// - A map of types to their OpenAPI schemas.
   Map<Type, ToOpenApiNormalMap> get apiEntries => _mapToOpenApi;
+
+  void addToJson<T>(ToJsonFunction toJson) {
+    _mapToJson[T] = toJson;
+  }
+
+  void addFromJson<T>(FromJsonFunction<T> fromJson) {
+    _mapFromJson[T] = fromJson;
+  }
+
+  void addToOpenApi<T>(ToOpenApiNormalMap toOpenApi) {
+    _mapToOpenApi[T] = toOpenApi;
+  }
 }

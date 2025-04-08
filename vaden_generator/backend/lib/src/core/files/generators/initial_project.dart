@@ -227,6 +227,13 @@ class AppConfiguration {
         .addVadenMiddleware(EnforceJsonContentType())
         .addMiddleware(logRequests());
   }
+
+  @Bean()
+  ModuleRegister externalModules() {
+    return ModuleRegister([
+      // Add your external modules here
+    ]);
+  }
 }
 ''';
 

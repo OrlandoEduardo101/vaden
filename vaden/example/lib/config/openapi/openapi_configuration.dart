@@ -21,13 +21,6 @@ class OpenApiConfiguration {
       paths: config.paths,
       components: Components(
         schemas: config.schemas,
-        securitySchemes: {
-          'bearer': SecurityScheme.http(
-            scheme: HttpSecurityScheme.bearer,
-            bearerFormat: 'JWT',
-            description: 'Bearer token for authentication',
-          ),
-        },
       ),
     );
   }
