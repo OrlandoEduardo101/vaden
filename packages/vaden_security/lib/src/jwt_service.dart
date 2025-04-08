@@ -56,7 +56,12 @@ class JwtService {
   /// Throws an exception if the token is expired.
   Map<String, dynamic>? verifyToken(String token) {
     try {
-      final jwt = JWT.verify(token, SecretKey(secret));
+      final jwt = JWT.verify(
+        token,
+        SecretKey(secret),
+        issuer: issuer,
+        audience: Audience(audiences),
+      );
       return jwt.payload;
     } catch (e) {
       return null;
