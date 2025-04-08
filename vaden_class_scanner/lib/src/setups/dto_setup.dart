@@ -62,7 +62,7 @@ String _toOpenApi(ClassElement classElement) {
   final buffer = StringBuffer();
   buffer.writeln('{');
   buffer.writeln('  "type": "object",');
-  buffer.writeln('  "properties": {');
+  buffer.writeln('  "properties": <String, dynamic>{');
   buffer.write(propertiesBuffer.toString());
   buffer.writeln();
   buffer.writeln('  },');
@@ -80,6 +80,8 @@ String _fieldToSchema(DartType type) {
     return '{"type": "boolean"}';
   } else if (type.isDartCoreString) {
     return '{"type": "string"}';
+  } else if (type.isDartCoreMap) {
+    return '{"type": "object", "properties": {"key": {"type": "object",},}}';
   } else if (type.isDartCoreList) {
     final elementType = (type as ParameterizedType).typeArguments.first;
     final elementSchema = _fieldToSchema(elementType);
@@ -125,9 +127,13 @@ String _fromJson(ClassElement classElement) {
       if (parameter.type.isDartCoreList) {
         final param = parameter.type as ParameterizedType;
         final arg = param.typeArguments.first.getDisplayString();
-        paramValue = isNotNull ? "fromJsonList<$arg>(json['$paramName'])" : "json['$paramName'] == null ? null : fromJsonList<$arg>(json['$paramName'])";
+        paramValue = isNotNull
+            ? "fromJsonList<$arg>(json['$paramName'])"
+            : "json['$paramName'] == null ? null : fromJsonList<$arg>(json['$paramName'])";
       } else {
-        paramValue = isNotNull ? "fromJson<$paramType>(json['$paramName'])" : "json['$paramName'] == null ? null : fromJson<$paramType>(json['$paramName'])";
+        paramValue = isNotNull
+            ? "fromJson<$paramType>(json['$paramName'])"
+            : "json['$paramName'] == null ? null : fromJson<$paramType>(json['$paramName'])";
       }
     }
 
@@ -247,9 +253,13 @@ String _toJsonField(FieldElement field) {
     if (field.type.isDartCoreList) {
       final param = field.type as ParameterizedType;
       final arg = param.typeArguments.first;
-      return isNotNull ? " '$fieldKey': toJsonList<$arg>(obj.$fieldName)," : " '$fieldKey': obj.$fieldName == null ? null : toJsonList<$arg>(obj.$fieldName!),";
+      return isNotNull
+          ? " '$fieldKey': toJsonList<$arg>(obj.$fieldName),"
+          : " '$fieldKey': obj.$fieldName == null ? null : toJsonList<$arg>(obj.$fieldName!),";
     } else {
-      return isNotNull ? "'$fieldKey': toJson<$fieldTypeString>(obj.$fieldName)," : "'$fieldKey': obj.$fieldName == null ? null : toJson<$fieldTypeString>(obj.$fieldName!),";
+      return isNotNull
+          ? "'$fieldKey': toJson<$fieldTypeString>(obj.$fieldName),"
+          : "'$fieldKey': obj.$fieldName == null ? null : toJson<$fieldTypeString>(obj.$fieldName!),";
     }
   }
 }
