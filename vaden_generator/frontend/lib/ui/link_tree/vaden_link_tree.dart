@@ -232,10 +232,17 @@ class _VadenLinkTreeState extends State<VadenLinkTree> {
                               color: VadenColors.secondaryColor,
                             ),
                           ),
-                          SvgPicture.asset(
-                            VadenImage.flutterandoLogo,
-                            width: 120,
-                            height: 24,
+                          InkWell(
+                            onTap: () {
+                              urlLauncherService.launch(
+                                'https://flutterando.com.br',
+                              );
+                            },
+                            child: SvgPicture.asset(
+                              VadenImage.flutterandoLogo,
+                              width: 120,
+                              height: 24,
+                            ),
                           ),
                         ],
                       ),

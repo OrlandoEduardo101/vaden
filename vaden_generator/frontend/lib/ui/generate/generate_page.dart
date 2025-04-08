@@ -5,6 +5,7 @@ import 'package:localization/localization.dart';
 
 import '../../config/dependencies.dart';
 import '../../config/extension.dart';
+import '../../data/services/url_launcher_service.dart';
 import '../../domain/entities/project.dart';
 import '../../domain/validators/project_validator.dart';
 import '../core/ui/ui.dart';
@@ -25,6 +26,7 @@ class _GeneratePageState extends State<GeneratePage> {
   late final double letterSpacing = fontSize * 0.04;
 
   final viewModel = injector.get<GenerateViewmodel>();
+  final urlLauncherService = UrlLauncherService();
 
   final project = Project();
 
@@ -357,10 +359,17 @@ class _GeneratePageState extends State<GeneratePage> {
                                     color: VadenColors.secondaryColor,
                                   ),
                                 ),
-                                SvgPicture.asset(
-                                  VadenImage.flutterandoLogo,
-                                  width: 120,
-                                  height: 24,
+                                InkWell(
+                                  onTap: () {
+                                    urlLauncherService.launch(
+                                      'https://flutterando.com.br',
+                                    );
+                                  },
+                                  child: SvgPicture.asset(
+                                    VadenImage.flutterandoLogo,
+                                    width: 120,
+                                    height: 24,
+                                  ),
                                 ),
                               ],
                             ),
