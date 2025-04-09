@@ -4,11 +4,16 @@ import 'package:example/src/product_dto.dart';
 import 'package:vaden/vaden.dart';
 
 @Api(tag: 'hello')
-@Controller('/hello')
+@Controller('/hello/')
 class HelloController {
   @Get('/ping')
   String ping() {
     return 'pong';
+  }
+
+  @Get()
+  String empty() {
+    return 'empty';
   }
 
   @Get('/map')

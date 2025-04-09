@@ -10,15 +10,15 @@ part of 'annotation.dart';
 /// @Controller('/api/users')
 /// class UserController {
 ///   final UserService _service;
-///   
+///
 ///   UserController(this._service);
-///   
+///
 ///   @Get('/') // Maps to GET /api/users/
 ///   Future<Response> getAllUsers(Request request) async {
 ///     final users = await _service.findAll();
 ///     return Response.ok(jsonEncode(users));
 ///   }
-///   
+///
 ///   @Get('/:id') // Maps to GET /api/users/:id
 ///   Future<Response> getUserById(Request request, @Param('id') String id) async {
 ///     final user = await _service.findById(id);
@@ -34,11 +34,11 @@ class Get {
   /// This can include path parameters (e.g., '/:id') which can be extracted
   /// using the @Param annotation in the method parameters.
   final String path;
-  
+
   /// Creates a Get annotation with the specified path.
   ///
   /// [path] - The route path relative to the controller's base path.
-  const Get(this.path);
+  const Get([this.path = '/']);
 }
 
 /// Marks a method as a handler for HTTP POST requests.
@@ -52,9 +52,9 @@ class Get {
 /// @Controller('/api/users')
 /// class UserController {
 ///   final UserService _service;
-///   
+///
 ///   UserController(this._service);
-///   
+///
 ///   @Post('/') // Maps to POST /api/users/
 ///   Future<Response> createUser(Request request, @Body() UserDTO user) async {
 ///     final createdUser = await _service.create(user);
@@ -68,11 +68,11 @@ class Post {
   /// This can include path parameters (e.g., '/:id') which can be extracted
   /// using the @Param annotation in the method parameters.
   final String path;
-  
+
   /// Creates a Post annotation with the specified path.
   ///
   /// [path] - The route path relative to the controller's base path.
-  const Post(this.path);
+  const Post([this.path = '/']);
 }
 
 /// Marks a method as a handler for HTTP PUT requests.
@@ -86,9 +86,9 @@ class Post {
 /// @Controller('/api/users')
 /// class UserController {
 ///   final UserService _service;
-///   
+///
 ///   UserController(this._service);
-///   
+///
 ///   @Put('/:id') // Maps to PUT /api/users/:id
 ///   Future<Response> updateUser(
 ///     Request request,
@@ -108,11 +108,11 @@ class Put {
   /// This can include path parameters (e.g., '/:id') which can be extracted
   /// using the @Param annotation in the method parameters.
   final String path;
-  
+
   /// Creates a Put annotation with the specified path.
   ///
   /// [path] - The route path relative to the controller's base path.
-  const Put(this.path);
+  const Put([this.path = '/']);
 }
 
 /// Marks a method as a handler for HTTP DELETE requests.
@@ -126,9 +126,9 @@ class Put {
 /// @Controller('/api/users')
 /// class UserController {
 ///   final UserService _service;
-///   
+///
 ///   UserController(this._service);
-///   
+///
 ///   @Delete('/:id') // Maps to DELETE /api/users/:id
 ///   Future<Response> deleteUser(Request request, @Param('id') String id) async {
 ///     final deleted = await _service.delete(id);
@@ -144,11 +144,11 @@ class Delete {
   /// This can include path parameters (e.g., '/:id') which can be extracted
   /// using the @Param annotation in the method parameters.
   final String path;
-  
+
   /// Creates a Delete annotation with the specified path.
   ///
   /// [path] - The route path relative to the controller's base path.
-  const Delete(this.path);
+  const Delete([this.path = '/']);
 }
 
 /// Marks a method as a handler for HTTP PATCH requests.
@@ -162,9 +162,9 @@ class Delete {
 /// @Controller('/api/users')
 /// class UserController {
 ///   final UserService _service;
-///   
+///
 ///   UserController(this._service);
-///   
+///
 ///   @Patch('/:id') // Maps to PATCH /api/users/:id
 ///   Future<Response> partialUpdateUser(
 ///     Request request,
@@ -184,11 +184,11 @@ class Patch {
   /// This can include path parameters (e.g., '/:id') which can be extracted
   /// using the @Param annotation in the method parameters.
   final String path;
-  
+
   /// Creates a Patch annotation with the specified path.
   ///
   /// [path] - The route path relative to the controller's base path.
-  const Patch(this.path);
+  const Patch([this.path = '/']);
 }
 
 /// Marks a method as a handler for HTTP HEAD requests.
@@ -202,9 +202,9 @@ class Patch {
 /// @Controller('/api/users')
 /// class UserController {
 ///   final UserService _service;
-///   
+///
 ///   UserController(this._service);
-///   
+///
 ///   @Head('/:id') // Maps to HEAD /api/users/:id
 ///   Future<Response> checkUserExists(Request request, @Param('id') String id) async {
 ///     final exists = await _service.exists(id);
@@ -220,11 +220,11 @@ class Head {
   /// This can include path parameters (e.g., '/:id') which can be extracted
   /// using the @Param annotation in the method parameters.
   final String path;
-  
+
   /// Creates a Head annotation with the specified path.
   ///
   /// [path] - The route path relative to the controller's base path.
-  const Head(this.path);
+  const Head([this.path = '/']);
 }
 
 /// Marks a method as a handler for HTTP OPTIONS requests.
@@ -252,11 +252,11 @@ class Options {
   /// This can include path parameters (e.g., '/:id') which can be extracted
   /// using the @Param annotation in the method parameters.
   final String path;
-  
+
   /// Creates an Options annotation with the specified path.
   ///
   /// [path] - The route path relative to the controller's base path.
-  const Options(this.path);
+  const Options([this.path = '/']);
 }
 
 /// Mounts a Router instance at the specified path.
@@ -270,12 +270,12 @@ class Options {
 /// @Controller('/api')
 /// class ApiController {
 ///   final UserController _userController;
-///   
+///
 ///   ApiController(this._userController);
-///   
+///
 ///   @Mount('/users') // Mounts the user router at /api/users
 ///   Router get userRouter => _userController.router;
-///   
+///
 ///   @Get('/status')
 ///   Response getApiStatus(Request request) {
 ///     return Response.ok(jsonEncode({'status': 'online'}));
@@ -287,9 +287,9 @@ class Mount {
   ///
   /// This path is relative to the controller's base path.
   final String path;
-  
+
   /// Creates a Mount annotation with the specified path.
   ///
   /// [path] - The path at which to mount the router.
-  const Mount(this.path);
+  const Mount([this.path = '/']);
 }
