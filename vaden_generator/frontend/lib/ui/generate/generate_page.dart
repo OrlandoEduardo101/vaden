@@ -130,71 +130,73 @@ class _GeneratePageState extends State<GeneratePage> {
               Center(
                 child: SizedBox(
                   width: 580,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Create_new_project'.i18n(),
-                        style: GoogleFonts.anekBangla(
-                          color: VadenColors.txtSecondary,
-                          fontSize: 20,
-                          fontWeight: FontWeight.normal,
+                  child: Form(
+                    key: viewModel.formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Create_new_project'.i18n(),
+                          style: GoogleFonts.anekBangla(
+                            color: VadenColors.txtSecondary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.normal,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          final textSpan = TextSpan(
-                            text: 'Create_new_project'.i18n(),
-                            style: GoogleFonts.anekBangla(
-                              color: VadenColors.txtSecondary,
-                              fontSize: 20,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          );
-                          final textPainter = TextPainter(
-                            text: textSpan,
-                            textDirection: TextDirection.ltr,
-                          )..layout();
-                          return Container(
-                            height: 1,
-                            width: textPainter.width,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                                colors: [
-                                  VadenColors.gradientStart,
-                                  VadenColors.gradientEnd,
-                                ],
+                        const SizedBox(height: 4),
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            final textSpan = TextSpan(
+                              text: 'Create_new_project'.i18n(),
+                              style: GoogleFonts.anekBangla(
+                                color: VadenColors.txtSecondary,
+                                fontSize: 20,
+                                fontWeight: FontWeight.normal,
                               ),
+                            );
+                            final textPainter = TextPainter(
+                              text: textSpan,
+                              textDirection: TextDirection.ltr,
+                            )..layout();
+                            return Container(
+                              height: 1,
+                              width: textPainter.width,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  colors: [
+                                    VadenColors.gradientStart,
+                                    VadenColors.gradientEnd,
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 32),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            VadenTextInput(
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              label: 'Project_name'.i18n(),
+                              hint: 'Vaden_Backend'.i18n(),
+                              onChanged: project.setName,
+                              validator: projectValidator.byField(project, 'name').i18n(),
+                              verticalPadding: 20,
                             ),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 32),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          VadenTextInput(
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            label: 'Project_name'.i18n(),
-                            hint: 'Vaden_Backend'.i18n(),
-                            onChanged: project.setName,
-                            validator: projectValidator.byField(project, 'name').i18n(),
-                            verticalPadding: 20,
-                          ),
-                          const SizedBox(height: 32),
-                          VadenTextInput(
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            label: 'Description'.i18n(),
-                            hint: 'Vaden_Project'.i18n(),
-                            onChanged: project.setDescription,
-                            validator: projectValidator.byField(project, 'description').i18n(),
-                            verticalPadding: 20,
-                          ),
-                          const SizedBox(height: 32),
-                          ListenableBuilder(
+                            const SizedBox(height: 32),
+                            VadenTextInput(
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              label: 'Description'.i18n(),
+                              hint: 'Vaden_Project'.i18n(),
+                              onChanged: project.setDescription,
+                              validator: projectValidator.byField(project, 'description').i18n(),
+                              verticalPadding: 20,
+                            ),
+                            const SizedBox(height: 32),
+                            ListenableBuilder(
                               listenable: viewModel.fetchMedatadaCommand,
                               builder: (context, _) {
                                 if (!viewModel.fetchMedatadaCommand.isSuccess) {
@@ -216,10 +218,12 @@ class _GeneratePageState extends State<GeneratePage> {
                                     fontSize: 16.0,
                                   ),
                                 );
-                              })
-                        ],
-                      ),
-                    ],
+                              },
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -297,9 +301,11 @@ class _GeneratePageState extends State<GeneratePage> {
                                                   (d) => project.dependenciesKeys.contains(d.key))
                                               .toList(),
                                           onRemove: (dependency) {
-                                            setState(() {
-                                              project.dependenciesKeys.remove(dependency.key);
-                                            });
+                                            setState(
+                                              () {
+                                                project.dependenciesKeys.remove(dependency.key);
+                                              },
+                                            );
                                           },
                                         ),
                                 ),
@@ -334,7 +340,9 @@ class _GeneratePageState extends State<GeneratePage> {
                                   : VadenButtonStyle.outlinedWhite,
                               onPressed: isValid
                                   ? () => viewModel.createProjectCommand.execute(project)
-                                  : () {},
+                                  : () {
+                                      viewModel.formKey.currentState?.validate();
+                                    },
                               width: 320,
                               isLoading: viewModel.createProjectCommand.isRunning,
                             ),
