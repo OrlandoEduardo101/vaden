@@ -1,4 +1,5 @@
 import 'package:vaden_security/src/glob.dart';
+import 'package:vaden_security/src/http_method.dart';
 
 class HttpSecurity {
   final List<AuthorizeRequest> authorizeRequests;
@@ -18,50 +19,70 @@ class HttpSecurity {
 
 class RequestMatcher {
   final Glob path;
+  final HttpMethod method;
 
-  RequestMatcher(String path) : path = Glob(path);
+  RequestMatcher(String path, [this.method = HttpMethod.any]) : path = Glob(path);
 
-  AuthorizeRequest permitAll() => _PermitAllAuthorizeRequest(path);
+  AuthorizeRequest permitAll() => _PermitAllAuthorizeRequest(path, method);
 
-  AuthorizeRequest hasRole(String role) => _HasRoleAuthorizeRequest(path, role);
+  AuthorizeRequest hasRole(String role) => _HasRoleAuthorizeRequest(path, role, method);
 
-  AuthorizeRequest hasAuthority(String authority) => _HasAuthorityAuthorizeRequest(path, authority);
+  AuthorizeRequest hasAnyRole(List<String> roles) => _HasAnyRoleAuthorizeRequest(path, roles, method);
 
-  AuthorizeRequest authenticated() => _AuthenticatedRequest(path);
+  AuthorizeRequest denyAll() => _DenyAllAuthorizeRequest(path, method);
+
+  AuthorizeRequest authenticated() => _AuthenticatedRequest(path, method);
 }
 
 class AnyRequest {
-  AuthorizeRequest permitAll() => _PermitAllAuthorizeRequest(Glob('/**'));
+  AuthorizeRequest permitAll() => _PermitAllAuthorizeRequest(Glob('/**'), HttpMethod.any);
 
-  AuthorizeRequest authenticated() => _AuthenticatedRequest(Glob('/**'));
+  AuthorizeRequest authenticated() => _AuthenticatedRequest(Glob('/**'), HttpMethod.any);
 }
 
 sealed class AuthorizeRequest {
   final Glob path;
-  const AuthorizeRequest(this.path);
+  final HttpMethod method;
+  const AuthorizeRequest(this.path, this.method);
 
-  bool matches(String path) => this.path.matches(path);
+  bool matches(String path, HttpMethod method) {
+    if (this.method == HttpMethod.any) {
+      return this.path.matches(path);
+    }
+    if (this.method != method) {
+      return false;
+    }
+
+    return this.path.matches(path);
+  }
 
   bool autheticated() => false;
+  bool isDenyAll() => false;
   bool hasRole(List<String> roles) => true;
-  bool hasAuthority(String authority) => true;
 }
 
 class _AuthenticatedRequest extends AuthorizeRequest {
-  const _AuthenticatedRequest(super.path);
+  const _AuthenticatedRequest(super.path, super.method);
 
   @override
   bool autheticated() => true;
 }
 
+class _DenyAllAuthorizeRequest extends AuthorizeRequest {
+  const _DenyAllAuthorizeRequest(super.path, super.method);
+
+  @override
+  bool isDenyAll() => true;
+}
+
 class _PermitAllAuthorizeRequest extends AuthorizeRequest {
-  const _PermitAllAuthorizeRequest(super.path);
+  const _PermitAllAuthorizeRequest(super.path, super.method);
 }
 
 class _HasRoleAuthorizeRequest extends AuthorizeRequest {
   final String role;
 
-  const _HasRoleAuthorizeRequest(super.path, this.role);
+  const _HasRoleAuthorizeRequest(super.path, this.role, super.method);
 
   @override
   bool autheticated() => true;
@@ -70,14 +91,21 @@ class _HasRoleAuthorizeRequest extends AuthorizeRequest {
   bool hasRole(List<String> roles) => roles.contains(role);
 }
 
-class _HasAuthorityAuthorizeRequest extends AuthorizeRequest {
-  final String authority;
+class _HasAnyRoleAuthorizeRequest extends AuthorizeRequest {
+  final List<String> roles;
 
-  const _HasAuthorityAuthorizeRequest(super.path, this.authority);
+  const _HasAnyRoleAuthorizeRequest(super.path, this.roles, super.method);
 
   @override
   bool autheticated() => true;
 
   @override
-  bool hasAuthority(String authority) => this.authority == authority;
+  bool hasRole(List<String> roles) {
+    for (var role in roles) {
+      if (this.roles.contains(role)) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

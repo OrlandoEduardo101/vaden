@@ -48,43 +48,90 @@ class VadenSecurity extends VadenModule {
       final pathItems = openapi.paths!;
       var pathItem = pathItems[path]!;
 
-      final authorize = httpSecurity.authorizeRequests.firstWhereOrNull((e) => e.matches(path));
-
-      if (authorize == null || !authorize.autheticated()) {
-        continue;
+      bool checkHasSecurity(String path, HttpMethod method) {
+        final authorize = httpSecurity.authorizeRequests.firstWhereOrNull((e) => e.matches(path, method));
+        return authorize != null && authorize.autheticated();
       }
 
       pathItem = pathItem.copyWith(
         get: pathItem.get?.copyWith(
           security: [
-            oapi.Security(
-              name: 'bearer',
-              scopes: [],
-            ),
+            ...pathItem.get?.security ?? [],
+            if (checkHasSecurity(path, HttpMethod.get))
+              oapi.Security(
+                name: 'bearer',
+                scopes: [],
+              ),
           ],
         ),
         post: pathItem.post?.copyWith(
           security: [
-            oapi.Security(
-              name: 'bearer',
-              scopes: [],
-            ),
+            ...pathItem.post?.security ?? [],
+            if (checkHasSecurity(path, HttpMethod.post))
+              oapi.Security(
+                name: 'bearer',
+                scopes: [],
+              ),
           ],
         ),
         put: pathItem.put?.copyWith(
           security: [
-            oapi.Security(
-              name: 'bearer',
-              scopes: [],
-            ),
+            ...pathItem.put?.security ?? [],
+            if (checkHasSecurity(path, HttpMethod.put))
+              oapi.Security(
+                name: 'bearer',
+                scopes: [],
+              ),
           ],
         ),
         delete: pathItem.delete?.copyWith(
           security: [
-            oapi.Security(
-              name: 'bearer',
-              scopes: [],
-            ),
+            ...pathItem.delete?.security ?? [],
+            if (checkHasSecurity(path, HttpMethod.delete))
+              oapi.Security(
+                name: 'bearer',
+                scopes: [],
+              ),
+          ],
+        ),
+        patch: pathItem.patch?.copyWith(
+          security: [
+            ...pathItem.patch?.security ?? [],
+            if (checkHasSecurity(path, HttpMethod.patch))
+              oapi.Security(
+                name: 'bearer',
+                scopes: [],
+              ),
+          ],
+        ),
+        head: pathItem.head?.copyWith(
+          security: [
+            ...pathItem.head?.security ?? [],
+            if (checkHasSecurity(path, HttpMethod.head))
+              oapi.Security(
+                name: 'bearer',
+                scopes: [],
+              ),
+          ],
+        ),
+        options: pathItem.options?.copyWith(
+          security: [
+            ...pathItem.options?.security ?? [],
+            if (checkHasSecurity(path, HttpMethod.options))
+              oapi.Security(
+                name: 'bearer',
+                scopes: [],
+              ),
+          ],
+        ),
+        trace: pathItem.trace?.copyWith(
+          security: [
+            ...pathItem.trace?.security ?? [],
+            if (checkHasSecurity(path, HttpMethod.trace))
+              oapi.Security(
+                name: 'bearer',
+                scopes: [],
+              ),
           ],
         ),
       );

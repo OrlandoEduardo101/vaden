@@ -3,6 +3,7 @@
 /// More dartdocs go here.
 library;
 
+export 'src/http_method.dart';
 export 'src/http_security.dart';
 export 'src/jwt_service.dart';
 export 'src/password_encoder.dart';

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:vaden/vaden.dart';
+import 'package:vaden_security/src/http_method.dart';
 import 'package:vaden_security/src/http_security.dart';
 import 'package:vaden_security/src/jwt_service.dart';
 import 'package:vaden_security/src/user_details_service.dart';
@@ -22,10 +23,12 @@ class GlobalSecurityMiddleware extends VadenMiddleware {
   FutureOr<Response> handler(Request request, Handler handler) async {
     final path = '/${request.url.path}';
 
-    final authorize = httpSecurity.authorizeRequests //
-        .firstWhereOrNull((e) => e.matches(path));
+    final method = HttpMethod.fromRequest(request);
 
-    if (authorize == null) {
+    final authorize = httpSecurity.authorizeRequests //
+        .firstWhereOrNull((e) => e.matches(path, method));
+
+    if (authorize == null || authorize.isDenyAll()) {
       return Response(500, body: jsonEncode({'error': 'No authorize request found for path $path'}));
     }
 
