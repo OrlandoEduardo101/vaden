@@ -22,6 +22,9 @@ class GenerateViewmodel extends ChangeNotifier {
   List<Dependency> _dependencies = [];
   List<Dependency> get dependencies => _dependencies;
 
+  final _formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> get formKey => _formKey;
+
   void _setDependencies(Metadata metadata) {
     _dartVersions = metadata.dartVersions;
     _defaultDartVersion = metadata.defaultDartVersion;
