@@ -1,0 +1,136 @@
+---
+sidebar_position: 1
+---
+
+# Vaden Security
+
+**VadenSecurity** is a security module for the [Vaden](https://vaden.dev) backend framework, built with Dart.
+It handles authentication and authorization with zero boilerplate,
+inspired by the power and simplicity of Spring Security.
+
+It works by scanning your classes using a custom build system,
+enabling automatic configuration with just one line of code.
+
+## Getting Started
+
+0. Add the dependency to your `pubspec.yaml`:
+
+```yaml
+dependencies:
+  vaden_security: ^0.1.0
+```
+
+1. Create a Security Configuration class:
+
+```dart
+import 'package:vaden/vaden.dart';
+import 'package:vaden_security/vaden_security.dart';
+
+@Configuration()
+class SecurityConfiguration {
+  @Bean()
+  PasswordEncoder passwordEncoder() {
+    return BCryptPasswordEncoder(cost: 10);
+  }
+
+  @Bean()
+  JwtService jwtService(ApplicationSettings settings) {
+    return JwtService.withSettings(settings);
+  }
+
+  @Bean()
+  HttpSecurity httpSecurity() {
+    return HttpSecurity([
+      RequestMatcher('/auth/**').permitAll(),
+      RequestMatcher('/docs/**').permitAll(),
+      AnyRequest().authenticated(),
+    ]);
+  }
+}
+```
+
+2. Register your module in the `app_configuration`:
+
+```dart
+@Bean()
+ModuleRegister externalModules() {
+  return ModuleRegister([
+    // Add your external modules here
+    VadenSecurity(),
+  ]);
+}
+```
+
+3. Add configurations to your `application.yaml`:
+
+```yaml
+security:
+  secret: AisuSijfdiflkDkldkeokdokDKodk
+  tokenValidity: 3600
+  refreshTokenValidity: 604800
+  issuer: "vaden"
+  audiences:
+    - "vaden"
+```
+
+## HttpSecurity
+
+The `HttpSecurity` class defines a list of rules for your API endpoints, 
+similar to the behavior found in Spring Security.
+Each rule is defined using a `RequestMatcher`, which supports path globbing and HTTP method filtering.
+
+```dart
+RequestMatcher('/admin/**', HttpMethod.get).hasRole('admin');
+```
+
+The matcher supports the following security actions:
+
+| Method                         | Description                                     |
+|-------------------------------|-------------------------------------------------|
+| `permitAll()`                 | Allows any request (no authentication)         |
+| `denyAll()`                   | Blocks all requests                            |
+| `authenticated()`             | Requires a valid authentication token          |
+| `hasRole('role')`             | Requires the user to have a specific role      |
+| `hasAnyRole(['r1', 'r2'])`    | Requires at least one role from a list         |
+
+---
+
+## 🔧 Example
+
+```dart
+@Bean()
+HttpSecurity httpSecurity() {
+  return HttpSecurity([
+    // Public access to auth and docs
+    RequestMatcher('/auth/**').permitAll(),
+    RequestMatcher('/docs/**').permitAll(),
+
+    // Allow only GET to "/public"
+    RequestMatcher('/public', HttpMethod.get).permitAll(),
+
+    // Restrict DELETE on /admin/** to "admin" role
+    RequestMatcher('/admin/**', HttpMethod.delete).hasRole('admin'),
+
+    // Secure everything else
+    AnyRequest().authenticated(),
+  ]);
+}
+```
+
+---
+
+## 🌐 Glob Support
+
+The `path` parameter accepts [Glob patterns](https://pub.dev/packages/glob). Examples:
+
+- `/api/**` → matches everything under `/api/`
+- `/users/*.json` → matches all `.json` files in `/users/`
+
+## Roadmap
+
+	•	✅ JWT Support
+	•	🔜 OAuth2 / OpenID Providers
+	•	🔜 RBAC / Fine-grained policies
+	•	🔜 Session-based auth (Cookie)
+	•	🔜 Multi-tenancy support
+

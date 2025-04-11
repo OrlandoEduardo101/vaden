@@ -1,3 +1,7 @@
+## 0.0.9 (2025/04/11)
+
+- Added RegisterModule
+
 ## 0.0.8 (2025/03/28)
 
 - Fix DSON serialization.
