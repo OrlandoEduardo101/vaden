@@ -1,7 +1,7 @@
 name: vaden_security
-description: A starting point for Dart libraries or applications.
-version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+description: A Dart package for security-related functionalities. Vaden is a Backend Framework Using Dart.
+version: 0.0.1
+repository: https://github.com/Flutterando/vaden
 
 resolution: workspace
 

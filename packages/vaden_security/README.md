@@ -1,39 +1,24 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Vaden Security
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages). 
+**Vaden** is a backend framework for Dart inspired by Spring Boot, built entirely by the [Flutterando](https://flutterando.com.br) community.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages). 
--->
+<img src="https://doc.vaden.dev/img/vaden-social-card.jpg"/>
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+It brings modern concepts like annotation-based controllers, dependency injection, middlewares, guards, DTOs, and OpenAPI documentation — all tailored for a fast and expressive Dart server experience.
 
-## Features
+Vaden aims to deliver the same developer joy Dart brought to Flutter, but for the backend.
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+## Documentation
+Full documentation is available at: [https://doc.vaden.dev/docs/addons/vaden-security](https://doc.vaden.dev/docs/addons/vaden-security)
 
-## Getting started
+## Vaden Community (Discord)
+Chat with others Vaden`users: [https://discord.vaden.dev](https://discord.vaden.dev)
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
 
-## Usage
+## Support the Project
+Vaden is open-source and maintained by the community.
+If you'd like to support its development: [https://apoia.se/vaden](https://apoia.se/vaden)
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+---
 
-```dart
-const like = 'sample';
-```
-
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+Made with ❤️ by the Flutterando community.
