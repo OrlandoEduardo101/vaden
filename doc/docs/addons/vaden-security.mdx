@@ -73,6 +73,32 @@ security:
     - "vaden"
 ```
 
+4. Implements the `UserDetailsService` interface to load user details:
+
+```dart
+import 'package:vaden/vaden.dart';
+import 'package:vaden_security/vaden_security.dart';
+
+@Service()
+class UserDetailsServiceImpl implements UserDetailsService {
+  @override
+  Future<UserDetails> loadUserByUsername(String username) async {
+    ...
+  }
+}
+```
+
+Return a `UserDetails` object with the user information and roles.
+
+We can retrieve the `UserDetails` in any `@Controller()` by using the `@Context()` in any handler:
+
+```dart
+@Post('/byUser')
+List<Product> getProductsByUser(@Context() UserDetails user) {
+  return productService.getProductsByUser(user);
+}
+```
+
 ## HttpSecurity
 
 The `HttpSecurity` class defines a list of rules for your API endpoints, 
@@ -119,12 +145,14 @@ HttpSecurity httpSecurity() {
 
 ---
 
-## 🌐 Glob Support
+## Glob Support
 
 The `path` parameter accepts [Glob patterns](https://pub.dev/packages/glob). Examples:
 
 - `/api/**` → matches everything under `/api/`
 - `/users/*.json` → matches all `.json` files in `/users/`
+
+## 
 
 ## Roadmap
 
