@@ -27,26 +27,12 @@ class ProjectDepreciated with Validator<ProjectDepreciated> {
   }
 
   @override
-  LucidValidator<ProjectDepreciated> validate(
-      ValidatorBuilder<ProjectDepreciated> builder) {
+  LucidValidator<ProjectDepreciated> validate(ValidatorBuilder<ProjectDepreciated> builder) {
+    final dependencyValidator = dependencies.first.validate(ValidatorBuilder<Dependency>());
+
     builder //
         .ruleFor((p) => p.dependencies, key: 'dependencies')
-        .use((dependencies, project) {
-      if (dependencies.isEmpty) {
-        return null;
-      }
-      final validate = ValidatorBuilder<Dependency>();
-      dependencies.first.validate(validate);
-
-      for (var dependency in dependencies) {
-        dependency.validate(validate);
-        final result = validate.validate(dependency);
-        if (!result.isValid) {
-          return result.exceptions.first;
-        }
-      }
-      return null;
-    });
+        .setEach(dependencyValidator);
 
     builder //
         .ruleFor((p) => p.projectName, key: 'projectName')
