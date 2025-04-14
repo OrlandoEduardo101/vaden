@@ -43,15 +43,26 @@ class VadenDependenciesDialog extends StatefulWidget {
 
 class _VadenDependenciesDialogState extends State<VadenDependenciesDialog> {
   var _currentCategory = 'Todos';
+  String? _search;
 
   List<String> _getUniqueCategories(List<Dependency> dependencies) {
     final categories = dependencies.map((dep) => dep.tag).toSet().toList();
     return ['Todos', ...categories.isEmpty ? [] : categories];
   }
 
-  List<Dependency> _getFilteredDependencies(List<Dependency> dependencies) {
+  List<Dependency> _getFilteredDependencies(List<Dependency> dependencies, [String? search]) {
     if (dependencies.isEmpty) return [];
-    if (_currentCategory == 'Todos') return dependencies;
+    if (_currentCategory == 'Todos') {
+      if (search == null) return dependencies;
+      return dependencies
+          .where((dep) => dep.name.toLowerCase().contains(search.toLowerCase()))
+          .toList();
+    }
+    if (search != null) {
+      return dependencies
+          .where((dep) => dep.name.toLowerCase().contains(search.toLowerCase()))
+          .toList();
+    }
     return dependencies.where((dep) => dep.tag == _currentCategory).toList();
   }
 
@@ -62,7 +73,7 @@ class _VadenDependenciesDialogState extends State<VadenDependenciesDialog> {
     late final double letterSpacing = fontSize * 0.04;
 
     final categories = _getUniqueCategories(widget.dependencies);
-    final filteredDependencies = _getFilteredDependencies(widget.dependencies);
+    final filteredDependencies = _getFilteredDependencies(widget.dependencies, _search);
 
     if (widget.dependencies.isNotEmpty && !categories.contains(_currentCategory)) {
       _currentCategory = categories.first;
@@ -72,7 +83,7 @@ class _VadenDependenciesDialogState extends State<VadenDependenciesDialog> {
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Container(
-        width: 580,
+        width: 900,
         decoration: BoxDecoration(
           color: VadenColors.dialogBgColor,
           borderRadius: BorderRadius.circular(16),
@@ -112,6 +123,17 @@ class _VadenDependenciesDialogState extends State<VadenDependenciesDialog> {
                         ),
                       ),
                     ],
+                  ),
+                  VadenTextInput(
+                    suffixIcon: Icon(Icons.search),
+                    label: 'Search'.i18n(),
+                    hint: 'Search'.i18n(),
+                    width: 360,
+                    onChanged: (value) {
+                      setState(() {
+                        _search = value;
+                      });
+                    },
                   ),
                   Container(
                     height: 40,
