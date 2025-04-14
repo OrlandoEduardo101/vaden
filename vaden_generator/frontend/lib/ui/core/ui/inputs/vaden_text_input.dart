@@ -14,6 +14,7 @@ class VadenTextInput extends StatefulWidget {
   final ValueChanged<String>? onChanged;
   final AutovalidateMode? autovalidateMode;
   final Widget? prefixIcon;
+  final Widget? suffixIcon;
   final TextStyle? labelStyle;
   final List<TextInputFormatter>? inputFormatters;
   final bool isEnabled;
@@ -31,6 +32,7 @@ class VadenTextInput extends StatefulWidget {
     this.autovalidateMode,
     this.textInputType = TextInputType.text,
     this.prefixIcon,
+    this.suffixIcon,
     this.labelStyle,
     this.inputFormatters,
     this.isEnabled = true,
@@ -65,6 +67,8 @@ class _VadenTextInputState extends State<VadenTextInput> {
                 color: VadenColors.txtDisabled,
               ),
         decoration: InputDecoration(
+          suffixIcon: widget.suffixIcon,
+          prefixIcon: widget.prefixIcon,
           contentPadding: EdgeInsets.symmetric(
             vertical: widget.verticalPadding,
             horizontal: 12,
