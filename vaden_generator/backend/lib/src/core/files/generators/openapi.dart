@@ -10,17 +10,20 @@ class OpenAPIGenerator extends FileGenerator {
     Directory directory, {
     Map<String, dynamic> variables = const {},
   }) async {
-    final libConfigOpenapiOpenapiConfiguration =
-        File('${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}config${Platform.pathSeparator}openapi${Platform.pathSeparator}openapi_configuration.dart');
+    final libConfigOpenapiOpenapiConfiguration = File(
+        '${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}config${Platform.pathSeparator}openapi${Platform.pathSeparator}openapi_configuration.dart');
     await libConfigOpenapiOpenapiConfiguration.create(recursive: true);
-    await libConfigOpenapiOpenapiConfiguration.writeAsString(parseVariables(_libConfigOpenapiOpenapiConfigurationContent, variables));
+    await libConfigOpenapiOpenapiConfiguration.writeAsString(parseVariables(
+        _libConfigOpenapiOpenapiConfigurationContent, variables));
 
-    final libConfigOpenapiOpenapiController =
-        File('${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}config${Platform.pathSeparator}openapi${Platform.pathSeparator}openapi_controller.dart');
+    final libConfigOpenapiOpenapiController = File(
+        '${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}config${Platform.pathSeparator}openapi${Platform.pathSeparator}openapi_controller.dart');
     await libConfigOpenapiOpenapiController.create(recursive: true);
-    await libConfigOpenapiOpenapiController.writeAsString(_libConfigOpenapiOpenapiControllerContent);
+    await libConfigOpenapiOpenapiController
+        .writeAsString(_libConfigOpenapiOpenapiControllerContent);
 
-    final helloController = File('${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}src${Platform.pathSeparator}hello_controller.dart');
+    final helloController = File(
+        '${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}src${Platform.pathSeparator}hello_controller.dart');
     await fileManager.insertLineInFile(
       helloController,
       RegExp(r'@Controller\(.+\)'),

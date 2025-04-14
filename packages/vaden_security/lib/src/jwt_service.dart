@@ -25,7 +25,8 @@ class JwtService {
     return JwtService(
       secret: settings['security']['secret'],
       tokenValidity: Duration(seconds: settings['security']['tokenValidity']),
-      refreshTokenValidity: Duration(seconds: settings['security']['refreshTokenValidity']),
+      refreshTokenValidity:
+          Duration(seconds: settings['security']['refreshTokenValidity']),
       issuer: settings['security']['issuer'],
       audiences: settings['security']['audiences'].cast<String>(),
     );
@@ -48,7 +49,8 @@ class JwtService {
       audience: Audience(audiences),
     );
 
-    return jwt.sign(SecretKey(secret), expiresIn: isRefreshToken ? refreshTokenValidity : tokenValidity);
+    return jwt.sign(SecretKey(secret),
+        expiresIn: isRefreshToken ? refreshTokenValidity : tokenValidity);
   }
 
   /// Verifies the JWT token and returns the claims if valid.

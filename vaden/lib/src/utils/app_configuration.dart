@@ -32,14 +32,14 @@ import 'package:yaml/yaml.dart';
 /// ```dart
 /// void main() {
 ///   final config = ApplicationSettings.load('config.yaml');
-///   
+///
 ///   final appName = config['app']['name'];
 ///   final serverPort = config['server']['port'];
 ///   final dbUrl = config['database']['url'];
 ///   final enableLogging = config['features']['enableLogging'];
-///   
+///
 ///   print('Starting $appName on port $serverPort');
-///   
+///
 ///   // Use the configuration values to set up the application
 /// }
 /// ```

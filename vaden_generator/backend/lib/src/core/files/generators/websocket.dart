@@ -10,16 +10,20 @@ class WebsocketGenerator extends FileGenerator {
     Directory directory, {
     Map<String, dynamic> variables = const {},
   }) async {
-    final libConfigWebsockeWebsocketResourceContent =
-        File('${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}config${Platform.pathSeparator}websocket${Platform.pathSeparator}websocket_resource.dart');
+    final libConfigWebsockeWebsocketResourceContent = File(
+        '${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}config${Platform.pathSeparator}websocket${Platform.pathSeparator}websocket_resource.dart');
     await libConfigWebsockeWebsocketResourceContent.create(recursive: true);
-    await libConfigWebsockeWebsocketResourceContent.writeAsString(_libConfigWebsockeWebsocketResourceContent);
+    await libConfigWebsockeWebsocketResourceContent
+        .writeAsString(_libConfigWebsockeWebsocketResourceContent);
 
-    final libSrcWebsocketController = File('${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}src${Platform.pathSeparator}websocket_controller.dart');
+    final libSrcWebsocketController = File(
+        '${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}src${Platform.pathSeparator}websocket_controller.dart');
     await libSrcWebsocketController.create(recursive: true);
-    await libSrcWebsocketController.writeAsString(_libSrcWebsocketControllerContent);
+    await libSrcWebsocketController
+        .writeAsString(_libSrcWebsocketControllerContent);
 
-    final pubspec = File('${directory.path}${Platform.pathSeparator}pubspec.yaml');
+    final pubspec =
+        File('${directory.path}${Platform.pathSeparator}pubspec.yaml');
     await fileManager.insertLineInFile(
       pubspec,
       RegExp(r'dependencies:'),

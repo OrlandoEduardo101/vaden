@@ -69,54 +69,70 @@ class ResponseException<W> implements Exception {
   /// - [headers]: Additional HTTP headers to include in the response (optional).
   const ResponseException(this.code, this.body, {this.headers = const {}});
 
-  factory ResponseException.internalServerError(W message, {Map<String, String> headers = const {}}) {
+  factory ResponseException.internalServerError(W message,
+      {Map<String, String> headers = const {}}) {
     return ResponseException(500, message, headers: headers);
   }
 
-  factory ResponseException.notFound(W message, {Map<String, String> headers = const {}}) {
+  factory ResponseException.notFound(W message,
+      {Map<String, String> headers = const {}}) {
     return ResponseException(404, message, headers: headers);
   }
-  factory ResponseException.badRequest(W message, {Map<String, String> headers = const {}}) {
+  factory ResponseException.badRequest(W message,
+      {Map<String, String> headers = const {}}) {
     return ResponseException(400, message, headers: headers);
   }
-  factory ResponseException.unauthorized(W message, {Map<String, String> headers = const {}}) {
+  factory ResponseException.unauthorized(W message,
+      {Map<String, String> headers = const {}}) {
     return ResponseException(401, message, headers: headers);
   }
-  factory ResponseException.forbidden(W message, {Map<String, String> headers = const {}}) {
+  factory ResponseException.forbidden(W message,
+      {Map<String, String> headers = const {}}) {
     return ResponseException(403, message, headers: headers);
   }
-  factory ResponseException.conflict(W message, {Map<String, String> headers = const {}}) {
+  factory ResponseException.conflict(W message,
+      {Map<String, String> headers = const {}}) {
     return ResponseException(409, message, headers: headers);
   }
-  factory ResponseException.unprocessableEntity(W message, {Map<String, String> headers = const {}}) {
+  factory ResponseException.unprocessableEntity(W message,
+      {Map<String, String> headers = const {}}) {
     return ResponseException(422, message, headers: headers);
   }
-  factory ResponseException.notAcceptable(W message, {Map<String, String> headers = const {}}) {
+  factory ResponseException.notAcceptable(W message,
+      {Map<String, String> headers = const {}}) {
     return ResponseException(406, message, headers: headers);
   }
-  factory ResponseException.notImplemented(W message, {Map<String, String> headers = const {}}) {
+  factory ResponseException.notImplemented(W message,
+      {Map<String, String> headers = const {}}) {
     return ResponseException(501, message, headers: headers);
   }
-  factory ResponseException.serviceUnavailable(W message, {Map<String, String> headers = const {}}) {
+  factory ResponseException.serviceUnavailable(W message,
+      {Map<String, String> headers = const {}}) {
     return ResponseException(503, message, headers: headers);
   }
-  factory ResponseException.gatewayTimeout(W message, {Map<String, String> headers = const {}}) {
+  factory ResponseException.gatewayTimeout(W message,
+      {Map<String, String> headers = const {}}) {
     return ResponseException(504, message, headers: headers);
   }
-  factory ResponseException.tooManyRequests(W message, {Map<String, String> headers = const {}}) {
+  factory ResponseException.tooManyRequests(W message,
+      {Map<String, String> headers = const {}}) {
     return ResponseException(429, message, headers: headers);
   }
-  factory ResponseException.notModified(W message, {Map<String, String> headers = const {}}) {
+  factory ResponseException.notModified(W message,
+      {Map<String, String> headers = const {}}) {
     return ResponseException(304, message, headers: headers);
   }
-  factory ResponseException.methodNotAllowed(W message, {Map<String, String> headers = const {}}) {
+  factory ResponseException.methodNotAllowed(W message,
+      {Map<String, String> headers = const {}}) {
     return ResponseException(405, message, headers: headers);
   }
 
-  factory ResponseException.requestTimeout(W message, {Map<String, String> headers = const {}}) {
+  factory ResponseException.requestTimeout(W message,
+      {Map<String, String> headers = const {}}) {
     return ResponseException(408, message, headers: headers);
   }
-  factory ResponseException.preconditionFailed(W message, {Map<String, String> headers = const {}}) {
+  factory ResponseException.preconditionFailed(W message,
+      {Map<String, String> headers = const {}}) {
     return ResponseException(412, message, headers: headers);
   }
 
@@ -138,27 +154,46 @@ class ResponseException<W> implements Exception {
   /// - A shelf Response object with the appropriate status code, body, and headers.
   Response generateResponse(DSON dson) {
     if (body is String) {
-      return Response(code, body: body, headers: _enforceContentType(headers, 'text/plain'));
+      return Response(code,
+          body: body, headers: _enforceContentType(headers, 'text/plain'));
     } else if (body is List<int>) {
-      return Response(code, body: body, headers: _enforceContentType(headers, 'application/octet-stream'));
+      return Response(code,
+          body: body,
+          headers: _enforceContentType(headers, 'application/octet-stream'));
     } else if (body is Map<String, dynamic>) {
-      return Response(code, body: jsonEncode(body), headers: _enforceContentType(headers, 'application/json'));
+      return Response(code,
+          body: jsonEncode(body),
+          headers: _enforceContentType(headers, 'application/json'));
     } else if (body is Map<String, Object>) {
-      return Response(code, body: jsonEncode(body), headers: _enforceContentType(headers, 'application/json'));
+      return Response(code,
+          body: jsonEncode(body),
+          headers: _enforceContentType(headers, 'application/json'));
     } else if (body is Map<String, String>) {
-      return Response(code, body: jsonEncode(body), headers: _enforceContentType(headers, 'application/json'));
+      return Response(code,
+          body: jsonEncode(body),
+          headers: _enforceContentType(headers, 'application/json'));
     } else if (body is List<Map<String, dynamic>>) {
-      return Response(code, body: jsonEncode(body), headers: _enforceContentType(headers, 'application/json'));
+      return Response(code,
+          body: jsonEncode(body),
+          headers: _enforceContentType(headers, 'application/json'));
     } else if (body is List<Map<String, String>>) {
-      return Response(code, body: jsonEncode(body), headers: _enforceContentType(headers, 'application/json'));
+      return Response(code,
+          body: jsonEncode(body),
+          headers: _enforceContentType(headers, 'application/json'));
     } else if (body is List<Map<String, Object>>) {
-      return Response(code, body: jsonEncode(body), headers: _enforceContentType(headers, 'application/json'));
+      return Response(code,
+          body: jsonEncode(body),
+          headers: _enforceContentType(headers, 'application/json'));
     } else {
       if (body is List) {
         final json = (body as List).map((e) => dson.toJson(e)).toList();
-        return Response(code, body: jsonEncode(json), headers: _enforceContentType(headers, 'application/json'));
+        return Response(code,
+            body: jsonEncode(json),
+            headers: _enforceContentType(headers, 'application/json'));
       }
-      return Response(code, body: jsonEncode(dson.toJson(body)), headers: _enforceContentType(headers, 'application/json'));
+      return Response(code,
+          body: jsonEncode(dson.toJson(body)),
+          headers: _enforceContentType(headers, 'application/json'));
     }
   }
 
@@ -174,10 +209,13 @@ class ResponseException<W> implements Exception {
   ///
   /// Returns:
   /// - A new headers map with the Content-Type header added if necessary.
-  Map<String, String> _enforceContentType(Map<String, String> headers, String contentType) {
-    final Map<String, String> enforcedHeaders = Map<String, String>.from(headers);
+  Map<String, String> _enforceContentType(
+      Map<String, String> headers, String contentType) {
+    final Map<String, String> enforcedHeaders =
+        Map<String, String>.from(headers);
 
-    if (enforcedHeaders['content-type'] == null && enforcedHeaders['Content-Type'] == null) {
+    if (enforcedHeaders['content-type'] == null &&
+        enforcedHeaders['Content-Type'] == null) {
       enforcedHeaders['Content-Type'] = contentType;
     }
 

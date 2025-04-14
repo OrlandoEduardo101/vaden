@@ -46,9 +46,7 @@ class VadenAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ],
                 )
               : null,
-          color: mode == VadenAppBarMode.production
-              ? VadenColors.productionColor
-              : null,
+          color: mode == VadenAppBarMode.production ? VadenColors.productionColor : null,
         ),
         child: AppBar(
           title: Text(

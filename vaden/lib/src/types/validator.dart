@@ -67,11 +67,11 @@ import 'package:lucid_validation/lucid_validation.dart';
 ///   @Post('/')
 ///   Future<Response> createUser(Request request, @Body() CreateUserDTO dto) {
 ///     final validationResult = _validator.validate(ValidatorBuilder<CreateUserDTO>()).validate(dto);
-///     
+///
 ///     if (!validationResult.isValid) {
 ///       throw ResponseException(422, {'errors': validationResult.errors});
 ///     }
-///     
+///
 ///     // Process the validated DTO
 ///   }
 /// }

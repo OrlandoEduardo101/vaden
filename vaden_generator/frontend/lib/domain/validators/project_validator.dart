@@ -23,11 +23,8 @@ class ProjectValidator extends LucidValidator<Project> {
         .minLength(3, message: 'minLength')
         .maxLength(50, message: 'maxLength')
         .matchesPattern(r'^[a-z][a-z0-9_]*$', code: 'invalidName')
-        .must(
-          (name) => !_reservedKeywords.contains(name.toLowerCase()),
-          'reservedKeyword',
-          'reservedKeyword'
-        );
+        .must((name) => !_reservedKeywords.contains(name.toLowerCase()), 'reservedKeyword',
+            'reservedKeyword');
 
     ruleFor((p) => p.description, key: 'description') //
         .notEmpty(message: 'notEmpty')

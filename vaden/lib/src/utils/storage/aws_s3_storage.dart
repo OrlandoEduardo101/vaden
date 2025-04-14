@@ -45,17 +45,17 @@ class AwsS3Storage extends Storage {
   ///
   /// The bucket must already exist and be accessible with the provided credentials.
   final String bucket;
-  
+
   /// The AWS region where the S3 bucket is located.
   ///
   /// Example regions: 'us-east-1', 'eu-west-1', 'ap-southeast-2', etc.
   final String region;
-  
+
   /// The AWS access key ID used for authentication.
   ///
   /// This key should have appropriate permissions to perform operations on the specified bucket.
   final String accessKey;
-  
+
   /// The AWS secret access key used for authentication.
   ///
   /// This key should be kept secure and not exposed in client-side code.
@@ -139,7 +139,7 @@ class AwsS3Storage extends Storage {
   ///
   /// // Download a file
   /// final bytes = await storage.download('images/profile.jpg');
-  /// 
+  ///
   /// // Save the file locally
   /// await File('downloaded_image.jpg').writeAsBytes(bytes);
   /// ```
@@ -181,7 +181,7 @@ class AwsS3Storage extends Storage {
   ///
   /// // List all images in the 'images' folder
   /// final images = await storage.listFiles('images/');
-  /// 
+  ///
   /// print('Found ${images.length} images:');
   /// for (final path in images) {
   ///   print(' - $path');

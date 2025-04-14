@@ -14,15 +14,15 @@
 /// @Service()
 /// class DatabaseService implements Disposable {
 ///   late final Database _database;
-///   
+///
 ///   Future<void> initialize() async {
 ///     _database = await Database.connect('connection_string');
 ///   }
-///   
+///
 ///   Future<List<Map<String, dynamic>>> query(String sql) async {
 ///     return _database.query(sql);
 ///   }
-///   
+///
 ///   @override
 ///   void dispose() {
 ///     // Close the database connection when the service is disposed

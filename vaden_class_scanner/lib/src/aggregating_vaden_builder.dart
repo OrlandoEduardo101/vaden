@@ -26,7 +26,8 @@ class AggregatingVadenBuilder implements Builder {
     );
   }
 
-  final formatter = DartFormatter(languageVersion: DartFormatter.latestLanguageVersion);
+  final formatter =
+      DartFormatter(languageVersion: DartFormatter.latestLanguageVersion);
 
   final componentChecker = TypeChecker.fromRuntime(BaseComponent);
   final dtoChecker = TypeChecker.fromRuntime(DTO);
@@ -42,7 +43,8 @@ class AggregatingVadenBuilder implements Builder {
 
     importsBuffer.writeln('// GENERATED CODE - DO NOT MODIFY BY HAND');
     importsBuffer.writeln('// Aggregated Vaden application file');
-    importsBuffer.writeln('// ignore_for_file: prefer_function_declarations_over_variables, implementation_imports');
+    importsBuffer.writeln(
+        '// ignore_for_file: prefer_function_declarations_over_variables, implementation_imports');
     importsBuffer.writeln();
     importsBuffer.writeln("import 'dart:convert';");
     importsBuffer.writeln("import 'dart:io';");
@@ -96,7 +98,9 @@ class AggregatingVadenBuilder implements Builder {
       for (var classElement in reader.classes) {
         final component = componentChecker.firstAnnotationOf(classElement);
         if (component != null) {
-          final registerWithInterfaceOrSuperType = component.getField('registerWithInterfaceOrSuperType')!.toBoolValue()!;
+          final registerWithInterfaceOrSuperType = component
+              .getField('registerWithInterfaceOrSuperType')!
+              .toBoolValue()!;
 
           yield (classElement, registerWithInterfaceOrSuperType);
           continue;
@@ -112,7 +116,8 @@ class AggregatingVadenBuilder implements Builder {
 
       final bodyBuffer = StringBuffer();
 
-      final registerText = _componentRegister(classElement, registerWithInterfaceOrSuperType);
+      final registerText =
+          _componentRegister(classElement, registerWithInterfaceOrSuperType);
       if (registerText.isNotEmpty) {
         bodyBuffer.writeln(registerText);
       }
@@ -138,7 +143,8 @@ class AggregatingVadenBuilder implements Builder {
 
     aggregatedBuffer.writeln(body.join('\n'));
 
-    aggregatedBuffer.writeln('    _injector.addLazySingleton(OpenApiConfig.create(paths, apis).call);');
+    aggregatedBuffer.writeln(
+        '    _injector.addLazySingleton(OpenApiConfig.create(paths, apis).call);');
     aggregatedBuffer.writeln('    _injector.commit();');
     aggregatedBuffer.writeln('''
 
@@ -153,7 +159,8 @@ class AggregatingVadenBuilder implements Builder {
     await moduleRegister?.registerAll(_router, _injector);
 ''');
     aggregatedBuffer.writeln('  }');
-    aggregatedBuffer.writeln('''Future<Response> _handleException(dynamic e) async {
+    aggregatedBuffer
+        .writeln('''Future<Response> _handleException(dynamic e) async {
 
     $exceptionHandlerBuffer
 
@@ -210,14 +217,18 @@ class _DSON extends DSON {
     }
   }
 
-  String _componentRegister(ClassElement classElement, bool registerWithInterfaceOrSuperType) {
-    if (dtoChecker.hasAnnotationOf(classElement) || configurationChecker.hasAnnotationOf(classElement)) {
+  String _componentRegister(
+      ClassElement classElement, bool registerWithInterfaceOrSuperType) {
+    if (dtoChecker.hasAnnotationOf(classElement) ||
+        configurationChecker.hasAnnotationOf(classElement)) {
       return '';
     }
 
     if (registerWithInterfaceOrSuperType) {
-      final interfaceType = classElement.interfaces.firstOrNull ?? classElement.supertype;
-      if (interfaceType != null && interfaceType.getDisplayString() != 'Object') {
+      final interfaceType =
+          classElement.interfaces.firstOrNull ?? classElement.supertype;
+      if (interfaceType != null &&
+          interfaceType.getDisplayString() != 'Object') {
         return '''
       _injector.addBind(Bind.withClassName(
       constructor: ${classElement.name}.new,
@@ -232,4 +243,5 @@ class _DSON extends DSON {
   }
 }
 
-Builder aggregatingVadenBuilder(BuilderOptions options) => AggregatingVadenBuilder();
+Builder aggregatingVadenBuilder(BuilderOptions options) =>
+    AggregatingVadenBuilder();

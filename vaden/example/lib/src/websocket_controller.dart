@@ -110,8 +110,10 @@ class WebSocket {
   void joinRoom(String room) => _enteredRooms.add(room);
   bool leaveRoom(String room) => _enteredRooms.remove(room);
 
-  void emit(dynamic data, [Iterable<String> rooms = const []]) => _broadcast(data, currentSocket: this, rooms: rooms);
-  void emitToRooms(dynamic data) => _broadcast(data, currentSocket: this, rooms: _enteredRooms);
+  void emit(dynamic data, [Iterable<String> rooms = const []]) =>
+      _broadcast(data, currentSocket: this, rooms: rooms);
+  void emitToRooms(dynamic data) =>
+      _broadcast(data, currentSocket: this, rooms: _enteredRooms);
 
   WebSocket._(this._channel, this._broadcast);
 }

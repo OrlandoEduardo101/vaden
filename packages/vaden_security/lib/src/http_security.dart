@@ -21,13 +21,16 @@ class RequestMatcher {
   final Glob path;
   final HttpMethod method;
 
-  RequestMatcher(String path, [this.method = HttpMethod.any]) : path = Glob(path);
+  RequestMatcher(String path, [this.method = HttpMethod.any])
+      : path = Glob(path);
 
   AuthorizeRequest permitAll() => _PermitAllAuthorizeRequest(path, method);
 
-  AuthorizeRequest hasRole(String role) => _HasRoleAuthorizeRequest(path, role, method);
+  AuthorizeRequest hasRole(String role) =>
+      _HasRoleAuthorizeRequest(path, role, method);
 
-  AuthorizeRequest hasAnyRole(List<String> roles) => _HasAnyRoleAuthorizeRequest(path, roles, method);
+  AuthorizeRequest hasAnyRole(List<String> roles) =>
+      _HasAnyRoleAuthorizeRequest(path, roles, method);
 
   AuthorizeRequest denyAll() => _DenyAllAuthorizeRequest(path, method);
 
@@ -35,9 +38,11 @@ class RequestMatcher {
 }
 
 class AnyRequest {
-  AuthorizeRequest permitAll() => _PermitAllAuthorizeRequest(Glob('/**'), HttpMethod.any);
+  AuthorizeRequest permitAll() =>
+      _PermitAllAuthorizeRequest(Glob('/**'), HttpMethod.any);
 
-  AuthorizeRequest authenticated() => _AuthenticatedRequest(Glob('/**'), HttpMethod.any);
+  AuthorizeRequest authenticated() =>
+      _AuthenticatedRequest(Glob('/**'), HttpMethod.any);
 }
 
 sealed class AuthorizeRequest {

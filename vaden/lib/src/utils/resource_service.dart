@@ -33,7 +33,7 @@ import 'package:vaden/vaden.dart';
 ///     fileSystemPath: 'public',
 ///     defaultDocument: 'index.html',
 ///   );
-///   
+///
 ///   final handler = const Pipeline()
 ///     .addMiddleware(logRequests())
 ///     .addHandler((request) {
@@ -42,7 +42,7 @@ import 'package:vaden/vaden.dart';
 ///       }
 ///       return router(request);
 ///     });
-///   
+///
 ///   await serve(handler, 'localhost', 8080);
 /// }
 /// ```
@@ -51,13 +51,13 @@ class ResourceService {
   ///
   /// This path can be absolute or relative to the current working directory.
   final String fileSystemPath;
-  
+
   /// The default document to serve when a directory is requested.
   ///
   /// When a request is made for a directory (e.g., '/'), the server will attempt to serve
   /// this document from that directory. Typically set to 'index.html'.
   final String defaultDocument;
-  
+
   /// Whether to list the contents of directories when no default document is found.
   ///
   /// If true and a directory is requested that doesn't contain the default document,
@@ -66,7 +66,7 @@ class ResourceService {
   ///
   /// Default is false for security reasons.
   final bool listDirectories;
-  
+
   /// Whether to use the header bytes of a file to determine its content type.
   ///
   /// If true, the server will examine the first few bytes of a file to determine its

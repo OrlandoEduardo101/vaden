@@ -40,7 +40,8 @@ class ResourceController {
       final links = <Map<String, String>>[];
       await for (final part in multipart.parts) {
         final headers = part.headers;
-        final fileName = headers['content-disposition']!.split('filename=')[1].trim();
+        final fileName =
+            headers['content-disposition']!.split('filename=')[1].trim();
         final link = await storage.upload(fileName, await part.readBytes());
         links.add({'filename': fileName, 'link': link});
       }

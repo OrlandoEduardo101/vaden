@@ -104,7 +104,8 @@ String _fromJson(ClassElement classElement) {
   for (final parameter in constructor.parameters) {
     final paramName = _getParameterName(parameter);
     final paramType = parameter.type.getDisplayString();
-    final isNotNull = parameter.type.nullabilitySuffix == NullabilitySuffix.none;
+    final isNotNull =
+        parameter.type.nullabilitySuffix == NullabilitySuffix.none;
     final hasDefault = parameter.hasDefaultValue;
     var paramValue = '';
 
@@ -139,7 +140,8 @@ String _fromJson(ClassElement classElement) {
 
     if (parameter.isNamed) {
       if (hasDefault) {
-        namedArgsBuffer.writeln("if (json.containsKey('$paramName')) #${parameter.name}: $paramValue,");
+        namedArgsBuffer.writeln(
+            "if (json.containsKey('$paramName')) #${parameter.name}: $paramValue,");
       } else {
         namedArgsBuffer.writeln("#${parameter.name}: $paramValue,");
       }
@@ -169,7 +171,8 @@ FieldElement _getFieldByParameter(ParameterElement parameter) {
     return parameter.field!;
   }
 
-  throw ResponseException.internalServerError({'error': 'Parameter is not a field formal parameter'});
+  throw ResponseException.internalServerError(
+      {'error': 'Parameter is not a field formal parameter'});
 }
 
 String _getParseFunction(FieldElement field, {required bool isFromJson}) {
@@ -231,7 +234,8 @@ String _getFieldName(FieldElement parameter) {
 
 String _toJson(ClassElement classElement) {
   final jsonBuffer = StringBuffer();
-  for (final field in classElement.fields.where((f) => !f.isStatic && !f.isPrivate)) {
+  for (final field
+      in classElement.fields.where((f) => !f.isStatic && !f.isPrivate)) {
     jsonBuffer.writeln(_toJsonField(field));
   }
 

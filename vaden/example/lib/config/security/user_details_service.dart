@@ -8,7 +8,8 @@ class UserDetailsServiceImpl implements UserDetailsService {
     if (username == 'vaden@vaden.dev') {
       return UserDetails(
         username: username,
-        password: r'$2a$10$ApYjJBHnp4a/sQAfAlT.9ufcss.8PxNykdid5ZweKRB.XRhXoM1qq', // 123456
+        password:
+            r'$2a$10$ApYjJBHnp4a/sQAfAlT.9ufcss.8PxNykdid5ZweKRB.XRhXoM1qq', // 123456
         roles: ['ADMIN'],
       );
     }

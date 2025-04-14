@@ -4,7 +4,7 @@ import 'package:backend/src/core/files/file_generate.dart';
 import 'package:backend/src/core/files/file_manager.dart';
 
 /// Generator for SQLite database integration.
-/// 
+///
 /// This generator adds SQLite dependencies, configuration files, and settings
 /// to a Vaden project.
 class SqliteGenerator extends FileGenerator {
@@ -52,8 +52,7 @@ class SqliteGenerator extends FileGenerator {
   }
 }
 
-const _libConfigSqliteSqliteConfigurationContent =
-    '''import 'dart:io';
+const _libConfigSqliteSqliteConfigurationContent = '''import 'dart:io';
 import 'package:sqlite3/sqlite3.dart';
 import 'package:vaden/vaden.dart';
 

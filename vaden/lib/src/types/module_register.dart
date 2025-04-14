@@ -19,7 +19,8 @@ class ModuleRegister {
   /// The constructor initializes the `ModuleRegister` with an optional list
   /// of `VadenModule` instances. If no modules are provided, an empty list
   /// is created.
-  ModuleRegister([List<VadenModule>? modules]) : modules = modules ?? <VadenModule>[];
+  ModuleRegister([List<VadenModule>? modules])
+      : modules = modules ?? <VadenModule>[];
 
   /// The `registerAll` method iterates through all registered modules and
   /// calls their `registerInjections` and `registerRoutes` methods.

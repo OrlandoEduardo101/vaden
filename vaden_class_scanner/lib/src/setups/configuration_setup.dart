@@ -15,7 +15,8 @@ String configurationSetup(ClassElement classElement) {
       continue;
     }
 
-    if (method.returnType.isDartAsyncFuture || method.returnType.isDartAsyncFutureOr) {
+    if (method.returnType.isDartAsyncFuture ||
+        method.returnType.isDartAsyncFutureOr) {
       final parametersCode = method.parameters.map((param) {
         if (param.isNamed) {
           return '${param.name}: _injector()';
@@ -33,7 +34,8 @@ _injector.addInstance(result);
 
 ''');
     } else {
-      bodyBuffer.writeln('    _injector.addLazySingleton($instanceName.${method.name});');
+      bodyBuffer.writeln(
+          '    _injector.addLazySingleton($instanceName.${method.name});');
     }
   }
 

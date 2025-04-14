@@ -54,7 +54,8 @@ class Glob {
     int starIndex = -1, matchIndex = 0;
 
     while (s < inputSegment.length) {
-      if (p < patternSegment.length && (patternSegment[p] == inputSegment[s] || patternSegment[p] == '*')) {
+      if (p < patternSegment.length &&
+          (patternSegment[p] == inputSegment[s] || patternSegment[p] == '*')) {
         if (patternSegment[p] == '*') {
           starIndex = p;
           matchIndex = s;

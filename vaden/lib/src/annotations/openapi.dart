@@ -17,10 +17,10 @@ part of 'annotation.dart';
 class Api {
   /// The tag name for grouping related endpoints in the OpenAPI documentation.
   final String tag;
-  
+
   /// A description of the API endpoints in this controller.
   final String description;
-  
+
   /// Creates an Api annotation with the specified tag and description.
   ///
   /// [tag] - The tag name for grouping related endpoints.
@@ -51,10 +51,10 @@ class Api {
 class ApiOperation {
   /// A short summary of what the operation does.
   final String summary;
-  
+
   /// A verbose explanation of the operation behavior.
   final String description;
-  
+
   /// Creates an ApiOperation annotation with the specified summary and description.
   ///
   /// [summary] - A short summary of what the operation does.
@@ -74,7 +74,7 @@ class ApiOperation {
 /// class UserController {
 ///   @Get('/:id')
 ///   @ApiOperation(summary: 'Get user by ID')
-///   @ApiResponse(200, 
+///   @ApiResponse(200,
 ///     description: 'User found',
 ///     content: ApiContent(type: 'application/json', schema: UserDTO)
 ///   )
@@ -87,13 +87,13 @@ class ApiOperation {
 class ApiResponse {
   /// The HTTP status code for this response.
   final int statusCode;
-  
+
   /// A description of the response.
   final String description;
-  
+
   /// The content type and schema of the response body.
   final ApiContent? content;
-  
+
   /// Creates an ApiResponse annotation with the specified status code, description, and content.
   ///
   /// [statusCode] - The HTTP status code for this response.
@@ -109,7 +109,7 @@ class ApiResponse {
 ///
 /// Example:
 /// ```dart
-/// @ApiResponse(200, 
+/// @ApiResponse(200,
 ///   description: 'Success',
 ///   content: ApiContent(type: 'application/json', schema: UserDTO)
 /// )
@@ -117,10 +117,10 @@ class ApiResponse {
 class ApiContent {
   /// The media type of the content (e.g., 'application/json').
   final String type;
-  
+
   /// The schema type of the content (typically a DTO class).
   final Type? schema;
-  
+
   /// Creates an ApiContent annotation with the specified type and schema.
   ///
   /// [type] - The media type of the content (e.g., 'application/json').
@@ -155,13 +155,13 @@ class ApiParam {
   ///
   /// If null, the parameter name from @Param will be used.
   final String? name;
-  
+
   /// A description of the parameter.
   final String description;
-  
+
   /// Indicates whether the parameter is required.
   final bool required;
-  
+
   /// Creates an ApiParam annotation with the specified name, description, and required flag.
   ///
   /// [name] - The name of the parameter (optional).
@@ -195,13 +195,13 @@ class ApiQuery {
   ///
   /// If null, the parameter name from @Query will be used.
   final String? name;
-  
+
   /// A description of the query parameter.
   final String description;
-  
+
   /// Indicates whether the query parameter is required.
   final bool required;
-  
+
   /// Creates an ApiQuery annotation with the specified name, description, and required flag.
   ///
   /// [name] - The name of the query parameter (optional).
@@ -222,13 +222,13 @@ class ApiQuery {
 /// @ApiSecurity(['bearerAuth'])
 /// class AdminController {
 ///   // All endpoints in this controller require bearer authentication
-///   
+///
 ///   @Get('/stats')
 ///   @ApiOperation(summary: 'Get admin statistics')
 ///   Future<Response> getStats(Request request) {
 ///     // Method implementation...
 ///   }
-///   
+///
 ///   @Post('/settings')
 ///   @ApiSecurity(['bearerAuth', 'apiKey'])
 ///   // This endpoint requires both bearer authentication and an API key

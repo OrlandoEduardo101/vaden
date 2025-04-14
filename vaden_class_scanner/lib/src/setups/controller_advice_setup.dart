@@ -16,11 +16,13 @@ final controllerAdviceChecker = TypeChecker.fromRuntime(ControllerAdvice);
   if (methods.isEmpty) return ('', {});
 
   final instanceName = 'controllerAdvice${classElement.name}';
-  bodyBuffer.writeln('final $instanceName = _injector.get<${classElement.name}>();');
+  bodyBuffer
+      .writeln('final $instanceName = _injector.get<${classElement.name}>();');
 
   for (final method in methods) {
     final exceptionHandler = exceptionHandlerChecker.firstAnnotationOf(method)!;
-    final exceptionType = exceptionHandler.getField('exceptionType')!.toTypeValue()!;
+    final exceptionType =
+        exceptionHandler.getField('exceptionType')!.toTypeValue()!;
     final exceptionTypeName = _removeGeneric(exceptionType.getDisplayString());
 
     final import = exceptionType.element?.library?.source.uri.toString();
@@ -29,7 +31,8 @@ final controllerAdviceChecker = TypeChecker.fromRuntime(ControllerAdvice);
       imports.add("'$import' show $exceptionTypeName;");
     }
 
-    final isFuture = method.returnType.isDartAsyncFuture || method.returnType.isDartAsyncFutureOr;
+    final isFuture = method.returnType.isDartAsyncFuture ||
+        method.returnType.isDartAsyncFutureOr;
     bodyBuffer.writeln('''
 if (e is $exceptionTypeName) {
   return ${isFuture ? 'await' : ''} $instanceName.${method.name}(e);

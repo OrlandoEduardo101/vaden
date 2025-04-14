@@ -17,14 +17,14 @@ import 'package:vaden/vaden.dart';
 /// @Component()
 /// class AuthGuard extends VadenGuard {
 ///   final AuthService _authService;
-///   
+///
 ///   AuthGuard(this._authService);
-///   
+///
 ///   @override
 ///   FutureOr<bool> canActivate(Request request) {
 ///     final authHeader = request.headers['Authorization'];
 ///     if (authHeader == null) return false;
-///     
+///
 ///     final token = authHeader.replaceFirst('Bearer ', '');
 ///     return _authService.validateToken(token);
 ///   }
@@ -37,12 +37,12 @@ import 'package:vaden/vaden.dart';
 /// @UseGuards([AuthGuard])
 /// class AdminController {
 ///   // All endpoints in this controller will be protected by the AuthGuard
-///   
+///
 ///   @Get('/dashboard')
 ///   Future<Response> getDashboard(Request request) {
 ///     // This endpoint will only be accessible if the AuthGuard allows it
 ///   }
-///   
+///
 ///   @Get('/public')
 ///   @UseGuards([]) // Override to remove guards for this specific endpoint
 ///   Future<Response> getPublicInfo(Request request) {

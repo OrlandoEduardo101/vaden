@@ -399,7 +399,7 @@ paths['$apiPathResolver']['$routerMethod']['parameters']?.add({
   if (request.context['$cname'] == null) {
     return Response(400, body: jsonEncode({'error': 'Context is required ($cname)'}));
   }
-  final ${parameter.name} = request.context['$cname'] as $ctype;
+  final ${parameter.name} = request.context['$cname'];
 
 """);
         } else {

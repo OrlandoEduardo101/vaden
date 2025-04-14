@@ -20,13 +20,13 @@ import 'package:vaden/vaden.dart';
 ///   FutureOr<Response> handler(Request request, Handler handler) async {
 ///     print('Incoming request: ${request.method} ${request.url}');
 ///     final stopwatch = Stopwatch()..start();
-///     
+///
 ///     // Call the next handler in the chain
 ///     final response = await handler(request);
-///     
+///
 ///     stopwatch.stop();
 ///     print('Response: ${response.statusCode} (${stopwatch.elapsedMilliseconds}ms)');
-///     
+///
 ///     return response;
 ///   }
 /// }

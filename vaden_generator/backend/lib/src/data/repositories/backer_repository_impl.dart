@@ -13,7 +13,8 @@ class BackerRepositoryImpl implements BackerRepository {
 
   @override
   AsyncResult<Backer> check(String email) async {
-    final response = await dio.get<Map<String, dynamic>>('/backers/charges/$email');
+    final response =
+        await dio.get<Map<String, dynamic>>('/backers/charges/$email');
     final backer = dson.fromJson<Backer>(response.data!);
     return Success(backer);
   }

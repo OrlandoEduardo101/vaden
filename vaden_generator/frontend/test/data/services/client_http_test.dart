@@ -43,8 +43,7 @@ void main() {
     when(() => dio.options).thenReturn(options);
   });
 
-  MockDioResponse mockDioResponse(
-      {dynamic data, int? statusCode, String? statusMessage}) {
+  MockDioResponse mockDioResponse({dynamic data, int? statusCode, String? statusMessage}) {
     final mockResponse = MockDioResponse();
     when(() => mockResponse.data).thenReturn(data ?? {'key': 'value'});
     when(() => mockResponse.statusCode).thenReturn(statusCode ?? 200);
@@ -64,8 +63,7 @@ void main() {
     });
 
     test('Should return ClientException on GET request failure', () async {
-      when(() => dio.get(any(), options: any(named: 'options')))
-          .thenThrow(dioError);
+      when(() => dio.get(any(), options: any(named: 'options'))).thenThrow(dioError);
 
       final result = await clientHttp.get(request);
 
@@ -76,8 +74,7 @@ void main() {
 
   group('ClientHttp - POST', () {
     test('Should return ClientResponse on successful POST request', () async {
-      when(() => dio.post(any(),
-              options: any(named: 'options'), data: any(named: 'data')))
+      when(() => dio.post(any(), options: any(named: 'options'), data: any(named: 'data')))
           .thenAnswer((_) async => mockDioResponse(statusCode: 201));
 
       final result = await clientHttp.post(request);
@@ -87,9 +84,8 @@ void main() {
     });
 
     test('Should return ClientException on POST request failure', () async {
-      when(() => dio.post(any(),
-          options: any(named: 'options'),
-          data: any(named: 'data'))).thenThrow(dioError);
+      when(() => dio.post(any(), options: any(named: 'options'), data: any(named: 'data')))
+          .thenThrow(dioError);
 
       final result = await clientHttp.post(request);
 

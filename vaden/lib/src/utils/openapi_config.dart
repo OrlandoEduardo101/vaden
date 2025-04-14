@@ -17,10 +17,10 @@ import 'package:vaden/vaden_openapi.dart';
 /// ```dart
 /// void main() async {
 ///   final app = await VadenApp.create();
-///   
+///
 ///   // Generate and serve OpenAPI documentation
 ///   app.useOpenApi();
-///   
+///
 ///   await app.listen();
 /// }
 /// ```
@@ -33,19 +33,19 @@ class OpenApiConfig {
   /// This map contains information about all the API endpoints, including their
   /// HTTP methods, parameters, request bodies, responses, and other metadata.
   final Map<String, dynamic> _paths;
-  
+
   /// The components section of the OpenAPI document.
   ///
   /// This map contains schema definitions for all the data models (DTOs) used in the API.
   /// These schemas are referenced by the paths section to describe request and response bodies.
   final Map<Type, ToOpenApiNormalMap> _components;
-  
+
   /// The application settings containing configuration values for the API.
   ///
   /// These settings are used to generate server information and other metadata
   /// for the OpenAPI document.
   final ApplicationSettings _settings;
-  
+
   /// The list of API annotations found in the controllers.
   ///
   /// These annotations provide metadata about the API endpoints, such as tags
@@ -107,7 +107,8 @@ class OpenApiConfig {
   /// - A Server object representing the local server where the API is hosted.
   Server get localServer {
     return Server(
-      url: 'http://${_settings['server']['host']}:${_settings['server']['port']}',
+      url:
+          'http://${_settings['server']['host']}:${_settings['server']['port']}',
       description: 'Local server',
     );
   }

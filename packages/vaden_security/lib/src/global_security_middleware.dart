@@ -29,7 +29,9 @@ class GlobalSecurityMiddleware extends VadenMiddleware {
         .firstWhereOrNull((e) => e.matches(path, method));
 
     if (authorize == null || authorize.isDenyAll()) {
-      return Response(500, body: jsonEncode({'error': 'No authorize request found for path $path'}));
+      return Response(500,
+          body: jsonEncode(
+              {'error': 'No authorize request found for path $path'}));
     }
 
     if (!authorize.autheticated()) {
@@ -38,7 +40,9 @@ class GlobalSecurityMiddleware extends VadenMiddleware {
 
     final authHeader = request.headers['Authorization'];
     if (authHeader == null || !authHeader.toLowerCase().startsWith('bearer ')) {
-      return Response(401, body: jsonEncode({'error': 'Missing or invalid Authorization header'}));
+      return Response(401,
+          body:
+              jsonEncode({'error': 'Missing or invalid Authorization header'}));
     }
 
     final token = authHeader.substring(7);
@@ -49,7 +53,8 @@ class GlobalSecurityMiddleware extends VadenMiddleware {
 
     final username = claims['sub'];
     if (username == null) {
-      return Response.forbidden(jsonEncode({'error': 'Missing username in token claims'}));
+      return Response.forbidden(
+          jsonEncode({'error': 'Missing username in token claims'}));
     }
     final userDetails = await userDetailsService?.loadUserByUsername(username);
     if (userDetails == null) {
@@ -57,7 +62,8 @@ class GlobalSecurityMiddleware extends VadenMiddleware {
     }
 
     if (!authorize.hasRole(userDetails.roles)) {
-      return Response.forbidden(jsonEncode({'error': 'User does not have the required role'}));
+      return Response.forbidden(
+          jsonEncode({'error': 'User does not have the required role'}));
     }
 
     final updatedRequest = request.change(context: {

@@ -49,7 +49,8 @@ class VadenSecurity extends VadenModule {
       var pathItem = pathItems[path]!;
 
       bool checkHasSecurity(String path, HttpMethod method) {
-        final authorize = httpSecurity.authorizeRequests.firstWhereOrNull((e) => e.matches(path, method));
+        final authorize = httpSecurity.authorizeRequests
+            .firstWhereOrNull((e) => e.matches(path, method));
         return authorize != null && authorize.autheticated();
       }
 
@@ -169,7 +170,8 @@ class VadenSecurity extends VadenModule {
         ),
         'bearer': oapi.SecurityScheme.http(
           scheme: oapi.HttpSecurityScheme.bearer,
-          description: 'Bearer authentication for accessing protected resources',
+          description:
+              'Bearer authentication for accessing protected resources',
         ),
         'bearer-refresh': oapi.SecurityScheme.http(
           scheme: oapi.HttpSecurityScheme.bearer,
@@ -200,7 +202,8 @@ class VadenSecurity extends VadenModule {
                 description: 'User details retrieved successfully',
                 content: {
                   'application/json': oapi.MediaType(
-                    schema: oapi.Schema.object(ref: '#/components/schemas/UserDetails'),
+                    schema: oapi.Schema.object(
+                        ref: '#/components/schemas/UserDetails'),
                   ),
                 },
               ),
@@ -223,7 +226,8 @@ class VadenSecurity extends VadenModule {
                 description: 'Tokens retrieved successfully',
                 content: {
                   'application/json': oapi.MediaType(
-                    schema: oapi.Schema.object(ref: '#/components/schemas/Tokens'),
+                    schema:
+                        oapi.Schema.object(ref: '#/components/schemas/Tokens'),
                   ),
                 },
               ),
@@ -247,7 +251,8 @@ class VadenSecurity extends VadenModule {
                 description: 'Tokens refreshed successfully',
                 content: {
                   'application/json': oapi.MediaType(
-                    schema: oapi.Schema.object(ref: '#/components/schemas/Tokens'),
+                    schema:
+                        oapi.Schema.object(ref: '#/components/schemas/Tokens'),
                   ),
                 },
               ),
@@ -265,7 +270,9 @@ class VadenSecurity extends VadenModule {
   Future<Response> _meHandler(Request request, AutoInjector injector) async {
     final header = request.headers['Authorization'];
     if (header == null || !header.toLowerCase().startsWith('bearer ')) {
-      return Response(400, body: jsonEncode({"error": 'Missing or invalid Authorization header'}));
+      return Response(400,
+          body:
+              jsonEncode({"error": 'Missing or invalid Authorization header'}));
     }
     final token = header.substring(7);
 
@@ -281,7 +288,10 @@ class VadenSecurity extends VadenModule {
     }
     final userDetailsService = injector.tryGet<UserDetailsService>();
     if (userDetailsService == null) {
-      return Response(500, body: jsonEncode({'error': 'UserDetailsService not available. Please register it.'}));
+      return Response(500,
+          body: jsonEncode({
+            'error': 'UserDetailsService not available. Please register it.'
+          }));
     }
     final userDetails = await userDetailsService.loadUserByUsername(username);
     if (userDetails == null) {
@@ -292,30 +302,38 @@ class VadenSecurity extends VadenModule {
       'username': userDetails.username,
       'roles': userDetails.roles,
     };
-    return Response.ok(jsonEncode(responseData), headers: {'Content-Type': 'application/json'});
+    return Response.ok(jsonEncode(responseData),
+        headers: {'Content-Type': 'application/json'});
   }
 
   Future<Response> _handleLogin(Request request, AutoInjector injector) async {
     final headers = request.headers;
     final basic = headers['Authorization'];
     if (basic == null || !basic.toLowerCase().startsWith('basic ')) {
-      return Response(400, body: jsonEncode({'error': 'Missing or invalid Authorization header'}));
+      return Response(400,
+          body:
+              jsonEncode({'error': 'Missing or invalid Authorization header'}));
     }
     final encodedCredentials = basic.substring(6);
     final decodedCredentials = utf8.decode(base64.decode(encodedCredentials));
     final credentials = decodedCredentials.split(':');
     if (credentials.length != 2) {
-      return Response(400, body: jsonEncode({'error': 'Invalid credentials format'}));
+      return Response(400,
+          body: jsonEncode({'error': 'Invalid credentials format'}));
     }
     final username = credentials[0];
     final rawPassword = credentials[1];
     if (username.isEmpty || rawPassword.isEmpty) {
-      return Response(400, body: jsonEncode({'error': 'Missing username or password'}));
+      return Response(400,
+          body: jsonEncode({'error': 'Missing username or password'}));
     }
 
     final userDetailsService = injector.tryGet<UserDetailsService>();
     if (userDetailsService == null) {
-      return Response(500, body: jsonEncode({'error': 'UserDetailsService not available. Please register it.'}));
+      return Response(500,
+          body: jsonEncode({
+            'error': 'UserDetailsService not available. Please register it.'
+          }));
     }
 
     final userDetails = await userDetailsService.loadUserByUsername(username);
@@ -335,22 +353,30 @@ class VadenSecurity extends VadenModule {
       claims: {'refresh': true},
       isRefreshToken: true,
     );
-    final responseData = {'access_token': accessToken, 'refresh_token': refreshToken};
+    final responseData = {
+      'access_token': accessToken,
+      'refresh_token': refreshToken
+    };
 
-    return Response.ok(jsonEncode(responseData), headers: {'Content-Type': 'application/json'});
+    return Response.ok(jsonEncode(responseData),
+        headers: {'Content-Type': 'application/json'});
   }
 
-  Future<Response> _handleRefresh(Request request, AutoInjector injector) async {
+  Future<Response> _handleRefresh(
+      Request request, AutoInjector injector) async {
     final header = request.headers['Authorization'];
     if (header == null || !header.toLowerCase().startsWith('bearer ')) {
-      return Response(400, body: jsonEncode({"error": 'Missing or invalid Authorization header'}));
+      return Response(400,
+          body:
+              jsonEncode({"error": 'Missing or invalid Authorization header'}));
     }
     final refreshToken = header.substring(7);
 
     final jwtService = injector.get<JwtService>();
     final claims = jwtService.verifyToken(refreshToken);
     if (claims == null || claims['refresh'] != true) {
-      return Response.forbidden(jsonEncode({'error': 'Invalid or non-refresh token'}));
+      return Response.forbidden(
+          jsonEncode({'error': 'Invalid or non-refresh token'}));
     }
 
     final username = claims['sub'];
@@ -360,7 +386,10 @@ class VadenSecurity extends VadenModule {
 
     final userDetailsService = injector.tryGet<UserDetailsService>();
     if (userDetailsService == null) {
-      return Response(500, body: jsonEncode({'error': 'UserDetailsService not available. Please register it.'}));
+      return Response(500,
+          body: jsonEncode({
+            'error': 'UserDetailsService not available. Please register it.'
+          }));
     }
 
     final userDetails = await userDetailsService.loadUserByUsername(username);
@@ -374,8 +403,12 @@ class VadenSecurity extends VadenModule {
       claims: {'refresh': true},
       isRefreshToken: true,
     );
-    final responseData = {'access_token': accessToken, 'refresh_token': newRefreshToken};
+    final responseData = {
+      'access_token': accessToken,
+      'refresh_token': newRefreshToken
+    };
 
-    return Response.ok(jsonEncode(responseData), headers: {'Content-Type': 'application/json'});
+    return Response.ok(jsonEncode(responseData),
+        headers: {'Content-Type': 'application/json'});
   }
 }

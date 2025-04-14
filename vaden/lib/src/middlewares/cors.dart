@@ -49,13 +49,15 @@ Middleware cors({
       String? allowOriginHeader;
       if (allowedOrigins.contains('*')) {
         allowOriginHeader = '*';
-      } else if (requestOrigin != null && allowedOrigins.contains(requestOrigin)) {
+      } else if (requestOrigin != null &&
+          allowedOrigins.contains(requestOrigin)) {
         allowOriginHeader = requestOrigin;
       }
 
       if (request.method.toUpperCase() == 'OPTIONS') {
         var headers = <String, String>{
-          if (allowOriginHeader != null) 'Access-Control-Allow-Origin': allowOriginHeader,
+          if (allowOriginHeader != null)
+            'Access-Control-Allow-Origin': allowOriginHeader,
           'Access-Control-Allow-Methods': allowMethods.join(', '),
           'Access-Control-Allow-Headers': allowHeaders.join(', '),
         };
@@ -65,7 +67,8 @@ Middleware cors({
       final response = await innerHandler(request);
 
       var headers = <String, String>{
-        if (allowOriginHeader != null) 'Access-Control-Allow-Origin': allowOriginHeader,
+        if (allowOriginHeader != null)
+          'Access-Control-Allow-Origin': allowOriginHeader,
         'Access-Control-Allow-Methods': allowMethods.join(', '),
         'Access-Control-Allow-Headers': allowHeaders.join(', '),
       };

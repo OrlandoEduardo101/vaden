@@ -10,7 +10,8 @@ class InitialProjectGenerator extends FileGenerator {
     Directory directory, {
     Map<String, dynamic> variables = const {},
   }) async {
-    final pubspec = File('${directory.path}${Platform.pathSeparator}pubspec.yaml');
+    final pubspec =
+        File('${directory.path}${Platform.pathSeparator}pubspec.yaml');
     await pubspec.create(recursive: true);
     await pubspec.writeAsString(parseVariables(_pubspecContent, variables));
 
@@ -22,50 +23,65 @@ class InitialProjectGenerator extends FileGenerator {
     await build.create(recursive: true);
     await build.writeAsString(_buildContent);
 
-    final application = File('${directory.path}${Platform.pathSeparator}application.yaml');
+    final application =
+        File('${directory.path}${Platform.pathSeparator}application.yaml');
     await application.create(recursive: true);
-    await application.writeAsString(parseVariables(_applicationContent, variables));
+    await application
+        .writeAsString(parseVariables(_applicationContent, variables));
 
-    final dockerFile = File('${directory.path}${Platform.pathSeparator}Dockerfile');
+    final dockerFile =
+        File('${directory.path}${Platform.pathSeparator}Dockerfile');
     await dockerFile.create(recursive: true);
     await dockerFile.writeAsString(_dockerFileContent);
 
-    final analysisOptions = File('${directory.path}${Platform.pathSeparator}analysis_options.yaml');
+    final analysisOptions =
+        File('${directory.path}${Platform.pathSeparator}analysis_options.yaml');
     await analysisOptions.create(recursive: true);
     await analysisOptions.writeAsString(_analysisOptionsContent);
 
-    final gitIgnore = File('${directory.path}${Platform.pathSeparator}.gitignore');
+    final gitIgnore =
+        File('${directory.path}${Platform.pathSeparator}.gitignore');
     await gitIgnore.create(recursive: true);
     await gitIgnore.writeAsString(_gitIgnoreContent);
 
-    final dockerIgnore = File('${directory.path}${Platform.pathSeparator}.dockerignore');
+    final dockerIgnore =
+        File('${directory.path}${Platform.pathSeparator}.dockerignore');
     await dockerIgnore.create(recursive: true);
     await dockerIgnore.writeAsString(_dockerIgnoreContent);
 
-    final publicIndex = File('${directory.path}${Platform.pathSeparator}public${Platform.pathSeparator}index.html');
+    final publicIndex = File(
+        '${directory.path}${Platform.pathSeparator}public${Platform.pathSeparator}index.html');
     await publicIndex.create(recursive: true);
-    await publicIndex.writeAsString(parseVariables(_publicIndexContent, variables));
+    await publicIndex
+        .writeAsString(parseVariables(_publicIndexContent, variables));
 
-    final binServer = File('${directory.path}${Platform.pathSeparator}bin${Platform.pathSeparator}server.dart');
+    final binServer = File(
+        '${directory.path}${Platform.pathSeparator}bin${Platform.pathSeparator}server.dart');
     await binServer.create(recursive: true);
     await binServer.writeAsString(parseVariables(_binServerContent, variables));
 
-    final libConfigAppConfiguration = File('${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}config${Platform.pathSeparator}app_configuration.dart');
+    final libConfigAppConfiguration = File(
+        '${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}config${Platform.pathSeparator}app_configuration.dart');
     await libConfigAppConfiguration.create(recursive: true);
-    await libConfigAppConfiguration.writeAsString(_libConfigAppConfigurationContent);
+    await libConfigAppConfiguration
+        .writeAsString(_libConfigAppConfigurationContent);
 
-    final libConfigResourcesResourceConfiguration =
-        File('${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}config${Platform.pathSeparator}resources${Platform.pathSeparator}resource_configuration.dart');
+    final libConfigResourcesResourceConfiguration = File(
+        '${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}config${Platform.pathSeparator}resources${Platform.pathSeparator}resource_configuration.dart');
     await libConfigResourcesResourceConfiguration.create(recursive: true);
-    await libConfigResourcesResourceConfiguration.writeAsString(_libConfigResourcesResourceConfigurationContent);
+    await libConfigResourcesResourceConfiguration
+        .writeAsString(_libConfigResourcesResourceConfigurationContent);
 
-    final srcHelloController = File('${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}src${Platform.pathSeparator}hello_controller.dart');
+    final srcHelloController = File(
+        '${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}src${Platform.pathSeparator}hello_controller.dart');
     await srcHelloController.create(recursive: true);
     await srcHelloController.writeAsString(_srcHelloControllerContent);
 
-    final libConfigAppControllerAdvice = File('${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}config${Platform.pathSeparator}app_controller_advice.dart');
+    final libConfigAppControllerAdvice = File(
+        '${directory.path}${Platform.pathSeparator}lib${Platform.pathSeparator}config${Platform.pathSeparator}app_controller_advice.dart');
     await libConfigAppControllerAdvice.create(recursive: true);
-    await libConfigAppControllerAdvice.writeAsString(_libConfigAppControllerAdviceContent);
+    await libConfigAppControllerAdvice
+        .writeAsString(_libConfigAppControllerAdviceContent);
   }
 }
 
@@ -237,7 +253,8 @@ class AppConfiguration {
 }
 ''';
 
-const _libConfigResourcesResourceConfigurationContent = '''import 'package:vaden/vaden.dart';
+const _libConfigResourcesResourceConfigurationContent =
+    '''import 'package:vaden/vaden.dart';
 
 @Configuration()
 class ResourceConfiguration {

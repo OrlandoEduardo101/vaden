@@ -87,7 +87,7 @@ class ClientException implements Exception {
   final int? statusCode;
   final dynamic error;
   final ClientRequest request;
-  
+
   ClientException({
     required this.message,
     this.statusCode,

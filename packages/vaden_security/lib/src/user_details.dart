@@ -10,5 +10,6 @@ class UserDetails {
   final String password;
   final List<String> roles;
 
-  UserDetails({required this.username, required this.password, required this.roles});
+  UserDetails(
+      {required this.username, required this.password, required this.roles});
 }
