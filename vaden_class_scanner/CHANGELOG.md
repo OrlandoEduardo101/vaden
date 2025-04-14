@@ -1,3 +1,8 @@
+## 0.0.10 (2025/04/14)
+
+- Added ResponseEntity
+- Added VadenModule annotation
+
 ## 0.0.8 (2025/03/28)
 
 - Fix DSON serialization.

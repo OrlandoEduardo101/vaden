@@ -26,11 +26,11 @@ class AggregatingVadenBuilder implements Builder {
     );
   }
 
-  final formatter =
-      DartFormatter(languageVersion: DartFormatter.latestLanguageVersion);
+  final formatter = DartFormatter(languageVersion: DartFormatter.latestLanguageVersion);
 
   final componentChecker = TypeChecker.fromRuntime(BaseComponent);
   final dtoChecker = TypeChecker.fromRuntime(DTO);
+  final moduleChecker = TypeChecker.fromRuntime(VadenModule);
 
   @override
   Future<void> build(BuildStep buildStep) async {
@@ -38,13 +38,13 @@ class AggregatingVadenBuilder implements Builder {
     final dtoBuffer = StringBuffer();
     final importsBuffer = StringBuffer();
     final exceptionHandlerBuffer = StringBuffer();
+    final moduleRegisterBuffer = StringBuffer();
 
     final importSet = <String>{};
 
     importsBuffer.writeln('// GENERATED CODE - DO NOT MODIFY BY HAND');
     importsBuffer.writeln('// Aggregated Vaden application file');
-    importsBuffer.writeln(
-        '// ignore_for_file: prefer_function_declarations_over_variables, implementation_imports');
+    importsBuffer.writeln('// ignore_for_file: prefer_function_declarations_over_variables, implementation_imports');
     importsBuffer.writeln();
     importsBuffer.writeln("import 'dart:convert';");
     importsBuffer.writeln("import 'dart:io';");
@@ -96,15 +96,7 @@ class AggregatingVadenBuilder implements Builder {
       final reader = LibraryReader(library);
 
       for (var classElement in reader.classes) {
-        final component = componentChecker.firstAnnotationOf(classElement);
-        if (component != null) {
-          final registerWithInterfaceOrSuperType = component
-              .getField('registerWithInterfaceOrSuperType')!
-              .toBoolValue()!;
-
-          yield (classElement, registerWithInterfaceOrSuperType);
-          continue;
-        }
+        yield* _checkMasterAnnotations(classElement);
       }
     }).map((record) {
       final (classElement, registerWithInterfaceOrSuperType) = record;
@@ -116,8 +108,7 @@ class AggregatingVadenBuilder implements Builder {
 
       final bodyBuffer = StringBuffer();
 
-      final registerText =
-          _componentRegister(classElement, registerWithInterfaceOrSuperType);
+      final registerText = _componentRegister(classElement, registerWithInterfaceOrSuperType);
       if (registerText.isNotEmpty) {
         bodyBuffer.writeln(registerText);
       }
@@ -136,6 +127,10 @@ class AggregatingVadenBuilder implements Builder {
         }
 
         importSet.addAll(imports);
+      } else if (moduleChecker.hasAnnotationOf(classElement)) {
+        final name = classElement.name;
+
+        moduleRegisterBuffer.writeln('await $name().register(_router, _injector);');
       }
 
       return bodyBuffer.toString();
@@ -143,8 +138,7 @@ class AggregatingVadenBuilder implements Builder {
 
     aggregatedBuffer.writeln(body.join('\n'));
 
-    aggregatedBuffer.writeln(
-        '    _injector.addLazySingleton(OpenApiConfig.create(paths, apis).call);');
+    aggregatedBuffer.writeln('    _injector.addLazySingleton(OpenApiConfig.create(paths, apis).call);');
     aggregatedBuffer.writeln('    _injector.commit();');
     aggregatedBuffer.writeln('''
 
@@ -154,13 +148,9 @@ class AggregatingVadenBuilder implements Builder {
 
 ''');
 
-    aggregatedBuffer.writeln('''
-    final moduleRegister = _injector.tryGet<ModuleRegister>();
-    await moduleRegister?.registerAll(_router, _injector);
-''');
+    aggregatedBuffer.writeln('$moduleRegisterBuffer');
     aggregatedBuffer.writeln('  }');
-    aggregatedBuffer
-        .writeln('''Future<Response> _handleException(dynamic e) async {
+    aggregatedBuffer.writeln('''Future<Response> _handleException(dynamic e) async {
 
     $exceptionHandlerBuffer
 
@@ -217,18 +207,16 @@ class _DSON extends DSON {
     }
   }
 
-  String _componentRegister(
-      ClassElement classElement, bool registerWithInterfaceOrSuperType) {
-    if (dtoChecker.hasAnnotationOf(classElement) ||
-        configurationChecker.hasAnnotationOf(classElement)) {
+  String _componentRegister(ClassElement classElement, bool registerWithInterfaceOrSuperType) {
+    if (dtoChecker.hasAnnotationOf(classElement) || configurationChecker.hasAnnotationOf(classElement)) {
+      return '';
+    } else if (moduleChecker.hasAnnotationOf(classElement)) {
       return '';
     }
 
     if (registerWithInterfaceOrSuperType) {
-      final interfaceType =
-          classElement.interfaces.firstOrNull ?? classElement.supertype;
-      if (interfaceType != null &&
-          interfaceType.getDisplayString() != 'Object') {
+      final interfaceType = classElement.interfaces.firstOrNull ?? classElement.supertype;
+      if (interfaceType != null && interfaceType.getDisplayString() != 'Object') {
         return '''
       _injector.addBind(Bind.withClassName(
       constructor: ${classElement.name}.new,
@@ -241,7 +229,41 @@ class _DSON extends DSON {
 
     return '_injector.addLazySingleton(${classElement.name}.new);';
   }
+
+  Stream<(ClassElement, bool)> _checkMasterAnnotations(ClassElement classElement) async* {
+    final component = componentChecker.firstAnnotationOf(classElement);
+    if (component != null) {
+      final registerWithInterfaceOrSuperType = component.getField('registerWithInterfaceOrSuperType')!.toBoolValue()!;
+
+      yield (classElement, registerWithInterfaceOrSuperType);
+    } else if (moduleChecker.hasAnnotationOf(classElement)) {
+      final module = moduleChecker.firstAnnotationOf(classElement)!;
+      final vadenModules = module.getField('imports')!.toListValue() ?? [];
+      for (var module in vadenModules) {
+        final element = module.toTypeValue()?.element;
+
+        if (element is! ClassElement) {
+          continue;
+        }
+
+        final innerModule = moduleChecker.firstAnnotationOf(element);
+        if (innerModule == null) {
+          continue;
+        }
+
+        yield (element, false);
+
+        final types = innerModule.getField('imports')?.toListValue() ?? [];
+
+        for (var type in types) {
+          final typeElement = type.toTypeValue()?.element;
+          if (typeElement is ClassElement) {
+            yield* _checkMasterAnnotations(typeElement);
+          }
+        }
+      }
+    }
+  }
 }
 
-Builder aggregatingVadenBuilder(BuilderOptions options) =>
-    AggregatingVadenBuilder();
+Builder aggregatingVadenBuilder(BuilderOptions options) => AggregatingVadenBuilder();

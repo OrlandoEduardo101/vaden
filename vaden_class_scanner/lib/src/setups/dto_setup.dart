@@ -6,8 +6,7 @@ import 'package:vaden/vaden.dart';
 
 final _jsonKeyChecker = TypeChecker.fromRuntime(JsonKey);
 final useParseChecker = TypeChecker.fromRuntime(UseParse);
-
-// final _jsonIgnoreChecker = TypeChecker.fromRuntime(JsonIgnore);
+final _jsonIgnoreChecker = TypeChecker.fromRuntime(JsonIgnore);
 
 String dtoSetup(ClassElement classElement) {
   final bodyBuffer = StringBuffer();
@@ -39,7 +38,12 @@ String _toOpenApi(ClassElement classElement) {
   final propertiesBuffer = StringBuffer();
   final requiredFields = <String>[];
 
-  final fields = classElement.fields.where((f) => !f.isStatic && !f.isPrivate);
+  final fields = classElement.fields.where((f) {
+    if (_jsonIgnoreChecker.hasAnnotationOf(f)) {
+      return false;
+    }
+    return !f.isStatic && !f.isPrivate;
+  });
   bool first = true;
   for (final field in fields) {
     final fieldName = _getFieldName(field);
@@ -234,8 +238,12 @@ String _getFieldName(FieldElement parameter) {
 
 String _toJson(ClassElement classElement) {
   final jsonBuffer = StringBuffer();
-  for (final field
-      in classElement.fields.where((f) => !f.isStatic && !f.isPrivate)) {
+  for (final field in classElement.fields.where((f) {
+    if (_jsonIgnoreChecker.hasAnnotationOf(f)) {
+      return false;
+    }
+    return !f.isStatic && !f.isPrivate;
+  })) {
     jsonBuffer.writeln(_toJsonField(field));
   }
 

@@ -428,13 +428,19 @@ paths['$apiPathResolver']['$routerMethod']['parameters']?.add({
 
     bodyBuffer.writeln("final ctrl = _injector.get<$controllerName>();");
 
-    if (returnType.getDisplayString() == 'Response') {
+    final display = returnType.getDisplayString();
+
+    if (display == 'Response') {
       bodyBuffer.writeln("""
   final result = ${isFuture ? 'await' : ''} ctrl.${method.name}($callParams);
   return result;
 """);
+    } else if (display.startsWith('ResponseEntity')) {
+      bodyBuffer.writeln("""
+  final result = ${isFuture ? 'await' : ''} ctrl.${method.name}($callParams);
+  return result.generateResponse(_injector.get<DSON>());
+""");
     } else {
-      final display = returnType.getDisplayString();
       late final String toJsonResponse;
       if (display == 'String') {
         toJsonResponse = """
