@@ -38,12 +38,8 @@ String _toOpenApi(ClassElement classElement) {
   final propertiesBuffer = StringBuffer();
   final requiredFields = <String>[];
 
-  final fields = classElement.fields.where((f) {
-    if (_jsonIgnoreChecker.hasAnnotationOf(f)) {
-      return false;
-    }
-    return !f.isStatic && !f.isPrivate;
-  });
+  final fields = _getAllFields(classElement);
+
   bool first = true;
   for (final field in fields) {
     final fieldName = _getFieldName(field);
@@ -108,8 +104,7 @@ String _fromJson(ClassElement classElement) {
   for (final parameter in constructor.parameters) {
     final paramName = _getParameterName(parameter);
     final paramType = parameter.type.getDisplayString();
-    final isNotNull =
-        parameter.type.nullabilitySuffix == NullabilitySuffix.none;
+    final isNotNull = parameter.type.nullabilitySuffix == NullabilitySuffix.none;
     final hasDefault = parameter.hasDefaultValue;
     var paramValue = '';
 
@@ -132,20 +127,15 @@ String _fromJson(ClassElement classElement) {
       if (parameter.type.isDartCoreList) {
         final param = parameter.type as ParameterizedType;
         final arg = param.typeArguments.first.getDisplayString();
-        paramValue = isNotNull
-            ? "fromJsonList<$arg>(json['$paramName'])"
-            : "json['$paramName'] == null ? null : fromJsonList<$arg>(json['$paramName'])";
+        paramValue = isNotNull ? "fromJsonList<$arg>(json['$paramName'])" : "json['$paramName'] == null ? null : fromJsonList<$arg>(json['$paramName'])";
       } else {
-        paramValue = isNotNull
-            ? "fromJson<$paramType>(json['$paramName'])"
-            : "json['$paramName'] == null ? null : fromJson<$paramType>(json['$paramName'])";
+        paramValue = isNotNull ? "fromJson<$paramType>(json['$paramName'])" : "json['$paramName'] == null ? null : fromJson<$paramType>(json['$paramName'])";
       }
     }
 
     if (parameter.isNamed) {
       if (hasDefault) {
-        namedArgsBuffer.writeln(
-            "if (json.containsKey('$paramName')) #${parameter.name}: $paramValue,");
+        namedArgsBuffer.writeln("if (json.containsKey('$paramName')) #${parameter.name}: $paramValue,");
       } else {
         namedArgsBuffer.writeln("#${parameter.name}: $paramValue,");
       }
@@ -175,8 +165,15 @@ FieldElement _getFieldByParameter(ParameterElement parameter) {
     return parameter.field!;
   }
 
-  throw ResponseException.internalServerError(
-      {'error': 'Parameter is not a field formal parameter'});
+  if (parameter is SuperFormalParameterElement) {
+    final superParam = parameter.superConstructorParameter!;
+
+    if (superParam is FieldFormalParameterElement) {
+      return superParam.field!;
+    }
+  }
+
+  throw ResponseException.internalServerError({'error': 'Parameter is not a field formal parameter'});
 }
 
 String _getParseFunction(FieldElement field, {required bool isFromJson}) {
@@ -238,12 +235,7 @@ String _getFieldName(FieldElement parameter) {
 
 String _toJson(ClassElement classElement) {
   final jsonBuffer = StringBuffer();
-  for (final field in classElement.fields.where((f) {
-    if (_jsonIgnoreChecker.hasAnnotationOf(f)) {
-      return false;
-    }
-    return !f.isStatic && !f.isPrivate;
-  })) {
+  for (final field in _getAllFields(classElement)) {
     jsonBuffer.writeln(_toJsonField(field));
   }
 
@@ -265,15 +257,32 @@ String _toJsonField(FieldElement field) {
     if (field.type.isDartCoreList) {
       final param = field.type as ParameterizedType;
       final arg = param.typeArguments.first;
-      return isNotNull
-          ? " '$fieldKey': toJsonList<$arg>(obj.$fieldName),"
-          : " '$fieldKey': obj.$fieldName == null ? null : toJsonList<$arg>(obj.$fieldName!),";
+      return isNotNull ? " '$fieldKey': toJsonList<$arg>(obj.$fieldName)," : " '$fieldKey': obj.$fieldName == null ? null : toJsonList<$arg>(obj.$fieldName!),";
     } else {
-      return isNotNull
-          ? "'$fieldKey': toJson<$fieldTypeString>(obj.$fieldName),"
-          : "'$fieldKey': obj.$fieldName == null ? null : toJson<$fieldTypeString>(obj.$fieldName!),";
+      return isNotNull ? "'$fieldKey': toJson<$fieldTypeString>(obj.$fieldName)," : "'$fieldKey': obj.$fieldName == null ? null : toJson<$fieldTypeString>(obj.$fieldName!),";
     }
   }
+}
+
+List<FieldElement> _getAllFields(ClassElement classElement) {
+  final fields = <FieldElement>[];
+
+  ClassElement? current = classElement;
+
+  while (current != null) {
+    fields.addAll(current.fields.where((f) => !f.isSynthetic));
+    final superType = current.supertype;
+    if (superType == null || superType.isDartCoreObject) break;
+
+    current = superType.element as ClassElement?;
+  }
+
+  return fields.where((f) {
+    if (_jsonIgnoreChecker.hasAnnotationOf(f)) {
+      return false;
+    }
+    return !f.isStatic && !f.isPrivate;
+  }).toList();
 }
 
 bool isPrimitive(DartType type) {
