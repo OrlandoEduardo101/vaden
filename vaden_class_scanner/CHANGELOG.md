@@ -1,4 +1,4 @@
-## 0.0.10 (2025/04/14)
+## 0.0.11 (2025/04/14)
 
 - Added ResponseEntity
 - Added VadenModule annotation
