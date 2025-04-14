@@ -17,10 +17,17 @@ enabling automatic configuration with just one line of code.
 
 ```yaml
 dependencies:
-  vaden_security: ^0.1.0
+  vaden_security: any
 ```
 
-1. Create a Security Configuration class:
+1. Register your module in the `app_module`:
+
+```dart
+@VadenModule([VadenSecurity])
+class AppModule {}
+```
+
+2. Create a Security Configuration class:
 
 ```dart
 import 'package:vaden/vaden.dart';
@@ -46,18 +53,6 @@ class SecurityConfiguration {
       AnyRequest().authenticated(),
     ]);
   }
-}
-```
-
-2. Register your module in the `app_configuration`:
-
-```dart
-@Bean()
-ModuleRegister externalModules() {
-  return ModuleRegister([
-    // Add your external modules here
-    VadenSecurity(),
-  ]);
 }
 ```
 
