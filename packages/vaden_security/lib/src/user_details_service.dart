@@ -1,4 +1,4 @@
-import 'package:vaden_security/src/user_details.dart';
+import 'package:vaden_security/src/models/user_details.dart';
 
 /// Defines the contract for loading user information,
 /// given an identifier (usually the [username]).

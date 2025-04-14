@@ -1,6 +1,7 @@
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:vaden/vaden.dart';
-import 'package:vaden_security/src/user_details.dart';
+import 'package:vaden_security/src/models/tokenization.dart';
+import 'package:vaden_security/src/models/user_details.dart';
 
 /// Responsible for generating and verifying JWT tokens.
 /// Focuses on two main methods:
@@ -34,7 +35,21 @@ class JwtService {
 
   /// Verifies and decodes the JWT token.
   /// Returns the payload (claims) if valid, or `null` if invalid.
-  String generateToken(
+  Tokenization generateToken(
+    UserDetails user, {
+    Map<String, dynamic> claims = const {},
+  }) {
+    final accessToken = _generateToken(user, claims: claims);
+    final refreshToken =
+        _generateToken(user, claims: claims, isRefreshToken: true);
+
+    return Tokenization(
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    );
+  }
+
+  String _generateToken(
     UserDetails user, {
     Map<String, dynamic> claims = const {},
     bool isRefreshToken = false,
