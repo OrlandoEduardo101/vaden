@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import '../../themes/colors.dart';
 
 class VadenTextInput extends StatefulWidget {
-  final String label;
+  final String? label;
   final String hint;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
@@ -22,7 +22,7 @@ class VadenTextInput extends StatefulWidget {
 
   const VadenTextInput({
     super.key,
-    required this.label,
+    this.label,
     required this.hint,
     this.controller,
     this.validator,
