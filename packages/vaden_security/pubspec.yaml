@@ -10,7 +10,7 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
-  vaden:
+  vaden: ^0.0.2
   dart_jsonwebtoken: ^3.2.0
   bcrypt: ^1.1.3
   collection: ^1.19.1
