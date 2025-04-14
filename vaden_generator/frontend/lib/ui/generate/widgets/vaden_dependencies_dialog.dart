@@ -43,15 +43,27 @@ class VadenDependenciesDialog extends StatefulWidget {
 
 class _VadenDependenciesDialogState extends State<VadenDependenciesDialog> {
   var _currentCategory = 'Todos';
+  String? _search;
 
   List<String> _getUniqueCategories(List<Dependency> dependencies) {
     final categories = dependencies.map((dep) => dep.tag).toSet().toList();
     return ['Todos', ...categories.isEmpty ? [] : categories];
   }
 
-  List<Dependency> _getFilteredDependencies(List<Dependency> dependencies) {
+  List<Dependency> _getFilteredDependencies(List<Dependency> dependencies, [String? search]) {
     if (dependencies.isEmpty) return [];
-    if (_currentCategory == 'Todos') return dependencies;
+    if (_currentCategory == 'Todos') {
+      if (search == null) return dependencies;
+      return dependencies
+          .where((dep) => dep.name.toLowerCase().contains(search.toLowerCase()))
+          .toList();
+    }
+    if (search != null) {
+      return dependencies
+          .where((dep) =>
+              dep.name.toLowerCase().contains(search.toLowerCase()) && dep.tag == _currentCategory)
+          .toList();
+    }
     return dependencies.where((dep) => dep.tag == _currentCategory).toList();
   }
 
@@ -62,7 +74,7 @@ class _VadenDependenciesDialogState extends State<VadenDependenciesDialog> {
     late final double letterSpacing = fontSize * 0.04;
 
     final categories = _getUniqueCategories(widget.dependencies);
-    final filteredDependencies = _getFilteredDependencies(widget.dependencies);
+    final filteredDependencies = _getFilteredDependencies(widget.dependencies, _search);
 
     if (widget.dependencies.isNotEmpty && !categories.contains(_currentCategory)) {
       _currentCategory = categories.first;
@@ -71,103 +83,146 @@ class _VadenDependenciesDialogState extends State<VadenDependenciesDialog> {
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: Container(
-        width: 580,
-        decoration: BoxDecoration(
-          color: VadenColors.dialogBgColor,
-          borderRadius: BorderRadius.circular(16),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: 1280,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(24),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      Text(
-                        'Dependencies'.i18n(),
-                        style: GoogleFonts.anekBangla(
-                          color: VadenColors.txtSecondary,
-                          fontSize: 20,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Container(
-                        height: 1,
-                        width: 120,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [
-                              VadenColors.gradientStart,
-                              VadenColors.gradientEnd,
-                            ],
+        child: Container(
+          decoration: BoxDecoration(
+            color: VadenColors.dialogBgColor,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(24),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          'Dependencies'.i18n(),
+                          style: GoogleFonts.anekBangla(
+                            color: VadenColors.txtSecondary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.normal,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    height: 40,
-                    constraints: BoxConstraints(
-                      minWidth: 120,
+                        const SizedBox(height: 4),
+                        Container(
+                          height: 1,
+                          width: 120,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [
+                                VadenColors.gradientStart,
+                                VadenColors.gradientEnd,
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: VadenDropdown(
-                      options: categories,
-                      height: 36,
-                      fontSize: 12.0,
-                      dynamicWidth: true,
-                      optionsStyle: GoogleFonts.anekBangla(
-                        fontSize: fontSize,
-                        color: VadenColors.txtSecondary,
-                        height: lineHeight * 0.5,
-                        letterSpacing: letterSpacing,
-                      ),
-                      selectedOption: _currentCategory,
-                      onOptionSelected: (newCategory) {
+                    VadenTextInput(
+                      suffixIcon: Icon(Icons.search),
+                      hint: 'search_dependencies'.i18n(),
+                      width: 360,
+                      onChanged: (value) {
                         setState(() {
-                          _currentCategory = newCategory;
+                          _search = value;
                         });
                       },
                     ),
-                  )
-                ],
+                    Container(
+                      height: 40,
+                      constraints: BoxConstraints(
+                        minWidth: 120,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: VadenDropdown(
+                        options: categories,
+                        height: 36,
+                        fontSize: 12.0,
+                        dynamicWidth: true,
+                        optionsStyle: GoogleFonts.anekBangla(
+                          fontSize: fontSize,
+                          color: VadenColors.txtSecondary,
+                          height: lineHeight * 0.5,
+                          letterSpacing: letterSpacing,
+                        ),
+                        selectedOption: _currentCategory,
+                        onOptionSelected: (newCategory) {
+                          setState(() {
+                            _currentCategory = newCategory;
+                          });
+                        },
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.5,
-                minHeight: 50,
-              ),
-              child: ListView.separated(
-                shrinkWrap: true,
-                padding: const EdgeInsets.all(20),
-                itemCount: filteredDependencies.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
-                itemBuilder: (context, index) {
-                  final dependency = filteredDependencies[index];
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.5,
+                  minHeight: 50,
+                ),
+                child: SingleChildScrollView(
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: filteredDependencies
+                          .map((dependency) => ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  maxWidth: 608,
+                                  minWidth: 550,
+                                  maxHeight: 100,
+                                ),
+                                child: VadenCard(
+                                  width: MediaQuery.of(context).size.width * 0.4,
+                                  height: 100,
+                                  title: dependency.name,
+                                  subtitle: dependency.description,
+                                  tag: dependency.tag,
+                                  isSelected: false,
+                                  onTap: () => widget.onSave(dependency),
+                                  maxLines: 3,
+                                ),
+                              ))
+                          .toList(),
+                    ),
+                  ),
+                ),
+                // child: ListView.separated(
+                //   shrinkWrap: true,
+                //   padding: const EdgeInsets.all(20),
+                //   itemCount: filteredDependencies.length,
+                //   separatorBuilder: (_, __) => const SizedBox(height: 12),
+                //   itemBuilder: (context, index) {
+                //     final dependency = filteredDependencies[index];
 
-                  return VadenCard(
-                    title: dependency.name,
-                    subtitle: dependency.description,
-                    tag: dependency.tag,
-                    isSelected: false,
-                    onTap: () => widget.onSave(dependency),
-                    maxLines: 3,
-                  );
-                },
+                //     return VadenCard(
+                //       title: dependency.name,
+                //       subtitle: dependency.description,
+                //       tag: dependency.tag,
+                //       isSelected: false,
+                //       onTap: () => widget.onSave(dependency),
+                //       maxLines: 3,
+                //     );
+                //   },
+                // ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

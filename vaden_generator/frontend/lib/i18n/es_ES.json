@@ -25,5 +25,6 @@
   "minLength": "Número insuficiente de caracteres",
   "notEmpty": "No puede estar vacío",
   "addDependencies": "Añadir dependencias",
-  "reservedKeyword": "El nombre no puede ser una palabra reservada de Dart o el nombre del framework (Vaden)"
+  "reservedKeyword": "El nombre no puede ser una palabra reservada de Dart o el nombre del framework (Vaden)",
+  "search_dependencies": "Buscar dependencia"
 }

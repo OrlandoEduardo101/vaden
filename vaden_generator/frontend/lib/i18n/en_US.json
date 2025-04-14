@@ -25,5 +25,6 @@
   "minLength": "Insufficient number of characters",
   "notEmpty": "Cannot be empty",
   "addDependencies": "Add dependencies",
-  "reservedKeyword": "The name cannot be a Dart reserved keyword or the framework name (Vaden)"
+  "reservedKeyword": "The name cannot be a Dart reserved keyword or the framework name (Vaden)",
+  "search_dependencies": "Search dependency"
 }
