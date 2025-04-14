@@ -592,3 +592,8 @@ class UseParse {
 
   const UseParse(this.parser);
 }
+
+class VadenModule {
+  final List<Type> imports;
+  const VadenModule(this.imports);
+}
