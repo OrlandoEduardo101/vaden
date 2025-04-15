@@ -229,8 +229,30 @@ class FirebaseStorage extends Storage {
   ///
   /// TODO: Implement this method using the Firebase SDK for Dart.
   @override
-  Future<String> upload(String filePath, List<int> bytes) {
-    // TODO: implement upload
-    throw UnimplementedError();
+  Future<String> upload(String filePath, List<int> bytes) async {
+    final fileBytes = bytes;
+
+    final uri = Uri.parse(
+      'https://storage.googleapis.com/upload/storage/v1/b/$projectId/o?uploadType=media&name=$filePath',
+    );
+
+    final response = await dio.Dio().post(
+      uri.toString(),
+      options: dio.Options(headers: {
+        'Authorization': 'Bearer $apiKey',
+        'Content-Type': 'application/octet-stream',
+      }),
+      data: fileBytes,
+    );
+
+    if (response.statusCode == 200) {
+      log('Upload bem-sucedido!');
+      log(response.data);
+      return response.data['name'];
+    } else {
+      log('Erro no upload: ${response.statusCode}');
+      log(response.data);
+      return '';
+    }
   }
 }

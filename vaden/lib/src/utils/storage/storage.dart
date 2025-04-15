@@ -1,5 +1,7 @@
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:dio/dio.dart' as dio;
 import 'package:mime/mime.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vaden/vaden.dart';
@@ -120,15 +122,15 @@ abstract class Storage {
     switch (settings['storage']['provider']) {
       case 's3':
         return AwsS3Storage(
-          bucket: settings['storage']['provider']['s3']['bucket'],
-          region: settings['storage']['provider']['s3']['region'],
-          accessKey: settings['storage']['provider']['s3']['accessKey'],
-          secretKey: settings['storage']['provider']['s3']['secretKey'],
+          bucket: settings['storage']['s3']['bucket'],
+          region: settings['storage']['s3']['region'],
+          accessKey: settings['storage']['s3']['accessKey'],
+          secretKey: settings['storage']['s3']['secretKey'],
         );
       case 'firebase':
         return FirebaseStorage(
-          projectId: settings['storage']['provider']['firebase']['projectId'],
-          apiKey: settings['storage']['provider']['firebase']['apiKey'],
+          projectId: settings['storage']['firebase']['projectId'],
+          apiKey: settings['storage']['firebase']['apiKey'],
         );
       case 'local':
       default:
